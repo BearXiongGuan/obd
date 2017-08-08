@@ -1,0 +1,273 @@
+.icon-blank {
+	background: url('icons/blank.gif') no-repeat center center;
+}
+
+.icon-add {
+	background: url('icons/edit_add.png') no-repeat center center;
+}
+.icon-org {
+	background: url('icons/org.png') no-repeat center center;
+}
+.icon-OBD{
+	background: url('icons/OBD.png') no-repeat center center;
+}
+.icon-OTB{
+	background: url('icons/OTB.png') no-repeat center center;
+}
+.icon-serviceArea{
+	background: url('icons/serviceArea.png') no-repeat center center;
+}
+.icon-gridType{
+	background: url('icons/gridType.png') no-repeat center center;
+}
+.icon-gridCell{
+	background: url('icons/gridCell.png') no-repeat center center;
+}
+.icon-building{
+	background: url('icons/building.png') no-repeat center center;
+}
+.icon-edit {
+	background: url('icons/pencil.png') no-repeat center center;
+}
+
+.icon-clear {
+	background: url('icons/clear.png') no-repeat center center;
+}
+
+.icon-remove {
+	background: url('icons/edit_remove.png') no-repeat center center;
+}
+
+.icon-save {
+	background: url('icons/filesave.png') no-repeat center center;
+}
+
+.icon-cut {
+	background: url('icons/cut.png') no-repeat center center;
+}
+
+.icon-ok {
+	background: url('icons/ok.png') no-repeat center center;
+}
+
+.icon-no {
+	background: url('icons/no.png') no-repeat center center;
+}
+
+.icon-cancel {
+	background: url('icons/cancel.png') no-repeat center center;
+}
+
+.icon-reload {
+	background: url('icons/reload.png') no-repeat center center;
+}
+
+.icon-search {
+	background: url('icons/search.png') no-repeat center center;
+}
+
+.icon-print {
+	background: url('icons/print.png') no-repeat center center;
+}
+
+.icon-help {
+	background: url('icons/help.png') no-repeat center center;
+}
+
+.icon-undo {
+	background: url('icons/undo.png') no-repeat center center;
+}
+
+.icon-redo {
+	background: url('icons/redo.png') no-repeat center center;
+}
+
+.icon-back {
+	background: url('icons/back.png') no-repeat center center;
+}
+
+.icon-sum {
+	background: url('icons/sum.png') no-repeat center center;
+}
+
+.icon-tip {
+	background: url('icons/tip.png') no-repeat center center;
+}
+
+.icon-mapView1 {
+	background: url('icons/mapView1.png') no-repeat center center;
+}
+
+.icon-mapView2 {
+	background: url('icons/mapView2.png') no-repeat center center;
+}
+.icon-details1 {
+	background: url('icons/details1.png') no-repeat center center;
+}
+
+.icon-details2 {
+	background: url('icons/details2.png') no-repeat center center;
+}
+
+.icon-resubmit1 {
+	background: url('icons/resubmit1.png') no-repeat center center;
+}
+
+.icon-resubmit2 {
+	background: url('icons/resubmit2.png') no-repeat center center;
+}
+
+.icon-abandoned1 {
+	background: url('icons/abandoned1.png') no-repeat center center;
+}
+.icon-abandoned2 {
+	background: url('icons/abandoned2.png') no-repeat center center;
+}
+.icon-audited {
+	background: url('icons/audited.png') no-repeat center center;
+}
+.icon-noAudited {
+	background: url('icons/noAudited.png') no-repeat center center;
+}
+.icon-rejected {
+	background: url('icons/rejected.png') no-repeat center center;
+}
+.icon-reject1 {
+	background: url('icons/reject1.png') no-repeat center center;
+}
+.icon-reject2 {
+	background: url('icons/reject2.png') no-repeat center center;
+}
+.icon-pass1 {
+	background: url('icons/pass1.png') no-repeat center center;
+}
+.icon-pass2 {
+	background: url('icons/pass2.png') no-repeat center center;
+}
+.icon-filter {
+	background: url('icons/filter.png') no-repeat center center;
+}
+
+.icon-man {
+	background: url('icons/man.png') no-repeat center center;
+}
+
+.icon-lock {
+	background: url('icons/lock.png') no-repeat center center;
+}
+
+.icon-more {
+	background: url('icons/more.png') no-repeat center center;
+}
+
+.icon-mini-add {
+	background: url('icons/mini_add.png') no-repeat center center;
+}
+
+.icon-mini-edit {
+	background: url('icons/mini_edit.png') no-repeat center center;
+}
+
+.icon-mini-refresh {
+	background: url('icons/mini_refresh.png') no-repeat center center;
+}
+
+.icon-large-picture {
+	background: url('icons/large_picture.png') no-repeat center center;
+}
+
+.icon-large-clipart {
+	background: url('icons/large_clipart.png') no-repeat center center;
+}
+
+.icon-large-shapes {
+	background: url('icons/large_shapes.png') no-repeat center center;
+}
+
+.icon-large-smartart {
+	background: url('icons/large_smartart.png') no-repeat center center;
+}
+
+.icon-large-chart {
+	background: url('icons/large_chart.png') no-repeat center center;
+}
+
+.icon-book_previous {
+	background: url('icons/book_previous.png') no-repeat center center;
+}
+
+.icon-book_next {
+	background: url('icons/book_next.png') no-repeat center center;
+}
+.icon-lightfacility-statistics{
+	background: url('icons/lightfacility_statistics.png') no-repeat center center;
+}
+.icon-lightfacility-statistics-grey{
+	background: url('icons/lightfacility_statistics_grey.png') no-repeat center center;
+}
+.icon-image-view{
+	background: url('icons/image_view.png') no-repeat center center;
+}
+.icon-image-view-grey{
+	background: url('icons/image_view_grey.png') no-repeat center center;
+}
+.icon-back-page{
+	background: url('icons/back_page.png') no-repeat center center;
+}
+.icon-back-page-grey{
+	background: url('icons/back_page_grey.png') no-repeat center center;
+}
+.icon-del{
+	background: url('icons/del.png') no-repeat center center;
+}
+.icon-del-grey{
+	background: url('icons/del_grey.png') no-repeat center center;
+}
+.icon-property-modify{
+	background: url('icons/property_modify.png') no-repeat center center;
+}
+.icon-property-modify-grey{
+	background: url('icons/property_modify_grey.png') no-repeat center center;
+}
+.icon-image-add{
+	background: url('icons/add.png') no-repeat center center;
+}
+.icon-image-add-grey{
+	background: url('icons/add_grey.png') no-repeat center center;
+}
+.icon-shape-modify{
+	background: url('icons/shape_modify.png') no-repeat center center;
+}
+.icon-shape-modify-grey{
+	background: url('icons/shape_modify_grey.png') no-repeat center center;
+}
+.icon-move{
+	background: url('icons/move.png') no-repeat center center;
+}
+.icon-move-grey{
+	background: url('icons/move_grey.png') no-repeat center center;
+}
+.icon-menu-cancel{
+	background: url('icons/menu_cancel.png') no-repeat center center;
+}
+.icon-menu-cancel-grey{
+	background: url('icons/menu_cancel_grey.png') no-repeat center center;
+}
+.icon-property-view{
+	background: url('icons/property_view.png') no-repeat center center;
+}
+.icon-property-view-grey{
+	background: url('icons/property_view_grey.png') no-repeat center center;
+}
+.icon-menu-submit{
+	background: url('icons/menu_submit.png') no-repeat center center;
+}
+.icon-menu-submit-grey{
+	background: url('icons/menu_submit_grey.png') no-repeat center center;
+}
+.icon-menu-pickup{
+	background: url('icons/menu_pickup.png') no-repeat center center;
+}
+.icon-menu-pickup-grey{
+	background: url('icons/menu_pickup_grey.png') no-repeat center center;
+}

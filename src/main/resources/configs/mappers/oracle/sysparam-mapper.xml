@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.bm.mapper.SysParamMapper">
+    <resultMap type="com.hq.bm.entity.SysParam" id="sysparamResultMap">
+        <result column="param_name" property="paramName" javaType="java.lang.String"/>
+        <result column="param_value" property="paramValue" javaType="java.lang.String"/>
+        <result column="remark" property="remark" javaType="java.lang.String"/>
+    </resultMap>
+
+    <sql id="column">
+        s.param_name,s.param_value,s.remark
+    </sql>
+
+    <select id="findAll" resultMap="sysparamResultMap">
+        SELECT
+        <include refid="column"/>
+        from sys_param s where isshow=1
+    </select>
+
+    <select id="findOne" resultMap="sysparamResultMap" parameterType="java.lang.String">
+         SELECT s.param_name,s.param_value from sys_param s where  s.param_name = #{paramName}
+    </select>
+
+    <select id="findName" resultMap="sysparamResultMap">
+       select * from sys_param t where t.param_name like '%_SHAPE_EXPORT';
+    </select>
+
+    <insert id="save" parameterType="java.util.Map">
+        insert into sys_param s (s.param_name,s.param_value,s.remark)
+        VALUES (#{paramName,jdbcType=VARCHAR},#{paramValue,jdbcType=VARCHAR},#{remark,jdbcType=VARCHAR})
+    </insert>
+
+    <update id="update" parameterType="com.hq.bm.entity.SysParam">
+        update sys_param s
+        <set>
+            <if test="paramValue != null and paramValue != '' ">
+                <![CDATA[
+                    s.param_value = #{paramValue},
+                ]]>
+            </if>
+            <if test="remark != null and remark != '' ">
+                <![CDATA[
+                    s.remark = #{remark},
+                ]]>
+            </if>
+
+        </set>
+        where s.param_name = #{paramName}
+    </update>
+</mapper>

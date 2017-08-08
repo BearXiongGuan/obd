@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.bm.mapper.AppMapper">
+    <resultMap type="com.hq.bm.entity.App" id="appResultMap">
+        <result column="id" property="id" javaType="java.lang.String"/>
+        <result column="version" property="version" javaType="java.lang.String"/>
+        <result column="update_desc" property="updateDesc" javaType="java.lang.String"/>
+        <result column="url" property="url" javaType="java.lang.String"/>
+        <result column="update_date" property="updateDate" javaType="java.util.Date"/>
+        <result column="app_size" property="size" javaType="java.lang.Long"/>
+
+    </resultMap>
+    <sql id="column">
+        am.id,am.version,am.update_desc,am.url,am.update_date,am.app_size
+    </sql>
+    <select id="findAll" resultMap="appResultMap">
+    	select * from APP_MANAGE order by version DESC
+    </select>
+    
+    <select id="getNew" resultMap="appResultMap">
+    	select * from (select * from APP_MANAGE order by version DESC) where rownum = 1
+    </select>
+
+    <insert id="insert" parameterType="java.util.Map">
+        insert into APP_MANAGE am (
+        am.id,am.version,am.update_desc,am.url,am.update_date,am.app_size
+        )
+        VALUES
+        (SEQ_APP_MANAGE.nextval,#{version,jdbcType=VARCHAR},#{updateDesc,jdbcType=VARCHAR},#{url,jdbcType=VARCHAR},#{updateDate,jdbcType=VARCHAR},#{size,jdbcType=VARCHAR})
+    </insert>
+
+    <select id="getCount" parameterType="java.util.Map" resultType="int">
+        select
+        count(1)
+        from app_manage am
+        <where>
+            <if test="version != null and version != ''">
+                <![CDATA[
+                and am.version =#{version}
+                ]]>
+            </if>
+        </where>
+    </select>
+
+    <delete id="deleteByUrl" parameterType="java.lang.String">
+        delete from app_manage am where am.url =#{url}
+    </delete>
+
+</mapper>

@@ -1,0 +1,2490 @@
+<!DOCTYPE html>
+<html xmlns:ime-mode="http://www.w3.org/1999/xhtml">
+<meta http-equiv="Expires" content="0">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Cache-control" content="no-cache">
+<meta http-equiv="Cache" content="no-cache">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="css/common.css"/>
+    <link rel="stylesheet" href="css/index.css"/>
+
+    <link rel="stylesheet" type="text/css"
+          href="http://192.168.1.47/arcgis_js_api/library/3.19/3.19/dijit/themes/tundra/tundra.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="http://192.168.1.47/arcgis_js_api/library/3.19/3.19/esri/css/esri.css"/>
+
+          
+    <link rel="stylesheet" type="text/css"
+          href="js/jquery-easyui-1.4.5/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css"
+          href="js/jquery-easyui-1.4.5/themes/icon.css">
+</head>
+<body>
+
+<div class="header">
+    <div class="container"></div>
+    <div class="headerFix"></div>
+    <div class="personal-menu">
+        <ul>
+            <li><span class="imgSp1"></span><span>OBD服务优化</span> <!-- OBD服务优化菜单项 -->
+                <div id="service_menu_items" class="personal-menu-items hide">
+                    <ul>
+                        <li id="obdResource"><span
+                                style="background:url('./img/menu/1.1.PNG');"
+                                class="imgSp-item"></span><span>OBD资源</span></li>
+                        <li id="jzwResource"><span
+                                style="background:url('./img/menu/1.3.PNG');" class="imgSp-item"></span>
+                            <span>建筑物 </span></li>
+                        <!-- <li id="odbdistance"><span
+                                style="background:url('./img/menu/1.2.PNG');" class="imgSp-item"></span>
+                            <span>OBD距离 </span></li>
+                        <li><span style="background:url('./img/menu/1.4.PNG');"
+                                  class="imgSp-item"></span> <span>OBD录入 </span></li>
+                        <li><span style="background:url('./img/menu/1.5.PNG');"
+                                  class="imgSp-item"></span> <span>OBD场景覆盖 </span></li> -->
+                    </ul>
+                </div>
+            </li>
+            <li><span class="imgSp2"></span><span>OBD资源可视</span> <!-- OBD资源可视菜单项 -->
+                <div id="resource_menu_items" class="personal-menu-items hide">
+                    <ul>
+                        <!-- <li><span style="background:url('./img/menu/obdData.png');"
+                                  class="imgSp-item"></span> <span>OBD资料 </span></li> -->
+                        <li id="facilityQry"><span
+                                style="background:url('./img/menu/queryFacility.png');" class="imgSp-item"></span>
+                            <span>设施查询 </span></li>
+							<li id="myReviewData"><span
+								style="background:url('./img/menu/myAudit.png');" class="imgSp-item"></span>
+								<span>我的审核</span></li>
+							<li id="mySubmitReviewData"><span
+								style="background:url('./img/menu/mySubmit.png');" class="imgSp-item"></span>
+								<span>我的提交</span></li>
+						<li id="mapDataExport"><span
+							style="background:url('./img/menu/exportData.png');" class="imgSp-item"></span>
+							<span>数据导出</span></li>
+                    </ul>
+                </div>
+            </li>
+            <li><span class="imgSp3"></span><span>OBD统计报表</span> <!-- OBD统计报表菜单项 -->
+                <div id="report_menu_items" class="personal-menu-items hide">
+                    <ul>
+                        <li id="qyzyfgl_chart"><span
+                                style="background:url('./img/menu/3.1.PNG');" class="imgSp-item"></span>
+                            <span>区域资源覆盖率 </span></li>
+                     <!--    <li><span style="background:url('./img/menu/3.2.PNG');"
+                                  class="imgSp-item"></span> <span>热区专题图 </span></li>
+                        <li><span style="background:url('./img/menu/3.3.PNG');"
+                                  class="imgSp-item"></span> <span>OBD疏密分析 </span></li> -->
+                        <li id="qyzyfg4_chart"><span style="background:url('./img/menu/3.4.PNG');"
+                                  class="imgSp-item"></span> <span>OBD覆盖分析 </span></li>
+                       <!-- <li><span style="background:url('./img/menu/3.5.PNG');"
+                                   class="imgSp-item"></span> <span>建筑物光资源 </span></li>
+                        <li><span style="background:url('./img/menu/3.6.PNG');"
+                                  class="imgSp-item"></span> <span>统计数据专题图 </span></li>
+                        <li><span style="background:url('./img/menu/3.7.PNG');"
+                                  class="imgSp-item"></span> <span>业务安装 </span></li> -->
+                        <li id="obd_dkzy"><span style="background:url('./img/menu/3.8.PNG');"
+                                  class="imgSp-item"></span> <span>OBD端口占用 </span></li>
+                        <li id="kdstl_chart"><span style="background:url('./img/menu/3.9.PNG');"
+                                  class="imgSp-item"></span> <span>宽带渗透率</span></li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="personal">
+        <ul>
+            <li class="log-set"><a href="#"><i></i></a></li>
+            <li class="log-user">
+                <p class="log-name"></p>
+                <p class="log-time"></p>
+            </li>
+            <li class="log-out"><a href="logout"><i></i></a></li>
+        </ul>
+    </div>
+</div>
+<!--<div id="to_end" class="to_end hide"><img src="img/x.png" alt=""></div>-->
+<div id="to_top" class="to_top hide"></div>
+<div id="cover"
+     style="width:100%;height:100%;top:0;left:0;z-index:1200;position:fixed;background-color:rgba(0,0,0,0.6);display:none"></div>
+<div id="map"
+     style="width:100%; height:100%; top:0; left: 0;z-index: 11;position: fixed;" onclick="mapClick(this)"></div>
+<div class="section clearfix">
+    <div class="alarm hide">
+        <span></span>
+    </div>
+    <!--警报-->
+    <div class="tool-nav">
+        <!--右侧工具栏-->
+        <div class="toolShow">
+            <label></label>
+        </div>
+        <b></b>
+        <div class="tool-navList">
+            <div class="roam hide">
+                <span><i></i></span> <a href="#">漫游</a>
+            </div>
+            <b></b>
+            <div class="thermodynamic">
+            	<span class="high_f"><i></i></span> <a href="#" style="letter-spacing: 4px;">热力图</a><em></em>
+            	<ul class="shape hide">
+                    <li class="broadband-coverage" id="kuandaishentoulv-heatmap"><span><i></i></span> <label>宽带渗透率</label></li>
+                    <li class="port-occupancy" id="duankouzhanyonglv-heatmap"><span><i></i></span> <label>端口占用率</label></li>
+			    </ul>
+            </div>
+            <b></b>
+            <div class="pickup">
+                <span class="high_f"><i></i></span> <a href="#">地图拾取</a><em></em>
+                <ul class="shape hide">
+                    <li class="org"><span><i></i></span> <label>县分</label></li>
+                    <li class="gridType"><span><i></i></span> <label>营服</label></li>
+                    <li class="gridCell"><span><i></i></span> <label>网格</label></li>
+                    <li class="fwq"><span><i></i></span> <label>服务区</label></li>
+			        <li class="building"><span><i></i></span> <label>建筑物</label></li>
+                    <li class="obd"><span><i></i></span> <label>光资源</label></li>
+			    </ul>
+            </div>
+            <b></b>
+            <div class="measureRange">
+                <span><i></i></span> <a id="measurePolyline" href="#">测距</a>
+            </div>
+            <b></b>
+            <div class="measureFace">
+                <span><i></i></span> <a id="measurePolygon"  href="#">测面</a>
+            </div>
+            <b></b>
+            <div class="boxChoose hide">
+                <span class="high_f"><i></i></span> <a href="#">选框</a> <em></em>          
+			    <ul class="shape hide">
+			        <li class="polygon"><span><i></i></span> <label>多边形</label></li>
+			        <li class="circle"><span><i></i></span> <label>圆形</label></li>
+			    </ul>			 
+            </div>
+            <b></b>
+            <div class="mapSeparate">
+                <span class="high_f"><i></i></span> <a href="#">图层控制</a> <em></em>
+			        <ul class="shape hide">
+                        <li><input type="checkbox" name="map" value="0"  id="selectZsyx"/><label>影像图</label></li>
+			            <li><input type="checkbox" name="map" value="1"  checked="checked" id="selectZsdzdt"/><label>底图</label></li>
+                        <li><input type="checkbox" name="map" value="4"  checked="checked" id="selectXfbj" /><label>县分</label></li>
+						<li><input type="checkbox" name="map" value="2"  checked="checked" id="selectYfbj" /><label>营服</label></li>
+                        <li><input type="checkbox" name="map" value="5"  checked="checked" id="selectWg" /><label>网格</label></li>
+                        <li><input type="checkbox" name="map" value="7"  checked="checked" id="selectFwq" /><label>服务区</label></li>
+						<li><input type="checkbox" name="map" value="3"  checked="checked" id="selectJzw" /><label>建筑物</label></li>
+						<li><input type="checkbox" name="map" value="6"  checked="checked" id="selectLightfacility"/><label>光资源</label></li>
+			        </ul>
+            </div>
+        </div>
+    </div>
+    <div class="rate-check hide">
+    	<ul>
+    		<li><input type="radio" name="ra" id="fengongsi"/><label>分公司</label></li>
+    		<li><input type="radio" name="ra" id="yingfu"/><label>营服</label></li>
+    		<li><input type="radio" name="ra" checked="checked" id="wangge"/><label>网格</label></li>
+    		<li><input type="radio" name="ra" id="jianzhuwu"/><label>建筑物</label></li>
+    		<b id="clearRenderer"> × </b>
+    	</ul>
+    </div>
+	<!-- 地图缩放按钮 -->
+	<div class="mapScale">
+		<ul>
+			<li ><span class="mapEnlarge" onclick="zoomIn()">+</span></li>
+			<li ><span class="mapNarrow" onclick="zoomOut()">-</span></li>
+		</ul>
+	</div>
+    <!--警报弹框-->
+    <div class="alarm-box assets-box popBox hide">
+        <div class="popBox-head">
+            <p>OBD警报信息</p>
+            <div class="boxSize">
+                <a href="#" class="close"><i></i></a>
+            </div>
+        </div>
+        <div class="alarm-body assets-body"></div>
+    </div>
+    <!--服务	-->
+    <!--OBD资源覆盖范围-->
+    
+	<div class="sevice-box assets-box popBox hide scale" id="sourceCover"> 
+		<div class="scale-wrap">   	
+	        <div class="popBox-head" style="width: auto">
+	            <p style="font-size: x-small">OBD资源</p>
+	            <div class="boxSize">
+	                <a href="#" class="close" onclick="closeWindow('tinput')"><i></i></a>
+	            </div>
+	        </div>
+	        <div class="sevice-sltbox">
+	            <select id="showOrg" class="easyui-combobox" style="width:287px;"
+	                    name="">
+	                <option>请选择组织机构</option>
+	            </select>
+	            <div class="sevice-schbox">
+	                <input type="text" class="schfilterIpt" placeholder="输入OBD名称搜索"
+	                       id="searchOTB" style="width: 287px"/> <span class="schfilterBtn"
+	                                                      id="searchOBDButton"><i></i></span>
+	            </div>
+	        </div>
+	        <div class="assets-body"
+	             style="overflow :auto; height:82%">
+	            <ul id="tselect" class="easyui-tree"></ul>
+	            <ul id="tinput" class="easyui-tree" style="display: none"></ul>
+	            <div class="loadMoreBox" style="cursor: pointer;">
+	                <span class="loadMore" onclick="loadMore()">点击加载更多</span>
+	            </div>
+	        </div>
+	         
+	      </div>  
+	      <div class="scaleBtn"></div>
+    </div>
+
+    <!--建筑物-->
+    
+	<div class="sevice-box assets-box popBox hide scale">  
+		<div class="scale-wrap">	 		
+        <div class="popBox-head">
+            <p style="font-size: x-small" text-align="center">建筑物</p>
+            <div class="boxSize">
+                <a href="#" class="close" onclick="closeWindow('tBuildingselect')"><i></i></a>
+            </div>
+        </div>
+    	<div class="sevice-sltbox" class="easyui-dialog" data-options="iconCls:'icon-menu-cancel',resizable:true,modal:true">
+            <select id="showWebGrid" class="easyui-combotree"
+                    style="width:287px;" name="">
+                <option>请选择组织机构</option>
+            </select>
+            <div class="sevice-schbox">
+                <input type="text" class="schfilterIpt" placeholder="输入建筑物名称搜索"
+                       id="searchBuilding" style="width: 287px"/> <span class="schfilterBtn"
+                                                           id="searchBuildingButton"><i></i></span>
+            </div>
+        </div>
+        <div class="assets-body"
+             style="overflow :auto; height:82%">
+            <ul id="tBuildingselect" class="easyui-tree"></ul>
+        </div>
+         
+        </div>
+        <div class="scaleBtn"></div>
+    </div>
+    <!--距离导入-->
+    <!-- <div class="sevice-box  popBox hide">
+        <div class="popBox-head">
+            <p>距离导入</p>
+            <div class="boxSize">
+                <a href="#" class="close"><i></i></a>
+            </div>
+            <div class="assets-body"></div>
+        </div>
+    </div> -->
+    <!--OBD服务区录入-->
+    <!-- <div class="sevice-box popBox hide">
+        <div class="popBox-head">
+            <p>OBD服务区录入</p>
+            <div class="boxSize">
+                <a href="#" class="close"><i></i></a>
+            </div>
+        </div>
+        <div class="assets-body countCom-body">
+            <div class="OBDnum typeinItem">
+                <label>OBD编号：</label>
+                <div class="typeinIpt">
+                    <input type="text"/>
+                </div>
+            </div>
+            <div class="buildAdr typeinItem">
+                <label>建筑物地址：</label>
+                <div class="typeinIpt buildAdright">
+                    <div>
+                        <input type="text"/><span>+</span>
+                    </div>
+                    <div>
+                        <input type="text"/><span>-</span>
+                    </div>
+                </div>
+            </div>
+            <div class="seviceBtn">
+                <button>导入</button>
+                <button>取消</button>
+            </div>
+        </div>
+    </div> -->
+    <!--OBD场景覆盖-->
+    <!-- <div class="sevice-box assets-box popBox hide">
+        <div class="popBox-head">
+            <p>OBD场景覆盖</p>
+            <div class="boxSize">
+                <a href="#" class="close"><i></i></a>
+            </div>
+        </div>
+        <div class="assets-body"></div>
+    </div> -->
+    <!--<<div id="buildingID" class="sevice-box popBox hide easyui-draggable"
+        data-options="handle:'.popBox-head',onDrag:onDrag"
+        style="width:1000px;left:20%;top:20%;z-index:1201;">
+        <div class="popBox-head">
+            <p>建筑物属性</p>
+            <div class="boxSize">
+                <a href="#" class="minSize"><i></i></a> <a href="#" class="close"><i></i></a>
+            </div>
+        </div>
+        <div class="FacilityQuery countCom-body">
+            <div class="Facility-table">
+                <table id="buildingPropertyGrid"></table>
+            </div>
+        </div>
+    </div>-->
+
+    <div id="gzytj_dialog" class="hide">
+
+        <div class="Facility-table">
+            <table id="buildingGrid"></table>
+
+        </div>
+        <div id="building-dialog" class="building-dialog hide">
+            <div id="buildingDetailGrid"></div>
+        </div>
+
+    </div>
+    <!--资料-->
+    <!--OBD资料导入导出-->
+    <!-- <div class="resource-box popBox hide" style="z-index:1201">
+
+        <div class="popBox-head">
+            <p>OBD资料导入导出</p>
+            <div class="boxSize">
+                <a href="#" class="minSize"><i></i></a> <a href="#" class="maxSize"><i></i></a>
+                <a href="#" class="close"><i></i></a>
+            </div>
+        </div>
+        <div class="dataOprt-body countCom-body">
+            <div class="condit-title">
+                <p>导入</p>
+            </div>
+            <div class="typeinIpt dataImport">
+                <div>
+                    <label>OBD资料路径：</label><input type="text"/><span>...</span><input
+                        type="file" style="left:370px;"/>
+                    <button>导入</button>
+                </div>
+            </div>
+            <div class="condit-title">
+                <p>导出</p>
+            </div>
+            <div class="dataExport">
+                <div class="dataExportIpt">
+                    <input type="text"/>
+                    <button>查询</button>
+                    <button>导出</button>
+                </div>
+                <div class="testTlb	table">
+                    <div class="thead">
+                        <input type="checkbox" class="selectAll"/>
+                        <span>Column1</span><span>Column2</span><span>Column3</span>
+                    </div>
+                    <div class="tbody">
+                        <ul>
+                            <li><input type="checkbox"/><span>111</span><span></span><span></span></li>
+                            <li><input type="checkbox"/><span>222</span><span></span><span></span></li>
+                            <li><input type="checkbox"/><span>333</span><span></span><span></span></li>
+                            <li><input type="checkbox"/><span>44</span><span></span><span></span></li>
+                            <li><input type="checkbox"/><span>55</span><span></span><span></span></li>
+                            <li><input type="checkbox"/><span>333</span><span></span><span></span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <!--设施查询-->
+    <div class="resource-box popBox hide easyui-draggable"
+         data-options="handle:'.popBox-head',onDrag:onDrag">
+			<div class="popBox-head">
+				<p>设施查询</p>
+				<div class="boxSize">
+					<a href="#" class="minSize"><i></i></a> <a href="#" class="maxSize"><i></i></a>
+					<a href="#" class="close"><i></i></a>
+				</div>
+			</div>
+			<div class="FacilityQuery countCom-body">
+				<div class="fq-condit">
+					<div class="query-condit typeinIpt">
+						<form id="facilityForm" action="javascript:void(0)">
+							<div class="adv-condit">
+								<ul>
+									<li style="display:inline-block;"><label>组织机构： </label><select
+										id="facility_combotree" class="easyui-combotree"
+										style="width:200px;" name="mkcenterId">
+											<option>==请选择组织机构==</option>
+									</select></li>
+									<li><label>查询条件：</label><select id="facility_qrysel_type"
+										style="width:100px">
+											<option value="0">设施名称</option>
+											<option value="1">设施编码</option>
+											<option value="2">设施地址</option>
+									</select><span
+										style="margin-left:5px;float:right;width:182px;border:none;background:none;"><input
+											type="text" name="name" id="facility_name" style="width:182px" /><input
+											type="text" name="address" id="facility_address" style="width:182px" /><input
+											type="text" name="ocfCode" id="facility_ocfCode" style="width:182px" /></span></li>
+								</ul>
+							</div>
+							<div class="adv-condit">
+								<label>录入时间：</label><input type="text" class="easyui-datebox"
+									style="width:150px" name="recdateStart" id="recdateStart" /><i>至</i><input
+									type="text" class="easyui-datebox" style="width:150px"
+									name="recdateEnd" id="recdateEnd" />
+								<div class="FacilityBtn"
+									style="display:inline-block;margin-left:10px">
+									<button id="facility_searchBtn">查询</button>
+									<button id='facility_resetBtn'>重置</button>
+									<button id='btnExport'>导出</button>
+								</div>
+							</div>
+						</form>
+					</div>
+            </div>
+            <div class="Facility-table">
+                <!-- <div class="testTlb	table">
+                    <div class="thead">
+                        <input type="checkbox" class="selectAll" /> <span>Column1</span><span>Column2</span><span>Column3</span>
+                    </div>
+                    <div class="tbody">
+                        <ul>
+                            <li><input type="checkbox" /><span>111</span><span></span><span></span></li>
+                            <li><input type="checkbox" /><span>222</span><span></span><span></span></li>
+                            <li><input type="checkbox" /><span>333</span><span></span><span></span></li>
+                            <li><input type="checkbox" /><span>44</span><span></span><span></span></li>
+                            <li><input type="checkbox" /><span>55</span><span></span><span></span></li>
+                        </ul>
+                    </div>
+                </div> -->
+                <table id="facilityGrid"></table>
+            </div>
+        </div>
+    </div>
+    <!--数据审批-->
+		<div  id="dataReview_dialog" class="resource-box popBox hide easyui-draggable"
+         data-options="handle:'.popBox-head',onDrag:onDrag"
+         style="width:1000px;z-index:1201">
+
+        <div class="popBox-head">
+				<p>我的审核</p>
+            <div class="boxSize">
+                <a href="#" class="minSize"><i></i></a><a href="#" class="maxSize"><i></i></a><a href="#" class="close"><i></i></a>
+            </div>
+        </div>
+        <div class="FacilityQuery countCom-body">
+            <div class="fq-condit">
+                <div class="query-condit typeinIpt">
+                    <form id="dataReviewForm" action="javascript:void(0)">
+                        <div class="adv-condit">
+                            <ul>
+                                <li><label>数据类型：</label> <select name="dataType"
+										id="dataType" style="width:150px">
+                                    <option value="1">设施</option>
+                                    <option value="2">建筑物</option>
+                                    <option value="3">网格</option>
+                                    <option value="4">服务区</option>
+                                </select></li>
+                                <li id="reviewLi" class="hide"><label>审核时间：</label><input
+                                        type="text" class="easyui-datebox" style="width:130px"
+                                        name="reviewDateStart" id="reviewDateStart"/><label><i>至</i></label><input
+                                        type="text" class="easyui-datebox" style="width:130px"
+                                        name="reviewDateEnd" id="reviewDateEnd"/></li>
+                            </ul>
+
+                        </div>
+
+
+                        <div class="adv-condit">
+                            <label>创建时间：</label><input type="text" class="easyui-datebox"
+                                                       style="width:130px" name="createDateStart" id="createDateStart"/><i>至</i><input
+                                type="text" class="easyui-datebox" style="width:130px"
+                                name="createDateEnd" id="createDateEnd"/>
+                            <div class="FacilityBtn"
+                                 style="display:inline-block;margin-left:10px">
+                                <button id="dataReview_searchBtn">查询</button>
+                                <button id='dataReview_resetBtn'>重置</button>
+                                <button id='dataReview_Batch_reviewBtn'>批量审核</button>
+                                <button id='dataReview_Batch_feedBackBtn'>批量驳回</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+			<div id="dataReview_panel" class="easyui-panel"
+				style="width:990px;background:#fafafa;">
+				<div class="Facility-table">
+					<div id="dataReview_reviewStatus_tabs" class="easyui-tabs"
+						style="width:250px;height:30px;">
+						<div title="待审批" data-options="iconCls:'icon-noAudited'"
+							style="display:none;">0</div>
+						<div title="已审批" data-options="iconCls:'icon-audited'"
+							style="display:none;">1</div>
+						<div title="已驳回" data-options="iconCls:'icon-rejected'"
+							style="display:none;">2</div>
+					</div>
+					<table id="dataReviewGrid"></table>
+				</div>
+			</div>
+			</div>
+    </div>
+	
+	<!--我的提交-->
+		<div id="mySubmit_dataReview" class="resource-box popBox hide easyui-draggable"
+			data-options="handle:'.popBox-head',onDrag:onDrag"
+			style="width:1000px;z-index:1201">
+
+			<div class="popBox-head">
+				<p>我的提交</p>
+				<div class="boxSize">
+					<a href="#" class="minSize"><i></i></a><a href="#" class="maxSize"><i></i></a><a
+						href="#" class="close"><i></i></a>
+				</div>
+			</div>
+			<div class="FacilityQuery countCom-body">
+				<div class="fq-condit">
+					<div class="query-condit typeinIpt">
+						<form id="mySubmitReviewForm" action="javascript:void(0)">
+							<div class="adv-condit">
+								<ul>
+									<li><label>数据类型：</label> <select name="dataType"
+										id="my_dataType" style="width:150px">
+											<option value="1">设施</option>
+											<option value="2">建筑物</option>
+											<option value="3">网格</option>
+											<option value="4">服务区</option>
+									</select></li>
+									<li id="myReviewLi" class="hide"><label>审核时间：</label><input
+										type="text" class="easyui-datebox" style="width:130px"
+										name="reviewDateStart" id="myReviewDateStart" /><label><i>至</i></label><input
+										type="text" class="easyui-datebox" style="width:130px"
+										name="reviewDateEnd" id="myReviewDateEnd" /></li>
+								</ul>
+
+							</div>
+
+
+							<div class="adv-condit">
+								<label>创建时间：</label><input type="text" class="easyui-datebox"
+									style="width:130px" name="createDateStart"
+									id="myCreateDateStart" /><i>至</i><input type="text"
+									class="easyui-datebox" style="width:130px" name="createDateEnd"
+									id="myCreateDateEnd" />
+								<div class="FacilityBtn"
+									style="display:inline-block;margin-left:10px">
+									<button id="my_dataReview_searchBtn">查询</button>
+									<button id='my_dataReview_resetBtn'>重置</button>
+								</div>
+							</div>
+
+						</form>
+					</div>
+				</div>
+				<div id="my_dataReview_panel" class="easyui-panel"
+					style="width:990px;background:#fafafa;">
+
+					<div class="Facility-table">
+						<div id="my_dataReview_reviewStatus_tabs" class="easyui-tabs"
+							style="width:330px;height:30px;">
+							<div title="待审批" data-options="iconCls:'icon-noAudited'"
+								style="display:none;">0</div>
+							<div title="已审批" data-options="iconCls:'icon-audited'"
+								style="display:none;">1</div>
+							<div title="已驳回" data-options="iconCls:'icon-rejected'"
+								style="display:none;">2</div>
+							<div title="已废弃" data-options="iconCls:'icon-abandoned2'"
+								style="display:none;">3</div>
+						</div>
+						<table id="my_dataReviewGrid"></table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 数据导出对话框 -->
+		<div id="mapDataExportDialog"
+			 class="resource-box popBox hide easyui-draggable"
+			data-options="handle:'.popBox-head',onDrag:onDrag"
+			style="z-index:1201;">
+
+			<div class="popBox-head">
+				<p>数据导出</p>
+				<div class="boxSize">
+					<a href="#" class="minSize"><i></i></a><a href="#" class="maxSize"><i></i></a><a
+						href="#" class="close"><i></i></a>
+				</div>
+			</div>
+
+			<div class="countCom-body" id="exportDlg-tabs" class="easyui-tabs" style="width:600px;height:350px;padding:2px">   
+
+				<div id="exportDlg-attr-tab" title="属性查询输出" style="width:100%;padding:10px">
+
+					<div>
+						<span class="radioSpan"/> <input type="radio"
+							id="exportDlg-fgsRadio" value="fengongsiRadio">分公司</input> <input
+							type="radio" id="exportDlg-yinfuRadio" value="yingfuRadio">营服</input>
+							<input type="radio" id="exportDlg-wanggeRadio"
+							value="wanggeRadio">网格</input>
+                            <input type="radio" id="exportDlg-jzwRadio"
+                               value="jzwRadio">建筑物</input>
+							<div id='exportDlg-selectDiv' style="height:30px;width:200px;margin-left:5px;display:inline-block">
+								<select class="easyui-combotree"
+									id="exportDlg-zzjgCombotree" style="width:200px;height:30px;"
+									name="orgId">
+									<option>==请选择组织机构==</option>
+								</select>
+							</div>
+							<p></p>
+					</div>
+
+					<div id="dataGridTableDiv">
+						<table id="exportDlg-dataGridTable" class="easyui-datagrid"
+							style="width:576px;height:260px" rownumbers="true">
+							<thead>
+								<tr>
+									<th data-options="field:'ck',width:30,checkbox:true"></th>
+									<th
+										data-options="field:'facName',width:500">名称</th>
+								</tr>
+							</thead>
+						</table>
+					</div>
+					<div id="dataGridJzwTableDiv" class="hide">
+						<table id="exportDlg-dataGridJzwTable"></table>
+					</div>
+
+				</div>
+
+				<div id="exportDlg-geom-tab" title="几何查询输出" style="width:100%;">
+					<div style="margin:5px 0px 5px 10px">
+						<span>图 层</span> <input class="easyui-combobox"
+							id="exportDlg-layerCombobox" style="width:100px;height:30px;"
+							data-options="valueField: 'label',textField: 'value',
+						data: [{label: 'xfbj', value: '分公司'},{label: 'yfbj', value: '营服'},
+						{label: 'wg',value: '网格'},
+						{label: 'jzw',value: '建筑物'}]" />
+					</div>
+					<div>
+						<span class="radioSpan"> <input type="radio"
+							id="exportDlg-pointRadio" value="pointRadio">点 </input> <input
+							type="radio" id="exportDlg-rectangleRadio" value="rectangleRadio">矩形</input>
+							<input type="radio" id="exportDlg-polygonRadio"
+							value="polygonRadio">多边形</input> <input type="radio"
+							id="exportDlg-circleRadio" value="circleRadio">圆</input>
+						</span>
+					</div>
+					<p></p>
+
+				</div>
+			</div>
+
+
+			<div  class="dataExportIpt" style="margin-left:250px">
+				<button id="exportDlg-exportButton">导出</button>
+			</div>
+		</div>
+		<!--统计报表-->
+    <!--热区专题图/区域资源覆盖率/OBD覆盖厚薄分析/建筑物光资源/OBD疏密分析/统计数据专题图-->
+		<div class="countReport-box popBox hide easyui-draggable"
+			data-options="handle:'.popBox-head',onDrag:onDrag">
+			<div class="popBox-head">
+				<p>区域资源覆盖率</p>
+				<div class="boxSize">
+					<a href="#" class="minSize"><i></i></a> <a href="#" class="maxSize"><i></i></a>
+					<a href="#" class="close" onClick="chartDefaultSetting('qyzyfgz-area');"><i></i></a>
+				</div>
+			</div>
+			<div class="countReport-body countCom-body">
+				<div class="lf countCom-condit">
+					<div class="condit-title">
+						<p>区域</p>
+					</div>
+					<div class="radioFilter">
+						<ul>
+							<li><input type="radio" name="qyzyfgz-area" value="1"/><span>市公司</span></li>
+							<li><input type="radio" name="qyzyfgz-area" value="2" checked="checked"/><span>分公司</span></li>
+							<li><input type="radio" name="qyzyfgz-area" value="3" /><span>营销服务中心</span></li>
+							<li id="yxfwzx_li" class="hide"><select id="yxfwzx_select"></select></li>
+							<li><input type="radio" name="qyzyfgz-area" value="4" /><span>网格</span></li>
+							<li><input type="radio" name="qyzyfgz-area" value="5" /><span>建筑物</span></li>
+						</ul>
+					</div>
+					<div class="condit-title">
+						<p>报表</p>
+					</div>
+					<div id="conditIcon-qyzyfgl" class="conditIcon">
+						<a href="#" class="lineType"><i></i></a> <a href="#"
+							class="pillarType"><i></i></a> <a href="#" class="mapType"><i></i></a>
+					</div>
+				</div>
+				<div class="lf countCom-chart">
+					<a href="#" class="hide"><img src="" /></a>
+					<div id="echarts-qyzyfgl" style="width:600px;;height:500px;"></div>
+					<div id="div-qyzyfgl" class="fq-condit hide" style="width:620px;">
+						<form id="form-qyzyfgl" action="javascript:void(0)">
+							<input type="hidden" name="objType" id="qyzyfgl-objType"/>
+							<ul>
+								<li style="display:inline-block;margin-top:5px"><label>组织机构：
+								</label><select id="combotree-qyzyfgl" class="easyui-combotree"
+									style="width:200px;" name="orgId">
+										<option>==请选择组织机构==</option>
+								</select></li>
+								<li style="display:inline-block;margin-top:5px"><label>名称：</label><input
+									type="text" name="objName" id="qyzyfgl-objName"/></li>
+								<li style="margin-top:5px;text-align:right"><div
+										class="FacilityBtn"
+										style="display:inline-block;margin-left:10px">
+										<button id="qyzyfgl_searchBtn">查询</button>
+										<button id='qyzyfgl_resetBtn'>重置</button>
+										<button id='qyzyfgl_btnExport'>导出</button>
+									</div></li>
+							</ul>
+						</form>
+						<div id="datagrid-qyzyfgl"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!--热区专题图/区域资源覆盖率/OBD覆盖厚薄分析/建筑物光资源/OBD疏密分析/统计数据专题图-->
+		<!-- <div class="countReport-box popBox hide easyui-draggable"
+			data-options="handle:'.popBox-head',onDrag:onDrag">
+			<div class="popBox-head">
+				<p>热区专题图</p>
+				<div class="boxSize">
+					<a href="#" class="minSize"><i></i></a> <a href="#" class="maxSize"><i></i></a>
+					<a href="#" class="close"><i></i></a>
+				</div>
+			</div>
+			<div class="countReport-body countCom-body">
+				<div class="lf countCom-condit">
+					<div class="condit-title">
+						<p>区域</p>
+					</div>
+					<div class="radioFilter">
+						<ul>
+							<li><input type="radio" id="" name="area-v" /><span>分公司区域</span></li>
+							<li><input type="radio" id="" name="area-v" /><span>行政区域</span></li>
+							<li><input type="radio" id="" name="area-v" value="" /><span>服务区域</span></li>
+						</ul>
+					</div>
+					<div class="condit-title">
+						<p>报表</p>
+					</div>
+					<div class="conditIcon">
+						<a href="#" class="lineType"><i></i></a> <a href="#"
+							class="pillarType"><i></i></a> <a href="#" class="mapType"><i></i></a>
+					</div>
+				</div>
+				<div class="lf countCom-chart">
+					<a href="#" class="hide"><img src="" /></a>
+					<div id="echarts-obdCorver" style="width:600px;;height:450px;"></div>
+				</div>
+			</div>
+		</div> -->
+
+		<!--业务安装-->
+    <!-- <div class="countReport-box popBox hide">
+        <div class="popBox-head">
+            <p>安装地址到OBD距离</p>
+            <div class="boxSize">
+                <a href="#" class="minSize"><i></i></a> <a href="#" class="maxSize"><i></i></a>
+                <a href="#" class="close"><i></i></a>
+            </div>
+        </div>
+        <div class="countInstall-body countCom-body">
+            <div class="lf countCom-condit">
+                <div class="condit-title">
+                    <p>时间</p>
+                </div>
+                <div class="install-cdt">
+                    <span>开始：</span><input type="datetime"/>
+                </div>
+                <div class="install-cdt">
+                    <span>结束：</span><input type="datetime"/>
+                </div>
+                <div class="install-cdt">
+                    <span>粒度：</span> <select name="">
+                    <option value="">每日</option>
+                </select>
+                </div>
+                <div class="install-cdt">
+                    <span>统计：</span> <select name="">
+                    <option value="">平均距离</option>
+                </select>
+                </div>
+                <div class="condit-title">
+                    <p>区域</p>
+                </div>
+                <div class="radioFilter">
+                    <ul>
+                        <li><input type="radio" id="" name="area"/><span>分公司区域</span></li>
+                        <li><input type="radio" id="" name="area"/><span>行政区域</span></li>
+                        <li><input type="radio" id="" name="area" value=""/><span>服务区域</span></li>
+                    </ul>
+                </div>
+                <div class="condit-title">
+                    <p>报表</p>
+                </div>
+                <div class="conditIcon">
+                    <a href="#" class="lineType"><i></i></a> <a href="#"
+							class="pillarType"><i></i></a> <a href="#" class="mapType"><i></i></a>
+                </div>
+                <div class="countBtn installCount">
+                    <button>统计</button>
+                </div>
+            </div>
+            <div class="lf countCom-chart">
+                <a href="#" class="hide"><img src=""/></a> <a href="#"><img
+                    src="img/bar.png"/></a>
+            </div>
+        </div>
+    </div> -->
+    <!--obd覆盖厚薄分析-->
+	<div class="countReport-box popBox hide easyui-draggable"
+		data-options="handle:'.popBox-head',onDrag:onDrag">
+			<div class="popBox-head">
+				<p>OBD覆盖厚薄分析</p>
+				<div class="boxSize">
+					<a href="#" class="minSize"><i></i></a> <a href="#" class="maxSize"><i></i></a>
+					<a href="#" class="close" onClick="chartDefaultSetting('fghbfx-area')"><i></i></a>
+				</div>
+			</div>
+			<div class="countReport-body countCom-body">
+				<div class="lf countCom-condit">
+					<div class="condit-title">
+						<p>区域</p>
+					</div>
+					<div class="radioFilter">
+						<ul>
+							<li><input type="radio" name="fghbfx-area" value="1"/><span>市公司</span></li>
+							<li><input type="radio" name="fghbfx-area" value="2" checked="checked"/><span>分公司</span></li>
+							<li><input type="radio" name="fghbfx-area" value="3" /><span>营销服务中心</span></li>
+                            <li id="yxfwzx_li1" class="hide"><select id="yxfwzx_select1"></select></li>
+                            <li><input type="radio" name="fghbfx-area" value="4" /><span>网格</span></li>
+                            <li><input type="radio" name="fghbfx-area" value="5" /><span>建筑物</span></li>
+							</select></li>
+						</ul>
+					</div>
+					<div class="condit-title">
+                        
+						<p>报表</p>
+					</div>
+					<div class="conditIcon" id="conditIcon-fghbfx">
+						<a href="#" class="lineType"><i></i></a> <a href="#"
+							class="pillarType"><i></i></a> <a href="#" class="mapType"><i></i></a>
+					</div>
+				</div>
+				<div class="lf countCom-chart">
+					<a href="#" class="hide"><img src="" /></a>
+					<div id="echarts-fghbfx" style="width:600px;;height:500px;"></div>
+                    <div id="div-fghbfx" class="fq-condit hide" style="width:620px;">
+                        <form id="form-fghbfx" action="javascript:void(0)">
+                            <input type="hidden" name="objType" id="fghbfx-objType"/>
+                            <ul>
+                                <li style="display:inline-block;margin-top:5px"><label>组织机构：
+                                </label><select id="combotree-fghbfx" class="easyui-combotree"
+                                                style="width:200px;" name="orgId">
+                                    <option>==请选择组织机构==</option>
+                                </select></li>
+                                <li style="display:inline-block;margin-top:5px"><label>名称：</label><input
+                                        type="text" name="objName" id="fghbfx-objName"/></li>
+                                <li style="margin-top:5px;text-align:right"><div
+                                        class="FacilityBtn"
+                                        style="display:inline-block;margin-left:10px">
+                                    <button id="fghbfx_searchBtn">查询</button>
+                                    <button id='fghbfx_resetBtn'>重置</button>
+                                    <button id='fghbfx_btnExport'>导出</button>
+                                </div></li>
+                            </ul>
+                        </form>
+                        <div id="datagrid-fghbfx"></div>
+                    </div>
+				</div>
+			</div>
+		</div>
+		<!--建筑物光资源-->
+   <!--  <div class="countReport-box popBox hide">
+        <div class="popBox-head">
+            <p>建筑物光资源</p>
+            <div class="boxSize">
+                <a href="#" class="minSize"><i></i></a> <a href="#" class="maxSize"><i></i></a>
+                <a href="#" class="close"><i></i></a>
+            </div>
+        </div>
+    </div> -->
+    <!--统计数据专题图-->
+   <!--  <div class="countReport-box popBox hide">
+        <div class="popBox-head">
+            <p>统计数据专题图</p>
+            <div class="boxSize">
+                <a href="#" class="minSize"><i></i></a> <a href="#" class="maxSize"><i></i></a>
+                <a href="#" class="close"><i></i></a>
+            </div>
+        </div>
+    </div> -->
+    <!--业务安装-->
+   <!--  <div class="countReport-box popBox hide">
+        <div class="popBox-head">
+            <p>业务安装</p>
+            <div class="boxSize">
+                <a href="#" class="minSize"><i></i></a> <a href="#" class="maxSize"><i></i></a>
+                <a href="#" class="close"><i></i></a>
+            </div>
+        </div>
+    </div> -->
+    
+    <!--OBD端口占用-->
+		<div class="countReport-box popBox hide easyui-draggable"
+			data-options="handle:'.popBox-head',onDrag:onDrag">
+			<div class="popBox-head">
+				<p>OBD端口占用</p>
+				<div class="boxSize">
+					<a href="#" class="minSize"><i></i></a> <a href="#" class="maxSize"><i></i></a>
+					<a href="#" class="close"><i></i></a>
+				</div>
+			</div>
+			<div class="countCom-body port-body">
+				<div class="obdport-search">
+
+					<select id="showOrgs" class="easyui-combotree" style="width:200px;"
+						name="">
+						<option>==请选择组织机构==</option>
+					</select> 
+					<label>端口占用&nbsp;:</label> 
+					<input type="text" id="number1" onkeyup="this.value=this.value.replace(/[^\d]/g,'') "
+						onafterpaste="this.value=this.value.replace(/[^\d]/g,'') "
+						style="width: 100px;border: 1px solid #b8d2e5"/>
+					<span>&nbsp;--&nbsp;</span>
+					<input type="text" id="number2" onkeyup="this.value=this.value.replace(/[^\d]/g,'') "
+						onafterpaste="this.value=this.value.replace(/[^\d]/g,'') "
+						style="width: 100px; border: 1px solid #b8d2e5"/><br/> 
+					<label style="margin-left:204px">端口空闲&nbsp;:</label> 
+					<input type="text" id="number3" onkeyup="this.value=this.value.replace(/[^\d]/g,'') "
+						onafterpaste="this.value=this.value.replace(/[^\d]/g,'') "
+						style="width: 100px;border: 1px solid #b8d2e5"/>
+					<span>&nbsp;--&nbsp;</span>
+					<input type="text" id="number4" onkeyup="this.value=this.value.replace(/[^\d]/g,'') "
+						onafterpaste="this.value=this.value.replace(/[^\d]/g,'') "
+						style="width: 100px;border: 1px solid #b8d2e5"/>
+					<button id="obdPortQry" style="width: 80px;border-radius:4px;margin-left: 15px">查询</button>
+				</div>
+				<div class="port-table">
+					<table id="obdPortDate" class="easyui-datagrid"
+					   style="width: 800px;height: 330px"></table>
+				</div>
+			</div>
+		</div>
+
+		<!--宽带渗透率-->
+		<div class="countReport-box popBox hide easyui-draggable"
+			data-options="handle:'.popBox-head',onDrag:onDrag">
+			<div class="popBox-head">
+				<p>宽带渗透率</p>
+				<div class="boxSize">
+					<a href="#" class="minSize"><i></i></a> <a href="#" class="maxSize"><i></i></a>
+					<a href="#" class="close" onClick="chartDefaultSetting('kdstl-area');"><i></i></a>
+
+				</div>
+			</div>
+			<div class="countReport-body countCom-body">
+				<div class="lf countCom-condit">
+					<div class="condit-title">
+						<p>区域</p>
+					</div>
+					<div class="radioFilter">
+						<ul>
+							<li><input type="radio" name="kdstl-area" value="1"/><span>市公司</span></li>
+							<li><input type="radio" name="kdstl-area" value="2" checked="checked"/><span>分公司</span></li>
+							<li><input type="radio" name="kdstl-area" value="3" /><span>营销服务中心</span></li>
+							<li id="kdstl_li" class="hide"><select id="kdstl_select1">
+							</select></li>
+							<li><input type="radio" name="kdstl-area" value="4" /><span>网格</span></li>
+							<li><input type="radio" name="kdstl-area" value="5" /><span>建筑物</span></li>
+						</ul>
+					</div>
+					<div class="condit-title">
+						<p>报表</p>
+					</div>
+					<div id="conditIcon-kdstl" class="conditIcon">
+						<a href="#" class="lineType"><i></i></a> <a href="#"
+							class="pillarType"><i></i></a> <a href="#" class="mapType"><i></i></a>
+					</div>
+				</div>
+				<div class="lf countCom-chart">
+					<a href="#" class="hide"><img src="" /></a>
+					<div id="echarts-kdstl" style="width:600px;height:500px;"></div>
+					<div id="div-kdstl" class="fq-condit hide" style="width:620px;">
+						<form id="form-kdstl" action="javascript:void(0)">
+							<input type="hidden" name="objType" id="kdstl-objType" />
+							<ul>
+								<li style="display:inline-block;margin-top:5px"><label>组织机构：
+								</label><select id="combotree-kdstl" class="easyui-combotree"
+									style="width:200px;" name="orgId">
+										<option>==请选择组织机构==</option>
+								</select></li>
+								<li style="display:inline-block;margin-top:5px"><label>名称：</label><input
+									type="text" name="objName" id="kdstl-objName" /></li>
+								<li style="margin-top:5px;text-align:right"><div
+										class="FacilityBtn"
+										style="display:inline-block;margin-left:10px">
+										<button id="kdstl_searchBtn">查询</button>
+										<button id='kdstl_resetBtn'>重置</button>
+										<button id='kdstl_btnExport'>导出</button>
+									</div></li>
+							</ul>
+						</form>
+						<div id="datagrid-kdstl"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<div id="obdPropertyEdit" class="popBox hide easyui-draggable" style="width: 470px;height: 440px" data-options="handle:'.popBox-head',onDrag:onDrag">
+        <div class="query-condit">
+            <div class="popBox-head">
+                <p>OTB移动</p>
+                <div class="boxSize">
+                    <a href="#" class="close"><i></i></a>
+                </div>
+            </div>
+                <form id="obdPropertyEdit_form" style="padding:10px" action="javascript:void(0)">
+                    <div class="Facility-table">
+                        <table class="easyui-datagrid" id="obdPropertyGrid">
+                        </table>
+                    </div>
+
+                    <div class="adv-condit" style="margin-top:8px">
+                       经度: <input type="text" name="obdLongitude" id="obdLongitude" class="bdLatitude" />&nbsp;&nbsp;
+                       纬度: <input type="text" name="obdLatitude" id="obdLatitude" class="obdLongitude"/>
+                    </div>
+
+                    <div class="buildhandleBtn">
+                        <button id='obdupdateBtn'>保存</button>
+                        <button id='obdcancleBtn'>取消</button>
+                    </div>
+                </form>
+        </div>
+</div>
+
+
+<div id="wgPropertyEdit" class="fq-condit" style="display:none">
+    <div class="query-condit typeinIpt">
+        <form id="wgPropertyEdit_form" style="padding:10px"
+              action="javascript:void(0)">
+            <input type="hidden" name="ocfId" id="wgFacIdEdit"/>
+            <input type="hidden" name="dataReviewId" id="wg_edit_dataReviewId"/>
+            <input type="hidden" name="dataKeyId" id="wg_edit_dataKeyId"/>
+            <table class="form-table">
+                <tr>
+                    <td>名称:</td>
+                    <td><input type="text" name="facName" id="wgFacNameEdit" /></td>
+                    <td>类型:</td>
+                    <td><select name="wgFacname" id="wgTypeFacnameEdit" class="selector"></select></td>
+                </tr>
+                <tr>
+                    <td>分公司:</td>
+                    <td><input type="text" name="county" id="wgCountyEdit" class="selectOrganization" style="background-color:#F0F0F0;border:1px solid #AFAFAF" readonly="readonly"/></td>
+                    <td>营服:</td>
+                    <td><input type="text" name="village" id="wgVillageEdit" class="selectYingFu"  style="background-color:#F0F0F0;border:1px solid #AFAFAF" readonly="readonly"/></td>
+                </tr>
+                <tr>
+                    <td>编码:</td>
+                    <td><input type="text" name="wgCode" id="wgCodeEdit"  style="background-color:#F0F0F0;border:1px solid #AFAFAF" readonly="readonly"/></td>
+                </tr>    
+            </table>
+            <div class="buildhandleBtn">
+                 <button id='wgupdateBtn'>保存</button>
+                 <button id='cancle2'>取消</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="otbPropertyEdit" class="fq-condit" style="display:none">
+    <div class="query-condit">
+        <form id="otbPropertyEdit_form" style="padding:10px"
+              action="javascript:void(0)">
+            <input type="hidden" name="ocfId" id="otbFacIdEdit"/>
+            <input type="hidden" name="dataReviewId" id="otb_edit_dataReviewId"/>
+            <input type="hidden" name="dataKeyId" id="otb_edit_dataKeyId"/>
+            <input type="hidden" name="COUNTY" id="otb_edit_countyName"/>
+            <input type="hidden" name="VILLAGE" id="otb_edit_villageName"/>
+            <div>
+                <p style="margin-bottom: 10px"><label>名称：</label>
+                    <input type="text" name="facName" id="otbFacNameEdit" /></p>
+                <p><label>网格：</label>
+                    <input type="text" name="facName" id="otbgirdEdit" disabled="disabled" /></p>
+                <input type="text" name="facNameid" id="otbgirdidEdit" class="hide" /></p>
+            </div>
+            <div style="display: none;">
+                <p><label>分公司：</label>
+                    <select name="county" id="otbCountyEdit" class="selectOrganization" onchange="oranizationChange()"></select></p>
+                <p><label>营服：</label>
+                    <select name="village" id="otbVillageEdit" class="selectYingFu"></select></p>
+            </div>
+
+            <div class="buildhandleBtn">
+                <button id='otbupdateBtn'>保存</button>
+                <button id='otbcancle2'>取消</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="otbPropertyAdd" class="fq-condit" style="display:none">
+    <div class="query-condit">
+        <form id="otbPropertyAdd_form" style="padding:10px"
+              action="javascript:void(0)">
+            <input type="hidden" name="ocfId"/>
+            <input type="hidden" name="shape" id="otb_shapeNew"/>
+            <input type="hidden" name="dataReviewId" id="otb_add_dataReviewId"/>
+                <div>
+                    <p><label>名称：</label>
+                    <input type="text" name="facName" id="otbFacName" placeholder="输入名称" /></p>
+                    <p ><label>网格：</label>
+                    <input type="text" name="facName" id="otbgird" disabled="disabled" /></p>
+                    <input type="text" name="facNameid" id="otbgirdid" class="hide" /></p>
+                </div>
+                <div style="display: none;">
+                    <p><label>分公司：</label>
+                    <select name="county" id="otbCounty" class="selectOrganization" onchange="oranizationChange()"></select></p>
+                    <p><label>营服：</label>
+                    <select name="village" id="otbVillage" class="selectYingFu"></select></p>
+                </div>
+
+            <div class="buildhandleBtn">
+                <button id='otbupdateBuildingBtn'>保存</button>
+                <button id='otbcancle'>取消</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="wgPropertyAdd" class="fq-condit" style="display:none">
+    <div class="query-condit typeinIpt">
+        <form id="wgPropertyAdd_form" style="padding:10px"
+              action="javascript:void(0)">
+            <input type="hidden" name="ocfId"/>
+            <input type="hidden" name="shape" id="wg_shapeNew"/>
+            <input type="hidden" name="dataReviewId" id="wg_add_dataReviewId"/>
+            <table class="form-table">
+                <tr>
+                    <td>名称:</td>
+                    <td><input type="text" name="facName" id="wgFacName" placeholder="输入名称" /></td>
+                    <td>编码:</td>
+                    <td><input type="text" name="wgCode" id="wgCode" placeholder="输入编码"/></td>
+                </tr>
+                <tr>
+                    <td>分公司:</td>
+                    <td><select name="county" id="wgCounty" class="selectOrganization" onchange="oranizationChange()"></select></td>
+                    <td>营服:</td>
+                    <td><select name="village" id="wgVillage" class="selectYingFu"></select></td>
+                </tr>
+                <tr>
+                    <td>类型:</td>
+                    <td><select type="text" name="wgFacname" id="wgTypeFacname"></select></td>
+                </tr>
+            </table>
+            <div class="buildhandleBtn">
+                <button id='wgupdateBuildingBtn'>保存</button>
+                <button id='cancle1'>取消</button>
+            </div>  
+        </form>
+    </div>
+</div>
+
+<div id="buildingPropertyGrid" class="fq-condit" style="display:none">
+    <div class="query-condit typeinIpt">
+        <form id="buildingPropertyGrid_form" style="padding:10px"
+              action="javascript:void(0)">
+            <input type="hidden" name="ocfId"/>
+            <input type="hidden" name="dataReviewId" id="building_dataReviewId"/>
+            <input type="hidden" name="dataKeyId" id="building_dataKeyId"/>
+            <table class="form-table">
+                <tr>
+                    <td>名称:</td>
+                    <td><input type="text" name="facName" id="FACNAME"
+                               oninput="getAddrId(event)"/></td>
+                    <td>地址:</td>
+                    <td><select id="showAddrId" name="addr"
+                                onchange="addrChage()">
+                    </select></td>
+                </tr>
+                <tr>
+                    <td>结构类型:</td>
+                    <td><select  name="structureType" id="STRUCTURE_TYPE" onchange="onChangeStructureType(this)"></select></td>
+                    <td>类型:</td>
+                    <td><select  name="jzwType" id="JZW_TYPE" ></select></td>
+
+                </tr>
+                <tr>
+                    <td>楼层数:</td>
+                    <td><input type="text" name="floorNum" id="FLOOR_NUM"/></td>
+                    <td>房间数:</td>
+                    <td><input type="text" id="ROOM_NUM" name="roomNum"/></td>
+                </tr>
+                <tr>
+                    <td>市公司:</td>
+                    <td><input type="text" name="city" disabled="disabled"/></td>
+                    <td>分公司:</td>
+                    <td><input type="text" name="county" disabled="disabled"/></td>
+                </tr>
+                <tr>
+                    <td>营销服务中心:</td>
+                    <td><input type="text" name="village" class="dis"
+                               disabled="disabled"/></td>
+                    <td>网格:</td>
+                    <td><input type="text" name="facnameWg" disabled="disabled"/></td>
+                </tr>
+                <tr>
+                    <td>备注:</td>
+                    <td colspan="6">
+                    	<textarea name="remark" id="JZWREMARK" rows="3"></textarea>
+                    </td>
+                </tr>            
+            </table>
+            <div class="buildhandleBtn">
+                <button id='updateBuildingBtn'>保存</button>
+                <button id='propertyCancle'>取消</button>
+            </div>  
+        </form>
+    </div>
+</div>
+	<div id="buildingPropertyAdd" class="fq-condit" style="display:none">
+		<div class="query-condit typeinIpt">
+			<form id="buildingPropertyAdd_form" style="padding:10px;font-size: 13px"
+				  action="javascript:void(0)">
+				<input type="hidden" name="ocfId" />
+				<input type="hidden" name="shapeNew" id="shapeNew"/>
+				<input type="hidden" name="dataReviewId" id="jzw_dataReviewId"/>
+				<table class="form-table">
+					<tr style="display: none">
+						<td>采集人:</td>
+						<td><input type="hidden" name="creater" disabled="disabled"/></td>
+					</tr>
+                    <tr style="display: none">
+                        <td>经度:</td>
+                        <td><input type="hidden" name="longitude" id="longitude" disabled="disabled"/></td>
+                        <td>纬度:</td>
+                        <td><input type="hidden" name="latitude" id="latitude" disabled="disabled"/></td>
+                    </tr>
+					<tr style="display: none">
+						<td>分公司:</td>
+						<td><select type="text" id="selectOrganization" name="county"  class="selectOrganization" onchange="oranizationChange()"/></td>
+						<td>营销中心:</td>
+						<td><select type="text" id="selectYingFu"  name="village" class="selectYingFu" onchange="villageChange()"/></td>
+					</tr>
+					<tr>
+						<td>所属网格:</td>
+						<td><input type="text" class="easyui-combobox" id="selectYingGird"  name="wgName" style="width: 280px"
+                                   data-options="valueField:'facId',textField:'facName'"/></td>
+					</tr>
+                    <tr>
+                        <td>建筑物名称:</td>
+                        <td colspan="5">
+                            <input type="text" name="facName" id="buildingName"  placeholder="输入关键字搜索" oninput="getAddr()"/>
+
+                        </td>
+
+                    </tr>
+					<tr>
+						<td>地址:</td>
+						<td class="bldNameParent"><input type="text" name="addrName" id="buildingAddr" disabled="disabled"/>
+                            <div class="search_suggest hide" id="gov_search_suggest">
+
+                            </div>
+                        </td>
+						<td>ID:</td>
+						<td class="addr-id"><input type="text" id="buildingAddrId" name="addrId" disabled="disabled"/></td>
+					</tr>
+					<tr>
+						<td>一级:</td>
+						<td><input type="text" class="easyui-combobox" id="oneLever" name="addrName1" data-options="valueField:'ID',textField:'NAME',editable:false" style="width: 280px" class="dis"/></td>
+						<td>ID:</td>
+						<td class="addr-id"><input type="text" id="oneLeverId" disabled="disabled" name="addrId1"/></td>
+					</tr>
+					<tr>
+						<td>二级:</td>
+						<td><input  type="text" class="easyui-combobox" id="twoLever" name="addrName2" data-options="valueField:'ID',textField:'NAME',editable:false" style="width: 280px"/></td>
+						<td>ID:</td>
+						<td class="addr-id"><input type="text" id="twoLeverId" disabled="disabled" name="addrId2"/></td>
+					</tr>
+					<tr>
+						<td>三级:</td>
+						<td><input type="text"  class="easyui-combobox one" id="threeLever" name="addrName3" data-options="valueField:'ID',textField:'NAME',editable:false" style="width: 280px"/></td>
+						<td>ID:</td>
+						<td class="addr-id"><input type="text" id="threeLeverId" disabled="disabled" name="addrId3"/></td>
+					</tr>
+					<tr>
+						<td>四级:</td>
+						<td><input type="text" class="easyui-combobox" id="fourLever" name="addrName4" data-options="valueField:'ID',textField:'NAME'" style="width: 280px"/></td>
+						<td>ID:</td>
+						<td class="addr-id"><input type="text" id="fourLeverId" disabled="disabled" name="addrId4"/></td>
+					</tr>
+					<tr>
+						<td>五级:</td>
+						<td><input type="text" class="easyui-combobox" id="fiveLever" name="addrName5" data-options="valueField:'ID',textField:'NAME'" style="width: 280px"/></td>
+						<td>ID:</td>
+						<td class="addr-id"><input type="text" id="fiveLeverId" disabled="disabled" name="addrId5"/></td>
+					</tr>
+					<tr>
+						<td>六级:</td>
+						<td><input type="text" class="easyui-combobox" id="sixLever" name="addrName6" data-options="valueField:'ID',textField:'NAME'" style="width: 280px"/></td>
+						<td>ID:</td>
+						<td class="addr-id"><input type="text" id="sixLeverId" disabled="disabled" name="addrId6"/></td>
+					</tr>
+					<tr>
+						<td>七级:</td>
+						<td><input type="text" class="easyui-combobox" id="sevenLever" name="addrName7" data-options="valueField:'ID',textField:'NAME'" style="width: 280px"/></td>
+						<td>ID:</td>
+						<td class="addr-id"><input type="text" id="sevenLeverId" disabled="disabled" name="addrId7"/></td>
+					</tr>
+					<tr>
+						<td>八级:</td>
+						<td><input type="text" id="eightLever" name="addrName8"/></td>
+                    </tr>
+                    <tr>
+						<td>九级:</td>
+						<td><input type="text" id="nineLever" name="addrName9"/></td>
+                    </tr>
+                    <tr>
+						<td>十级:</td>
+                        <td><input type="text" id="tenLever" name="addrName10"/></td>
+					</tr>                    
+                    <tr>
+                        <td>结构类型:</td>
+                        <td><select  name="structureType" id="STRUCTURETYPE" onchange="onChangeStructureType(this)"></select></td>
+                        <td>类型:</td>
+                        <td><select  name="jzwType" id="JZWTYPE" style="width: 200px;"></select></td>
+
+                    </tr>
+                    <tr>
+                        <td>楼层数:</td>
+                        <td><input type="text" name="floorNum" id="FLOORNUM"/></td>
+                        <td>房间数:</td>
+                        <td><input type="text" id="ROOMNUM" name="roomNum" style="width: 200px;"/></td>
+                    </tr>
+					<tr>
+						<td>备注:</td>
+						<td colspan="6"><textarea name="remark" id="jzwCreatRemark" rows="2"></textarea></td>
+					</tr>					
+				</table>
+				<div  class="buildhandleBtn">
+					<button id='saveCreatBuilding'>保存</button>
+					<button id='cancle'>取消</button>
+				</div>	
+			</form>
+		</div>
+	</div>
+
+	<!-- 设施分页对话框 -->
+	<div id="facilityDialog" class="fq-condit" style="display:none">
+		<div class="query-condit typeinIpt">
+			<form id="facility_detail_form" style="padding:10px"
+				action="javascript:void(0)">
+				<input type="hidden" name="ocfId" id="facility_detail_form_ocfId"/>
+				<input type="hidden" name="dataReviewId" id="facility_detail_form_dataReviewId"/>
+				<table class="form-table">
+					<tr>
+						<td>设施编码：</td>
+						<td><input type="text" name="ocfCode" class="dis"
+							disabled="disabled" /></td>
+						<td>设施名称：</td>
+						<td><input type="text" name="ocfName" id="ocfName"
+							class="dis" disabled="disabled" /></td>
+					</tr>
+					<tr>
+						<td>装机地址：</td>
+						<td><input type="text" name="address" /></td>
+						<td>状态：</td>
+						<td><select name="facstatus" class="dis" disabled="disabled">
+								<option value="0">已验收</option>
+								<option value="1">已完工</option>
+								<option value="2">预录入</option>
+						</select></td>
+					</tr>
+					<tr>
+						<td>入库时间：</td>
+						<td><input type="text" name="recdate" class="dis"
+							disabled="disabled" /></td>
+						<td>高度：</td>
+						<td><input type="text" name="height" id="facility_detail_form_height" ime-mode:disabled /></td>
+					</tr>
+
+                <tr>
+                    <td>接入方式：</td>
+                    <!-- 接入方式 2：FTTH，3：FTTB+LAN，4：FTTB+DSL，6：FTTO -->
+                    <td><select name="nmAccesstype" class="dis"
+                                disabled="disabled">
+                        <option value="2">FTTH</option>
+                        <option value="3">FTTB+LAN</option>
+                        <option value="4">FTTB+DSL</option>
+                        <option value="6">FTTO</option>
+                    </select></td>
+                    <td>网络层级：</td>
+                    <td><select name="netLevel" class="dis" disabled="disabled">
+                        <option value="0">末级</option>
+                        <option value="1">一级</option>
+                        <option value="2">二级</option>
+                    </select></td>
+                </tr>
+				<tr>
+					<td>县分：</td>
+					<td><select id="countySel" name="countyId" class="dis"
+						disabled="disabled"></select></td>
+
+					<td>营服：</td>
+					<td><select id="mkcenterSel" name="mkcenterId" class="dis"
+						disabled="disabled"></select></td>
+				</tr>
+				<tr>
+					<td>经度：</td>
+					<td><input type="text" name="longitude"
+						id="facility_detail_form_longitude" class="dis"
+						disabled="disabled" /></td>
+					<td>纬度：</td>
+					<td><input type="text" name="latitude"
+						id="facility_detail_form_latitude" class="dis"
+						disabled="disabled" /></td>
+
+				</tr>
+				<tr>
+                    <td>容量：</td>
+                    <td><input type="text" name="portXlCount" class="dis"
+                               disabled="disabled"/></td>
+                    <td>占用：</td>
+                    <td><input type="text" name="portXlCountZy" class="dis"
+                               disabled="disabled"/></td>
+                </tr>
+                <tr>
+                    <td>空闲：</td>
+                    <td><input type="text" name="portXlCountKx" class="dis"
+                               disabled="disabled"/></td>
+                    <td>标准地址：</td>
+                    <td><input type="text" name="addr" class="dis"
+                               disabled="disabled"/></td>
+                </tr>
+                <tr>
+                    <td>设施类型：</td>
+                    <td><select name="ocfType" disabled="disabled" class="dis">
+                        <option value="2">光纤分盒</option>
+                        <option value="8">OBD</option>
+                    </select></td>
+                    <td>入库人：</td>
+                    <td><input name="recorder" type='text' disabled="disabled"
+                               class="dis"/></td>
+                </tr>
+                <tr>
+                    <td>备注：</td>
+                    <td colspan="6"><textarea name="remark" rows="3"></textarea></td>
+                </tr>       
+            </table>
+            <div id='updateFacilityBtn' class="buildhandleBtn">
+                <button id='saveUpdateFacilityBtn'>保存</button>
+				<button id='cancleUpdateFacilityBtn'>取消</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div id="facilityPhotoDetail" class="photo_page">
+    <div class="photo_page_content">
+        <span class="prev"></span> <span class="next"></span> <span
+            class="photo_page_number">1/1</span>
+        <div class="photo_content"></div>
+    </div>
+    <div class="photo_page_table">
+        <ul>
+            <li>拍照者：<span id="photo_creater"></span></li>
+            <li>拍照时间：<span id="photo_createTime"></span></li>
+            <li>经度：<span id="photo_longitude"></span></li>
+            <li>纬度：<span id="photo_latitude"></span></li>
+            <li>方位角：<span id="photo_azimuth"></span></li>
+            <li>照片描述：<span id="photo_remark"></span></li>
+        </ul>
+    </div>
+</div>
+<div id="dataView_modify_config_dialog" class="hide">
+	<input id="dataView_modify_config_dataType" type="hidden"/>
+	<input id="dataView_modify_config_facid" type="hidden"/>
+	<input id="dataView_modify_config_index" type="hidden"/>
+    <input id="dataView_modify_config_id" type="hidden"/>
+    <div id="dataView_modify_config_table"></div>
+    <div id="dataView_modify_config_viewPic" class="popBox-btn" style="text-align:center;margin-top:10px;">
+    	<button id="dataView_modify_config_viewPicBtn">查看图片</button>
+    	<button id="dataView_modify_config_passBtn">通过</button>
+    	<button id="dataView_modify_config_fadebackBtn">驳回</button>
+    	<button id="dataView_modify_config_cancelBtn">取消</button>
+    </div>
+</div>
+<!-- 右键设施记录，弹出编辑、查看菜单 -->
+<div id="facilityMenu" class="easyui-menu hide" style="width:50px;">
+    <div data-options="iconCls:'icon-property-view',name:'详情'">查看</div>
+    <div class="menu-sep"></div>
+    <div data-options="iconCls:'icon-property-modify',name:'修改'">编辑</div>
+    <div class="menu-sep"></div>
+    <div data-options="iconCls:'icon-image-view',name:'图片'">图片浏览</div>
+</div>
+
+<!-- 右键设施记录，弹出编辑、查看菜单 -->
+<div id="mapMenu" class="easyui-menu hide" style="width:50px;">
+    <div data-options="iconCls:'icon-lightfacility-statistics',name:'查看光资源统计'" class="reviewToggle hide" id="reviewOBD">查看光资源统计</div>
+    <div class="menu-sep reviewToggle hide" id="reviewOBDLine"></div>
+    <div data-options="iconCls:'icon-image-view',name:'查看建筑物图片'" class="reviewToggle hide" id="reviewPic">查看建筑物图片</div>
+    <div class="menu-sep reviewToggle hide" id="reviewPicLine"></div>
+    <div data-options="iconCls:'icon-image-add',name:'添加'" class="newAdd hide" id="newAdd">添加</div>
+    <div class="menu-sep newAdd hide" id="newAddLine"></div>
+    <div data-options="iconCls:'icon-menu-pickup',name:'底图拾取'" class="pickUp hide" id="pickUp">底图拾取</div>
+    <div class="menu-sep pickUp hide" id="pickUpLine"></div>
+    <div data-options="iconCls:'icon-property-modify',name:'属性修改'" class="handleToggle hide" id="editPro">属性修改</div>
+    <div class="menu-sep handleToggle hide" id="editProLine"></div>
+    <div data-options="iconCls:'icon-shape-modify',name:'修改外形'" class="handleToggle hide" id="editGra">外形修改</div>
+    <div class="menu-sep handleToggle hide" id="editGraLine"></div>
+    <div data-options="iconCls:'icon-del',name:'删除'" class="handleToggle hide" id="delete">删除</div>
+    <div class="menu-sep handleToggle hide" id="deleteLine"></div>
+    <div data-options="iconCls:'icon-move',name:'移动'" class="moveToggle hide" id="move">移动</div>
+    <div class="menu-sep moveToggle hide" id="moveLine"></div>
+    <div data-options="iconCls:'icon-back-page',name:'返回'" class="backToPre hide" id="backToPre">返回</div>
+
+
+
+    <div data-options="iconCls:'icon-menu-cancel',name:'取消'" class="cancelOp hide" id="cancelOp">取消</div>
+    <div class="menu-sep hide" style="display: none" id="cancelOpLine"></div>
+    <div data-options="iconCls:'icon-menu-submit',name:'提交'" class="submitOp hide" id="submitOp">提交</div>
+    <div data-options="iconCls:'icon-OBD',name:'光资源'" class="mapToggle">光资源</div>
+    <div class="menu-sep mapToggle"></div>
+    <div data-options="iconCls:'icon-building',name:'建筑物'" class="mapToggle ">建筑物</div>
+    <div class="menu-sep mapToggle"></div>
+    <div data-options="iconCls:'icon-serviceArea',name:'服务区'" class="mapToggle">服务区</div>
+    <div class="menu-sep mapToggle"></div>
+    <div data-options="iconCls:'icon-gridCell',name:'网格'" class="mapToggle">网格</div>
+    <div class="menu-sep mapToggle"></div>
+    <div data-options="iconCls:'icon-gridType',name:'营服'" class="mapToggle">营服</div>
+    <div class="menu-sep mapToggle"></div>
+    <div data-options="iconCls:'icon-org',name:'县分'" class="mapToggle">县分</div>
+</div>
+
+<div id="mapMenu1" class="easyui-menu hide" style="width:50px;">
+    <div data-options="iconCls:'icon-lightfacility-statistics',name:'查看光资源统计'" class="reviewToggle hide" id="reviewOBD1">查看光资源统计</div>
+    <div class="menu-sep reviewToggle hide" id="reviewOBDLine1"></div>
+    <div data-options="iconCls:'icon-image-view',name:'查看建筑物图片'" class="reviewToggle hide" id="reviewPic1">查看建筑物图片</div>
+    <div class="menu-sep reviewToggle hide" id="reviewPicLine1"></div>
+    <div data-options="iconCls:'icon-property-modify',name:'属性修改'" class="handleToggle" id="editPro1">属性修改</div>
+    <div class="menu-sep handleToggle" id="editProLine1"></div>
+    <!--<div data-options="iconCls:'icon-edit',name:'外形修改'" class="handleToggle" id="editGra1">外形修改</div>-->
+    <!--<div class="menu-sep handleToggle" id="editGraLine1"></div>-->
+    <div data-options="iconCls:'icon-image-add',name:'添加'" class="newAdd hide" id="newAdd1">添加服务区</div>
+    <div class="menu-sep newAdd hide" id="newAddLine1"></div>
+    <div data-options="iconCls:'icon-del',name:'删除'" class="handleToggle" id="delete1">删除</div>
+    <div class="menu-sep handleToggle" id="deleteLine1"></div>
+</div>
+
+<!-- 数据编辑对话框 -->
+<div id="mapEditorDialog"
+     style="padding:5px;width:300px;height:400px;display:none;">
+    <div>
+        <div>
+            <span>图 层</span> <input class="easyui-combobox"
+                                    id="editDlg-layerCombobox" style="width:100px;height:30px;"
+                                    data-options="valueField: 'label',textField: 'value',
+						data: [{label: 'wg',value: '网格'}, {label: 'jzw',value: '建筑物'}, 
+						{label: 'obdfwq', value: 'OBD服务区'},
+						{label: 'xfbj', value: '县分'},{label: 'yfbj', value: '营服'},]"/>
+        </div>
+    </div>
+</div>
+	<!--弹框-->
+	<!--导出弹框-->
+	<div class="doExport-box popBox hide easyui-draggable"
+		data-options="handle:'.popBox-head',onDrag:onDrag"
+		style="width:300px;height:200px;left:50%;top:35%;z-index:1201">
+		<div>
+			<div class="popBox-head">
+				<p>导出到Excel</p>
+				<a href="#" class="close"><i></i></a>
+			</div>
+			<br>
+			<div style="text-align:center;">
+				<p style="display:block;"><input type="radio" name="export_radio" id="exportCurrentPage" checked="checked" /><label>导出当前页</label></p>
+				<p style="display:block;margin-top:7px;"><input type="radio" name="export_radio" id="exportAllPage" /><label>导出所有页</label></p>
+				<p style="display:block;margin-top:7px;" id="export_sel_rows_p"><input type="radio" name="export_radio" id="exportSelRows" /><label>导出选择项</label></p>
+			</div>
+			<br>
+			<div class="popBox-btn" align="center">
+				<button id="exportExcel">导出</button>
+				<button class="cancelBtn">关闭</button>
+			</div>
+		</div>
+	</div>
+
+<!-- 审核意见弹出框 -->
+<div id="review_remark_dialog" class="hide" style="text-align:center;padding-top:20px;">
+	<div>
+        <span>常用意见：</span><input type="text" style="width: 280px;" id="review_common_advice" class="easyui-combobox"
+                                  data-options="valueField:'id',textField:'advice'">
+       <div style="height: 10px"></div>
+		<textarea id="review_remark" rows="10" cols="35" style="height: 150px;width: 350px"></textarea>
+	</div>
+
+	<div class="FacilityBtn">
+        <button id="review_remark_add" style="display:inline-block;width:100px">加为常用意见</button>
+		<button id="review_remark_submit" style="display:inline-block">提交</button>
+        <button id="review_remark_reset" style="display:inline-block">重置</button>
+	</div>
+
+</div>
+<!-- 修改密码弹出框 -->
+<div id="update_password_dialog"  class="fq-condit hide">
+   <div class="query-condit typeinIpt">
+          <form id="update_password_form" style="padding:20px 10px 0px 10px;"
+              action="javascript:void(0)">
+       		<table class="form-table" style="margin:0 auto">
+       			<tr>
+       				<td>原始密码：</td>
+       				<td><input type="text"  name="oraginalPw" id="oraginalPw" autocomplete="off" onfocus="this.type='password';checkModifyPassWdForm();" oninput="checkModifyPassWdForm()"/></td>
+       			</tr>
+       			<tr>
+       				<td>新&nbsp;&nbsp;密&nbsp;&nbsp;码：</td>
+       				<td><input type="text" name="newPw" id="newPw" autocomplete="off" onfocus="this.type='password'" oninput="checkModifyPassWdForm()"/></td>
+       			</tr>
+       			<tr>
+       				<td>确认密码：</td>
+       				<td><input type="text" name="rePw" id="rePw" autocomplete="off" onfocus="this.type='password'" oninput="checkModifyPassWdForm()"/></td>
+       			</tr>
+       		</table>
+       		<div class="mesr" id="updatepw_tip" align="center">&nbsp;</div>
+         </form>
+         <div class="buildhandleBtn">
+             <button id="btn_updatepw_save">保存</button>
+             <button id="btn_updatepw_reset">重置</button>
+         </div>
+     </div>
+</div>
+<script type="text/javascript" src="js/jquery-1.7.min.js"></script>
+<script type="text/javascript" src="js/jquery.cookie.js"></script>
+<script type="text/javascript" src="js/jquery.serializeObj.js"></script>
+<script type="text/javascript" src="js/jquery-easyui-1.4.5/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="js/jquery-easyui-1.4.5/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="js/echarts.common.min.js"></script>
+<script type="text/javascript" src="js/md5.js"></script>
+<script type="text/javascript" src="js/date-format.js"></script>
+<script type="text/javascript" src="http://192.168.1.47/arcgis_js_api/library/3.19/3.19/init.js"></script>
+<script type="text/javascript" src="js/esri.symbol.MultiLineTextSymbol.js"></script>
+<script type="text/javascript" src="js/obdoperation.js"></script>
+<script type="text/javascript" src="js/obdportuse.js"></script>
+<script type="text/javascript" src="js/facilityquery.js"></script>
+<script type="text/javascript" src="js/dataReviewQry.js"></script>
+<script type="text/javascript" src="js/mySubmitReviewData.js"></script>
+<script type="text/javascript" src="js/chart.report.js"></script>
+<script type="text/javascript" src="js/chart.thickthin.js"></script>
+<script type="text/javascript" src="js/chart.broadband.js"></script>
+<script type="text/javascript" src="js/dataExport.js"></script>
+<script type="text/javascript" src="js/heatmap.js"></script>
+
+
+<script type="text/javascript">
+    var map;
+    require(["esri/map",
+            "esri/layers/GraphicsLayer",
+            "dojo/on", "dojo/query", "dojo/colors",
+            "esri/graphic", "esri/symbols/SimpleMarkerSymbol",
+            "esri/symbols/SimpleLineSymbol",
+            "esri/symbols/SimpleFillSymbol",
+            "esri/symbols/TextSymbol",
+            "esri/renderers/SimpleRenderer",
+            "esri/renderers/UniqueValueRenderer",
+            "esri/geometry/Extent",
+            "esri/geometry/Point",
+            "esri/geometry/Polyline", "esri/geometry/Polygon",
+            "esri/geometry/Circle",
+            "esri/layers/WMSLayer",
+            "esri/toolbars/draw",
+            "esri/toolbars/edit",
+            "esri/layers/FeatureLayer",
+            "esri/layers/LabelClass",
+            "esri/dijit/editing/Add",
+            "esri/tasks/IdentifyTask",
+            "esri/tasks/IdentifyParameters",
+            "esri/layers/TiledMapServiceLayer",
+            "esri/layers/ArcGISTiledMapServiceLayer",
+            "esri/dijit/editing/Delete",
+            "esri/dijit/editing/Update",
+               "esri/dijit/InfoWindow",
+                "esri/tasks/RelationParameters",
+                "esri/graphicsUtils",
+                "esri/geometry/ScreenPoint",
+                "esri/renderers/HeatmapRenderer",
+            "esri/tasks/query", "esri/layers/ArcGISDynamicMapServiceLayer",
+            "esri/tasks/FindTask",
+            "esri/tasks/FindParameters", "esri/tasks/LengthsParameters",
+            "esri/tasks/AreasAndLengthsParameters",
+            "esri/InfoTemplate","dijit/TooltipDialog", "dijit/popup",
+            "dojo/domReady!"],
+        function (Map,
+                  GraphicsLayer, on, query, Color, Graphic,
+                  SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol,TextSymbol,SimpleRenderer,UniqueValueRenderer,
+                  Extent, Point, Polyline, Polygon, Circle, WMSLayer,
+                  Draw, Edit,
+                  FeatureLayer, LabelClass,Add, IdentifyTask, IdentifyParameters,
+                  TiledMapServiceLayer,
+                  ArcGISTiledMapServiceLayer, Delete, Update, InfoWindowBase,RelationParameters,graphicsUtils,ScreenPoint,HeatmapRenderer,query,
+                  ArcGISDynamicMapServiceLayer,
+                  FindTask, FindParameters,LengthsParameters,AreasAndLengthsParameters,TooltipDialog, dijitPopup, InfoTemplate) {
+
+            wgSymbol = new SimpleFillSymbol(
+                SimpleLineSymbol.STYLE_SOLID,
+                new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([0, 0, 0, 1]), 1),
+                new Color([255, 0, 0, 0.2]));
+            wgSymbolRenderer = new SimpleRenderer(wgSymbol);
+
+            var flag = false;
+            onLoadMap();
+
+            //测试featurelayer编辑
+            addDrawSymbol = new SimpleFillSymbol(
+                SimpleFillSymbol.STYLE_SOLID,
+                new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([0, 0, 0]), 2),
+                new Color([0, 0, 255, 0.5]));
+
+            highlightSymbol = new SimpleFillSymbol(
+                SimpleFillSymbol.STYLE_SOLID,
+                new SimpleLineSymbol(
+                    SimpleLineSymbol.STYLE_SOLID,
+                    new Color([255, 0, 0]), 3
+                ),
+                new Color([125, 125, 125, 0.35])
+            );
+
+            
+            //var defaultSymbol = new SimpleFillSymbol().setStyle(SimpleFillSymbol.STYLE_NULL);
+          	//defaultSymbol.outline.setStyle(SimpleLineSymbol.STYLE_NULL);
+            //var renderer = new UniqueValueRenderer(defaultSymbol, "SUB_REGION");
+
+            //     头部缩放控制
+            $(".headerControl").click(function () {
+                $(".header").animate({height: 'toggle'});
+            });
+
+            //
+            $(".building-table").css("display", "none");
+            $(".building-head a").click(function () {
+                $(".building-table").hide();
+            });
+
+            $(".personal-menu ul li").mouseover(function () {
+                var index = $(this).index();
+                $("ul .personal-menu-items").eq(index).show();
+                $(this).siblings().find(".personal-menu-items").hide();
+            }).mouseout(function () {
+                $("ul .personal-menu-items").hide();
+            });
+
+            //点击后隐藏菜单
+            $("body").unbind('click').bind('click', function () {
+                $(".personal-menu-items").addClass("hide").hide();
+            });
+            $(".sevice-schbox .textbox").css({
+                "vertical-align": "top",
+                "border-radius": "0",
+                "-webkit-border-radius": "0"
+            });
+            //点击菜单项弹窗
+            //服务
+            $("#service_menu_items ul li").click(function () {
+                var index = $("#service_menu_items ul li").index(this);              
+                $(".sevice-box").eq(index).removeClass("hide").show().siblings(".popBox").hide();
+                if (index == 1) {
+                    initDistance();
+                }
+            });
+            //资料
+            $("#resource_menu_items ul li").click(function () {
+                var index = $("#resource_menu_items ul li").index(this);
+                //$("#cover").show();
+                var initWidth = '1000';
+                if(index==3){
+                	initWidth=600;
+                }
+                var initLeft = $(".resource-box").eq(index).position().left;
+                var initTop = $(".resource-box").eq(index).position().top;
+                $(".resource-box").eq(index).css({"position":"fixed","left":"50%","top":"20%","margin-left":-initWidth/2,"width":initWidth });
+                $(".resource-box").eq(index).find(".countCom-body").show();
+                $(".resource-box").eq(index).removeClass("hide").show().siblings(".popBox").hide();
+            });
+            //统计报表
+            $("#report_menu_items ul li").click(function () {
+                var index = $("#report_menu_items ul li").index(this);
+                //$("#cover").show();
+                var initWidth = '820';
+                if(index==7){
+                	initWidth=730;
+                }
+                var initLeft = $(".countReport-box").eq(index).position().left;
+                var initTop = $(".countReport-box").eq(index).position().top;
+                $(".countReport-box").eq(index).css({"position":"fixed","left":"50%","top":"20%","margin-left":-initWidth/2,"width":initWidth});
+                $(".countReport-box").eq(index).find(".countCom-body").show();
+                $(".countReport-box").eq(index).removeClass("hide").show().siblings(".popBox").hide();
+            });
+
+            $(".sch-back").click(function () {
+                $(".schfilterIpt").animate({width: '1px', left: '188px', opacity: '0.1'}, "slow").hide();
+                $(".sch-back").hide();
+                $(".sevice-schbox .textbox").show("10");
+            });
+            //弹框调用
+            //警报
+            $(".alarm").on('click', function () {
+                $(".alarm-box").removeClass("hide").show();
+                $(".alarm").hide();
+            });
+            //服务
+            $(".sevice li").on('click', function () {
+                var index = $(".sevice li").index(this);
+                $(".sevice-box").eq(index).removeClass("hide").show().siblings(".popBox").hide();
+            });
+            //资料
+            $(".resource li").on('click', function () {
+                var index = $(".resource li").index(this);
+                $("#cover").show();
+                $(".resource-box").eq(index).removeClass("hide").show().siblings(".popBox").hide();
+            });
+            //统计报表
+            $(".countReport li").each(function (index, obj) {
+                if (index < 6) {
+                    $(this).bind("click", function () {
+                        $(".countReport-box").eq(0).removeClass("hide").show().siblings(".popBox").hide();
+                    });
+                } else if (index == 6) {
+                    $(this).bind("click", function () {
+                        $(".countReport-box").eq(1).removeClass("hide").show().siblings(".popBox").hide();
+                    });
+                } else if (index == 7) {
+                    $(this).bind("click", function () {
+                        $(".countReport-box").eq(2).removeClass("hide").show().siblings(".popBox").hide();
+                    });
+                }
+                return;
+            });
+
+
+            function initDistance() {
+                $(".Facility-table").show();
+                $(".Facility-table .datagrid-view2 .datagrid-body").find("tr").removeClass("datagrid-row-selected");
+                $(".Facility-table .datagrid-view2 .datagrid-body").unbind('onDblClickRow');
+
+                $(".building-table").hide();
+            }
+
+            //工具栏显示
+            $(".tool-navList div").on('click', function () {
+                var index =$(this).index();
+                if( index == 8 || index == 6){
+                    $(".to_top").show();
+                }else{
+                    $(".to_top").hide();
+                }
+
+                return;
+            });
+            $(".tool-navList div").mouseover(function(){               
+                 $(this).addClass("active");
+                 $(this).children(".shape").removeClass("hide").show();    
+            }).mouseout(function(){
+            	 $(this).removeClass("active");
+                 $(this).children(".shape").hide();
+            });
+            //
+            $(".shape li").on('click', function () {
+            	
+            	$(this).addClass("li_active").siblings().removeClass("li_active");
+            	
+            	return false;
+            });
+            //
+            $(".toolShow").click(function () {
+                if (!flag) {
+                    $(".tool-navList").hide();
+                } else {
+                    $(".tool-navList").removeClass("hide").show();
+                }
+                flag = !flag;
+
+            });
+            $(".thermodynamic li").on('click',function(){
+            	$(".rate-check").removeClass("hide").show();
+            });
+            $(".rate-check ul b").on('click',function(){
+            	$(this).parents(".rate-check").hide();
+            });
+            //左侧弹框缩放
+            $(".scaleBtn").click(function(){           
+            	if(!flag){
+            		$(this).parent().addClass("move").css("left","-12px"); 
+            	}else{
+            		$(this).parent().removeClass("move").css("left","2px");
+            	}
+            	flag = !flag;
+            	return;
+            });
+            //最小化
+            $(".minSize").on('click',function () {
+            	var popHead = $(this).parent().parent();  
+            	var divWidth = popHead.parent().width();
+            	var $contBody = popHead.siblings(".countCom-body");
+            	if($contBody.is(':visible')){
+                popHead.siblings(".countCom-body").hide();
+                popHead.parent().css({"position":"fixed","right":"0","left":"auto","top":"96%","margin-left":"0","width":divWidth/4});
+            	}
+                return;
+            });
+            //最大化
+            $(".maxSize").on('click',function () {
+                var popHead = $(this).parent().parent();
+                var divWidth = popHead.parent().width();
+                var $contBody = popHead.siblings(".countCom-body");
+                if($contBody.is(':hidden')){
+                	popHead.siblings(".countCom-body").show();
+                    popHead.parent().css({"position":"fixed","left":"50%","top":"20%","margin-left":-divWidth*2,"width":divWidth*4});
+                }               
+                return;
+            });
+            //关闭弹框 
+            $(".close").click(function () {
+            	// 修正页面关闭时下拉框未收起导致下拉框会显示到左上角的bug
+            	$(this).parent().parent().parent().find('.easyui-combotree').each(function() {
+		        	$(this).combotree('hidePanel');
+		        });
+            	$(this).parent().parent().parent().find('.easyui-datebox').each(function() {
+		        	$(this).datebox('hidePanel');
+		        });
+                $("#cover").hide();              
+                $(this).parents('.popBox').hide();
+                
+                var featureLayer = map.getLayer("yfzxzyfglLayer") ;
+				if(typeof(featureLayer) != undefined && featureLayer != null){
+					map.removeLayer(featureLayer) ;
+					featureLayer = null ;
+				}
+				
+				var featureLayer1 = map.getLayer("fgszyfglLayer") ;
+				if(typeof(featureLayer1) != undefined && featureLayer1 != null){
+					map.removeLayer(featureLayer1) ;
+					featureLayer1 = null ;
+				}
+				
+				var featureLayer2 = map.getLayer("yfzxfghbfxLayer") ;
+				if(typeof(featureLayer2) != undefined && featureLayer2 != null){
+					map.removeLayer(featureLayer2) ;
+					featureLayer2 = null ;
+				}
+				
+				var featureLayer3 = map.getLayer("fgsfghbfxLayer") ;
+				if(typeof(featureLayer3) != undefined && featureLayer3 != null){
+					map.removeLayer(featureLayer3) ;
+					featureLayer3 = null ;
+				}
+				
+				var featureLayer4 = map.getLayer("yfzxkdstlLayer") ;
+				if(typeof(featureLayer4) != undefined && featureLayer4 != null){
+					map.removeLayer(featureLayer4) ;
+					featureLayer4 = null ;
+				}
+				
+				var featureLayer5 = map.getLayer("fgskdstlLayer") ;
+				if(typeof(featureLayer5) != undefined && featureLayer5 != null){
+					map.removeLayer(featureLayer5) ;
+					featureLayer5 = null ;
+				}
+				
+				var graphiclayer1 = map.getLayer("yfzxkdstlLabelLayer") ;
+				if(typeof(graphiclayer1) != undefined && graphiclayer1 != null){
+					map.removeLayer(graphiclayer1) ;
+					graphiclayer1 = null ;
+				}
+				
+				var graphiclayer = map.getLayer("fgskdstlLabelLayer") ;
+				if(typeof(graphiclayer) != undefined && graphiclayer != null){
+					map.removeLayer(graphiclayer) ;
+					graphiclayer = null ;
+				}
+				
+				map.graphics.clear();
+				
+				//$("div.esriPopupWrapper").hide();
+				//$("div.outerPointer.left").hide() ;
+                return;
+            });
+            $(".cancelBtn").click(function () {
+                var oParent = $(this).parent().parent();
+                $("#cover").hide();
+                oParent.parent().hide();
+            });	
+			
+            //服务区资源列表点击
+            $(".assets-bodyWrap .assets-listItem").click(function () {
+                $(".assets-bodyWrap").hide();
+                $(".assets-overLink").removeClass("hide").show();
+            });
+            //资源弹框地址多行文本溢出
+            $(".addrDescribe p").each(function () {
+                var maxNum = 30;     //最多显示50个字符
+                if ($(this).text().length > maxNum) {
+                    $(this).text($(this).text().substring(0, maxNum));
+                    $(this).html($(this).html() + '…');
+                }
+            });
+            //分页鼠标悬浮样式更改
+            $(".pageNum input").hover(function () {
+                var st = $("input[type='button']").attr("disabled");
+                if ($(this).st != "disabled") {
+                    $(this).css("background", "#08e");
+                } else {
+                    $(this).css("background", "#fff");
+                }
+            }, function () {
+                $(this).css("background", "#fff");
+            });
+            //分页点击点前禁用样式
+            $(".pageNum .page-c").click(function () {
+                $(this).css("background", "#fff");
+                $(this).addClass("pageCur").siblings().removeClass("pageCur");
+            });
+            //显示登录名和最后登录时间
+            var loginJSON = JSON.parse($.cookie("loginUser"));
+            $(".log-name").text(loginJSON['username']);
+            $(".log-time").text(getSmpFormatDateByLong(parseInt(loginJSON['lastLoginTime']), true));
+            
+            checkStartEndDatebox("createDateStart", "createDateEnd");
+            checkStartEndDatebox("recdateStart", "recdateEnd");
+            checkStartEndDatebox("reviewDateStart", "reviewDateEnd");
+            checkStartEndDatebox("myReviewDateStart", "myReviewDateEnd");
+            checkStartEndDatebox("myCreateDateStart", "myCreateDateEnd");
+            
+            //密码修改
+            $(".log-set").off().on('click',function(){
+            	$("#update_password_form").form('reset');
+            	$("#updatepw_tip").text("");
+            	modifyPassword();
+            	return false;
+            });
+        });
+    //div拖动公用方法
+    function onDrag(e) {
+    	
+        var d = e.data;
+        var oSpacing =$(this).css("marginLeft");       
+        var divSpacing =parseInt( oSpacing.substring(1,oSpacing.length-2));      
+        var screenHeight = $("#map").outerHeight();
+        var screenWidth = $("#map").outerWidth();
+        if (d.left<divSpacing) {
+            d.left=divSpacing;
+        }
+        if (d.top < 0) {
+            d.top = 0;
+        }
+
+        if (d.left + $(d.target).outerWidth() > screenWidth+divSpacing) {
+            d.left = screenWidth - $(d.target).outerWidth()+divSpacing;
+        }
+        if (d.top + $(d.target).outerHeight() > screenHeight) {
+            d.top = screenHeight - $(d.target).outerHeight();
+        }
+        
+		// 修正拖动页面时未收起的下拉框跟随页面的bug
+        $(this).find('.easyui-combotree').each(function() {
+        	$(this).combotree('hidePanel');
+        });
+        $(this).find('.easyui-datebox').each(function() {
+        	$(this).datebox('hidePanel');
+        });
+    }
+
+    //判断超时，超时跳转到登录
+    $.ajaxSetup({
+    	timeout: 8000,
+	    complete:function(XMLHttpRequest,textStatus){
+	          if(textStatus=="parsererror"){
+	               $.messager.alert("提示", "登录超时，请重新登录！", 'info',function(){
+	                   window.location.href = 'login.html';
+	               });
+	          } else if(textStatus=="error"){
+	              $.messager.alert("提示", "请求超时，请稍后再试！", 'info');
+	          }
+	    }
+	});
+    //报表默认选择第一个维度
+    function chartDefaultSetting(name){
+    	$(":input[name="+name+"]").eq(1).click();
+    }
+    
+    // 控制开始、结束日期的选择
+    function checkStartEndDatebox(startId, endId) {
+    	var startDatebox = $("#"+startId);
+    	var endDatebox = $("#"+endId);
+    
+    	startDatebox.datebox("calendar").calendar({
+		    validator: function(date) {
+		    	var endDateStr = endDatebox.datebox('getValue');
+		    	
+		    	if (endDateStr) {
+		    		var arr = [];
+		    		
+		    		if (endDateStr.indexOf("-") > 0) {
+		    			arr = endDateStr.split("-");
+		    		}
+		    		
+		    		if (arr.length == 3) {
+		    			var d = new Date(parseInt(arr[0]), parseInt(arr[1])-1, parseInt(arr[2]));
+		    			
+		    			return date <= d;
+		    		}
+
+		    		return true;
+		    	} else {
+		    		return true;
+		    	}
+		    }
+		});
+		
+		endDatebox.datebox('calendar').calendar({
+		    validator: function(date) {
+		    	var startDateStr = startDatebox.datebox('getValue');
+		    	
+		    	if (startDateStr) {
+		    		var arr = [];
+		    		
+		    		if (startDateStr.indexOf("-") > 0) {
+		    			arr = startDateStr.split("-");
+		    		}
+		    		
+		    		if (arr.length == 3) {
+		    			var d = new Date(parseInt(arr[0]), parseInt(arr[1])-1, parseInt(arr[2]));
+		    			
+		    			return date >= d;
+		    		}
+
+		    		return true;
+		    	} else {
+		    		return true;
+		    	}
+		    }
+		});
+    }
+    checkPermission();
+    //获取当前登录的用户，根据用户的角色查询权限
+    function checkPermission(){
+        var loginUser = JSON.parse($.cookie('loginUser'));
+        $.get("restful/permission/findByLoginName", {loginName: loginUser.loginName},function (data) {
+            var list = $.parseJSON(data.content);
+            //1、设施
+     		$("#facilityMenu").menu("disableItem",$("#facilityMenu").menu("findItem", "编辑").target);
+        	$("#facilityMenu").menu("disableItem",$("#facilityMenu").menu("findItem", "查看").target);
+        	$("#facilityMenu").menu("disableItem",$("#facilityMenu").menu("findItem", "图片浏览").target);
+        	//数据导出
+        	$("#btnExport").hide();
+        	//图形导出
+        	$("#exportDlg-exportButton").hide();
+        	//obd移动
+        	//2、建筑物，网格,服务区，营服边界、县分边界
+        	$("#mapMenu").menu("disableItem",$("#mapMenu").menu("findItem", "添加").target);
+        	$("#mapMenu").menu("disableItem",$("#mapMenu").menu("findItem", "属性修改").target);
+        	$("#mapMenu").menu("disableItem",$("#mapMenu").menu("findItem", "外形修改").target);
+        	$("#mapMenu").menu("disableItem",$("#mapMenu").menu("findItem", "删除").target);
+        	$("#mapMenu").menu("disableItem",$("#mapMenu").menu("findItem", "查看光资源统计").target);
+        	$("#mapMenu").menu("disableItem",$("#mapMenu").menu("findItem", "查看建筑物图片").target);
+        	$("#mapMenu1").menu("disableItem",$("#mapMenu1").menu("findItem", "添加服务区").target);
+        	$("#mapMenu1").menu("disableItem",$("#mapMenu1").menu("findItem", "查看光资源统计").target);
+        	$("#mapMenu1").menu("disableItem",$("#mapMenu1").menu("findItem", "查看建筑物图片").target);
+         	$("#mapMenu1").menu("disableItem",$("#mapMenu1").menu("findItem", "属性修改").target);
+         	$("#mapMenu1").menu("disableItem",$("#mapMenu1").menu("findItem", "删除").target);
+        	//3、我的提交
+        	$("#mySubmitReviewData").hide();
+        	//4、我的审核
+        	$("#myReviewData").hide();
+        	//5、obd统计报表
+        	$("#qyzyfgl_chart").hide();
+        	$("#qyzyfg4_chart").hide();
+        	$("#obd_dkzy").hide();
+        	$("#kdstl_chart").hide();
+            for(i in list){
+            	//导出按钮
+             	if(list[i].priviCode =='obd:dataExport'){
+    				$("#btnExport").show();
+                }
+            	//设施右键菜单
+   				if(list[i].priviCode =='obd:query'){
+   	            	$("#facilityMenu").menu("enableItem",$("#facilityMenu").menu("findItem", "查看").target);
+                }
+                if(list[i].priviCode =='obd:update'){
+                  	$("#facilityMenu").menu("enableItem",$("#facilityMenu").menu("findItem", "编辑").target);
+                }
+   				if(list[i].priviCode =='obd:shapeExport'){
+                   	
+                }
+   				if(list[i].priviCode =='obd:photoView'){
+   					$("#facilityMenu").menu("enableItem",$("#facilityMenu").menu("findItem", "图片浏览").target);
+                }
+   				if(list[i].priviCode =='obd:move'){
+   					
+                }
+   				//左侧树右键菜单
+                if(list[i].priviCode =='jzw:dataUpdate'){
+                	$("#mapMenu1").menu("enableItem",$("#mapMenu1").menu("findItem", "属性修改").target);
+                }
+                if(list[i].priviCode =='jzw:photoView'){
+                	$("#mapMenu1").menu("enableItem",$("#mapMenu1").menu("findItem", "查看建筑物图片").target);
+                }
+				if(list[i].priviCode =='jzw:queryLightFacility'){
+					$("#mapMenu1").menu("enableItem",$("#mapMenu1").menu("findItem", "查看光资源统计").target);
+                }
+                if(list[i].priviCode =='jzw:delete'){
+                	$("#mapMenu1").menu("enableItem",$("#mapMenu1").menu("findItem", "删除").target);
+                }
+
+                if(list[i].priviCode =='grid:dataUpdate'){
+                	$("#mapMenu1").menu("enableItem",$("#mapMenu1").menu("findItem", "属性修改").target);
+                }
+                if(list[i].priviCode =='grid:delete'){
+                	$("#mapMenu1").menu("enableItem",$("#mapMenu1").menu("findItem", "删除").target);
+                }
+
+	    		if(list[i].priviCode =='fwq:add'){
+	                $("#mapMenu1").menu("enableItem",$("#mapMenu1").menu("findItem", "添加服务区").target);
+	            }
+	    		if(list[i].priviCode =='fwq:dataUpdate'){
+	                $("#mapMenu1").menu("enableItem",$("#mapMenu1").menu("findItem", "属性修改").target);
+	            }
+	    		if(list[i].priviCode =='fwq:shapeUpdate'){
+	                //$("#mapMenu1").menu("enableItem",$("#mapMenu1").menu("findItem", "外形修改").target);
+	            }
+	    		if(list[i].priviCode =='fwq:delete'){
+	                $("#mapMenu1").menu("enableItem",$("#mapMenu1").menu("findItem", "删除").target);
+	            }
+	    		//我的审核
+	    		if(list[i].priviCode =='sh:mySh'){
+	    			$("#myReviewData").show();
+	    		}
+	    		//我的提交
+	    		if(list[i].priviCode =='tj:myTj'){
+	    			$("#mySubmitReviewData").show();
+	    		}
+	    		//报表
+	    		if(list[i].priviCode =='odbreport:qyzyfgl'){
+	    			$("#qyzyfgl_chart").show();
+	    		}
+	    		if(list[i].priviCode =='odbreport:dkzy'){
+	    			$("#obd_dkzy").show();
+	    		}
+	    		if(list[i].priviCode =='odbreport:kdstl'){
+	    			$("#kdstl_chart").show();
+	    		}
+	    		if(list[i].priviCode =='odbreport:hbfx'){
+	    			$("#qyzyfg4_chart").show();
+	    		}
+			 	if(list[i].priviCode =='jzw:add'){
+			 		$("#mapMenu").menu("enableItem",$("#mapMenu").menu("findItem", "添加").target);
+	            }
+	            if(list[i].priviCode =='jzw:dataUpdate'){
+	            	$("#mapMenu").menu("enableItem",$("#mapMenu").menu("findItem", "属性修改").target);
+	            }
+	            if(list[i].priviCode =='jzw:shapeUpdate'){
+	            	$("#mapMenu").menu("enableItem",$("#mapMenu").menu("findItem", "外形修改").target);
+	            }
+				if(list[i].priviCode =='jzw:queryLightFacility'){
+					$("#mapMenu").menu("enableItem",$("#mapMenu").menu("findItem", "查看光资源统计").target);
+	            }
+	            if(list[i].priviCode =='jzw:delete'){
+	            	$("#mapMenu").menu("enableItem",$("#mapMenu").menu("findItem", "删除").target);
+	            }
+	            if(list[i].priviCode =='jzw:dataExport'){
+	                
+	            }
+				if(list[i].priviCode =='jzw:shapeExport'){
+	                
+	            }
+	            if(list[i].priviCode =='jzw:photoView'){
+	            	$("#mapMenu").menu("enableItem",$("#mapMenu").menu("findItem", "查看建筑物图片").target);
+	            }
+	            if(list[i].priviCode =='jzw:dtsq'){
+	            	$("#mapMenu").menu("enableItem",$("#mapMenu").menu("findItem", "底图拾取").target);
+	            }
+	    		if(list[i].priviCode =='grid:add'){
+			 		$("#mapMenu").menu("enableItem",$("#mapMenu").menu("findItem", "添加").target);
+	            }
+	            if(list[i].priviCode =='grid:dataUpdate'){
+	            	$("#mapMenu").menu("enableItem",$("#mapMenu").menu("findItem", "属性修改").target);
+	            }
+	            if(list[i].priviCode =='grid:shapeUpdate'){
+	            	$("#mapMenu").menu("enableItem",$("#mapMenu").menu("findItem", "外形修改").target);
+	            }
+	            if(list[i].priviCode =='grid:delete'){
+	            	$("#mapMenu").menu("enableItem",$("#mapMenu").menu("findItem", "删除").target);
+	            }
+	            if(list[i].priviCode =='grid:dataExport'){
+	                
+	            }
+				if(list[i].priviCode =='grid:shapeExport'){
+	                
+	            }
+	    		if(list[i].priviCode =='obd:move'){
+	    			$("#mapMenu").menu("enableItem",$("#mapMenu").menu("findItem", "移动").target);
+	            }
+	    		if(list[i].priviCode =='yfbj:add'){
+	    			$("#mapMenu").menu("enableItem",$("#mapMenu").menu("findItem", "添加").target);
+	            }
+	    		if(list[i].priviCode =='xfbj:add'){
+	    			$("#mapMenu").menu("enableItem",$("#mapMenu").menu("findItem", "添加").target);
+	            }
+	    		if(list[i].priviCode =='fwq:add'){
+	                $("#mapMenu").menu("enableItem",$("#mapMenu").menu("findItem", "添加").target);
+	            }
+	    		if(list[i].priviCode =='fwq:dataUpdate'){
+	                $("#mapMenu").menu("enableItem",$("#mapMenu").menu("findItem", "属性修改").target);
+	            }
+	    		if(list[i].priviCode =='fwq:shapeUpdate'){
+	                $("#mapMenu").menu("enableItem",$("#mapMenu").menu("findItem", "外形修改").target);
+	            }
+	    		if(list[i].priviCode =='fwq:delete'){
+	                $("#mapMenu").menu("enableItem",$("#mapMenu").menu("findItem", "删除").target);
+	            }
+		    	
+            }
+        });
+    }
+    //修改密码
+    function modifyPassword(){
+    	$("#update_password_dialog").dialog({
+   			title : '修改密码',
+   			width : 450,
+   			height : 260,
+   			closed : false,
+   			cache : false,
+   			modal : false
+   		}).show();
+    	$("#btn_updatepw_save").off().on('click',function(){
+    		if(checkModifyPassWdForm()){
+    			var params = {id:loginUser.id, password: hex_md5($("#newPw").val()).toUpperCase()};
+         		 $.ajax({
+         	            type: "post",
+         	            url: "restful/user/update",
+         	            contentType: "application/json",
+         	            dataType: "json",
+         	            data: JSON.stringify(params),
+         	            success: function (data) {
+         	                if (data.status == 'success') {
+         	                 $.messager.alert("提示", "修改成功", 'info');
+         	                 $("#update_password_dialog").dialog('close');
+         	                }
+         	                else {
+         	                 $.messager.alert("提示", "修改失败", 'error');
+         	                }
+         	            }
+
+         	    });
+    		}
+    	});
+		$("#btn_updatepw_reset").off().on('click',function(){
+			$("#update_password_form").form('reset');
+			$("#updatepw_tip").text("");
+		});
+    }
+    function checkModifyPassWdForm(){
+		var pass=true;
+		//验证输入格式和有效性,密码格式为数字和字母混合
+    	//必须包含数字 和 字母 。 （字母大小写不限）长度 为 6-16个字符 
+    	var regRex = /^(?![0-9]+$)(?![a-zA-Z]+$)(\S){6,16}$/;
+    	var oraginalPw=$("#oraginalPw").val();
+    	var newPw=$("#newPw").val();
+    	var rePw=$("#rePw").val();
+    	$("#updatepw_tip").text("");
+    	if($.trim(oraginalPw).length==0){
+   			$("#updatepw_tip").text("原始密码不能为空");
+   			pass=false;
+   			return pass;
+   		}else{
+	         var params = {
+	             loginName : loginUser.loginName,
+	             password : oraginalPw
+	         }
+	         var isNotRight=false;
+	         $.ajax({
+	             type : "POST",
+	             url : "restful/user/checkOriginalPw",
+	             contentType : "application/json",
+	             dataType : "json",
+	             async:false,
+	             data : JSON.stringify(params),
+	             success : function(data) {
+	            	 if(data.status=="success"){
+	            		 if (data.content == '1') {
+			                	isNotRight=true;
+				                pass=false;
+		                	 $("#updatepw_tip").text("原始密码不正确");
+		                 }else{
+		                	 isNotRight=false;
+		                 }
+	            	 }
+	             }
+	         });
+   		}
+    	if(isNotRight){
+    		return pass;
+    	}
+		if($.trim(newPw).length==0){
+       		$("#updatepw_tip").text("新密码不能为空");
+       		pass=false;
+       		return pass;
+   		}else{
+   			if(!regRex.test(newPw)){
+   	    		$("#updatepw_tip").html("新密码格式必须包含数字 和 字母 ，长度 为 6-16个字符 ");
+   	    		pass=false;
+   	    		return pass;
+   	    	}
+   		}
+   		if($.trim(rePw).length==0){
+       		$("#updatepw_tip").text("确认密码不能为空");
+       		pass=false;
+       		return pass;
+  		}else{
+  			if(!regRex.test(rePw)){
+  	       		$("#updatepw_tip").html("确认密码格式必须包含数字 和 字母，长度 为 6-16个字符 ");
+  	       		pass=false;
+  	       		return pass;
+  	   		}
+  			if($.trim(newPw)!=$.trim(rePw)){
+  	    		$("#updatepw_tip").html("两次密码不一致");
+  	    		pass=false;
+  	    		return pass;
+  	    	}
+  		}
+    	return pass;
+	}
+    
+    //查询待办事项数目
+    var params = {"userId":loginUser.id,"reviewStatus":0};
+    $.ajax({
+         type: "post",
+         url: "restful/dataReview/getCount",
+         contentType: "application/json",
+         dataType: "json",
+         data: JSON.stringify(params),
+         success: function (data) {
+        	//显示待办事务数目
+       	    if(data.content > 0){
+       	    	//待办事项消息提示，默认显示在底部
+       	        $.messager.show({
+       	        	title:'消息提示',
+       	        	msg:'<a href="javascript:void(0);" onclick="$(\'#myReviewData\').click();" style="font-size:12px;color:black;text-decoration:underline;">您有<span style="color:red;">'+data.content+'</span>个待办事项，点击进入处理页面</a>',
+       	        	timeout:0,
+       	        	showType:'slide'
+       	        });
+       	    }
+         }
+	 });
+</script>
+</body>
+</html>

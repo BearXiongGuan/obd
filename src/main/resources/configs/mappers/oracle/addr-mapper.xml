@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.bm.mapper.AddrMapper">
+	<resultMap type="com.hq.bm.entity.Addr" id="addrMap">
+		<result column="ID" property="addrId" javaType="long" />
+		<result column="NAME" property="name" javaType="String" />
+		<result column="GRADE" property="grade" javaType="int" />
+		<result column="PARENTID" property="parentId" javaType="long" />
+		<result column="CONFIRM" property="confirm" javaType="int" />
+		<result column="AMEND" property="amend" javaType="int" />
+		<result column="GREEN_LABEL" property="greenLabel" javaType="int" />
+		<result column="RECDATE" property="recDate" javaType="java.util.Date" />
+		<result column="ADDR" property="addr" javaType="string" />
+		<result column="OPER_TYPE" property="operType" javaType="int" />
+		<result column="LOGID" property="logId" javaType="int" />
+	</resultMap>
+
+	<sql id="conlumn">
+		t.ID,t.NAME,t.GRADE,t.PARENTID,t.CONFIRM,t.AMEND,t.GREEN_LABEL,t.RECDATE,t.ADDR
+	</sql>
+	<select id="findParentLevelAddrsById" parameterType="long"
+		resultMap="addrMap">
+		select t.id,t.name,t.grade from addr t start with
+		t.id=#{addrId}
+		connect by prior t.parentid=t.id
+	</select>
+
+	<select id="findLogAddrsByOperType" parameterType="int"
+		resultMap="addrMap">
+		SELECT T1.LOGID,T1.ADDRID,T2.ADDR,T2.GRADE,T1.OPER_TYPE FROM
+		LOG_ADDR
+		T1 LEFT JOIN
+		ADDR T2
+		ON T1.ADDRID=T2.ID ORDER BY T1.LOGID ASC
+	</select>
+	
+	<select id="findAddrsByParentId" parameterType="java.util.Map"
+		resultType="java.util.Map">
+		select t.id,nvl(t.name,' ') as name from addr t where t.parentid =#{addrId}
+	</select>
+</mapper>

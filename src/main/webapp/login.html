@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<style type="text/css">
+/*初始化*/
+html {
+	font: 14px/22px "微软雅黑", "simsun", "\5b8b\4f53", Arial, sans-serif;
+}
+
+body {
+	min-width: 1170px;
+}
+
+html {
+	color: #666;
+	-ms-text-size-adjust: 100%;
+	-webkit-text-size-adjust: 100%; /*修正手持设备字体变化*/
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.clearfix {
+	zoom: 1;
+	overflow: hidden;
+}
+
+input:focus {
+	
+}
+/***************/
+.section {
+	overflow: hidden;
+	height: 722px;
+	background-color: #fff;
+	position: relative;
+}
+
+.topback {
+	height: 60%;
+	width: 100%;
+	background-color: #1d92df;
+	position: relative;
+}
+
+.topbg {
+	width: 1684px;
+	height: 100%;
+	margin: 0 auto;
+	background: url(img/login-bg.png) no-repeat;
+}
+
+.topbg div {
+	height: 200px;
+	line-height: 200px;
+	width: 985px;
+	position: absolute;
+	text-align: center;
+	top: 0;
+	left: 50%;
+	margin-left: -492.5px;
+}
+
+.topbg div p {
+	color: #fff;
+	font-size: 26px;
+	letter-spacing: 4px;
+}
+
+.log-box {
+	position: absolute;
+	width: 985px;
+	height: 476px;
+	top: 202px;
+	left: 50%;
+	margin-left: -492.5px;
+	background: url(img/login-mid.png) no-repeat;
+	z-index: 100;
+}
+
+.log-boxWrap {
+	height: 100%;
+	width: 100%;
+	position: relative;
+}
+
+.log-main {
+	position: absolute;
+	z-index: 111;
+	top: 0;
+	right: 52px;
+	width: 442px;
+	height: 100%;
+	padding: 20px;
+}
+
+.log-form {
+	width: 358px;
+	padding-top: 50px;
+}
+
+.log-input {
+	position: relative;
+	margin: 0;
+	margin-top: 30px;
+	height: 40px;
+}
+
+.log-input input {
+	height: 37px;
+	width: 358px;
+	padding-left: 30px;
+	border-radius: 4px;
+	border: 1px solid #d2e4eb;
+}
+
+.log-input label {
+	display: block;
+	position: absolute;
+	top: 8px;
+	left: 6px;
+	width: 19px;
+	height: 21px;
+}
+
+.logNick label {
+	background: url(img/login-user.png) no-repeat;
+}
+
+.logPsw label {
+	background: url(img/login-pwd.png) no-repeat;
+}
+
+.idCode label {
+	background: url(img/idCode.png) no-repeat;
+}
+
+.log-remind {
+	width: auto;
+	height: 16px;
+	line-height: 16px;
+	margin-top: 20px;
+}
+
+.log-remind div label {
+	font-size: 12px;
+	margin-left: 5px;
+	font-family: "simsun";
+}
+
+.log-remind div input {
+	vertical-align: middle;
+}
+
+.submit-btn button {
+	border: 0;
+	width: 100%;
+	height: 45px;
+	background: #067bda;
+	color: #FFF;
+	border-radius: 4px;
+	font-family: "微软雅黑";
+	font-size: 16px;
+	cursor: pointer;
+}
+.errorMsg{
+    width: 100%;
+    height: 34px;
+    line-height: 34px;
+}
+.errorMsg p{
+    width: 100%;
+    height:100%;
+    font-size: 12px;
+    color: red;
+    display: none;
+}
+.lf {
+	text-align: center;
+}
+
+.lf label {
+	margin-right: 30px;
+}
+</style>
+</head>
+<body>
+	<div class="section">
+		<div class="topback">
+			<div class="topbg">
+				<div>
+					<p>中山电信资源OBD可视化系统</p>
+				</div>
+			</div>
+		</div>
+		<div class="bottomBg"></div>
+		<div class="log-box clearfix">
+			<div class="log-boxWrap">
+				<div class="log-main ">
+					<form action="" method="post" class="log-form">
+
+						<div class="log-input logNick">
+							<label></label> <input type="text" name="nick"
+								placeholder="手机/用户名" id="nick" />
+						</div>
+						<div class="log-input logPsw">
+							<label></label> <input type="password" name="psw"
+								placeholder="密码" id="psw" autocomplete="off" />
+						</div>
+						<div class="log-input idCode">
+							<label></label> <input type="text" name="idCode"
+								placeholder="验证码" style="width:250px" id="idCode" />
+							<img id="codeImage" src="restful/codeImage/getCode" style="position:absolute;top:0px;right:0px"/>
+						</div>
+						<div class="log-remind">
+							<div class="lf">
+								<!-- <input type="checkbox" id="rememberPW"/><label>记住密码</label> -->
+								<input type="radio" name="login_radio" id="front_sys"
+									checked="checked" /><label>登录前台</label> <input type="radio"
+									name="login_radio" id="back_sys" /><label>登录后台</label>
+							</div>
+						</div>
+						<div class="errorMsg" ><p id="msg1"></p></div>
+						<div class="submit-btn">
+							<button id="submit">登&nbsp;录</button>
+						</div>
+					</form>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<div style="width: 100%;text-align:center;overflow:hidden">
+		<div style="width:150px;height:120px;display:inline-block"><span><img src="img/QRCode_ios.png" style="width:120px;height:120px;"/></span><br/><span>适用于IOS设备</span></div>
+		<div style="width:150px;height:120px;display:inline-block"><span><img src="img/QRCode_android.png" style="width:120px;height:120px;"/></span><br/><span>适用于android设备</span></div>
+	</div>
+	<script type="text/javascript" src="js/jquery-1.7.min.js"></script>
+	<script type="text/javascript" src="js/jquery.cookie.js"></script>
+	<script type="text/javascript" src="js/date-format.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			//$.cookie("loginUser",{expires:-1});
+			//1-表示登录前台，2-表示登录后台
+			var loginFlag = "1";
+			$("#front_sys").click(function() {
+				loginFlag = "1";
+			});
+			$("#back_sys").click(function() {
+				loginFlag = "2";
+			});
+
+			//根据是否记住密码初始化输入 
+			/* var userinfo =JSON.parse($.cookie("loginUser"));
+			if($.cookie("checked")==undefined){
+				
+			}else if($.cookie("checked")=="0"){
+				$("#rememberPW").attr("checked",false);
+				$("#nick").val(userinfo.loginName)
+				$("#psw").val("");
+			}else{
+				$("#rememberPW").attr("checked",true);
+				$("#nick").val(userinfo.loginName)
+				$("#psw").val(userinfo.password);
+			} */
+
+
+
+			$("#submit").click(function() {
+				var username = $("#nick").val();
+				var password = $("#psw").val();
+				if($.trim(username)==""){
+					$('#msg1').show();
+					$('#msg1').html('用户名不能为空！');
+					$("#nick").focus();
+					return false;
+				}
+				if($.trim(password)==""){
+					$('#msg1').show();
+					$('#msg1').html('密码不能为空！');
+					$("#psw").focus();
+					return false;
+				}
+                $.get("restful/permission/findByLoginName", {loginName: username}, function (data) {
+                    var list = $.parseJSON(data.content);
+                    if(list.length==0){
+                    	loginWeb();
+                    	return;
+                    }
+                    for(var i in list){
+                        if($.trim(list[i].priviCode) == 'login:web' && loginFlag == "1") {
+                            loginWeb();
+                            return;
+                        }else if ($.trim(list[i].priviCode) =='login:backstage' && loginFlag == "2"){
+                            loginWeb();
+                            return;
+						}
+                   }
+					$('#msg1').show();
+                    $('#msg1').html('您无权操作，请联系系统管理员！');
+				});
+				return false;
+			})
+
+			function loginWeb() {
+                var username = $("#nick").val();
+                var password = $("#psw").val();
+                var idCode = $("#idCode").val();
+				if(!idCode||idCode.length==0){
+					$('#msg1').show();
+					$('#msg1').html("请输入验证码！");
+					$("#idCode").focus();
+					return;
+				}
+                var params = {
+                    loginName : username,
+                    password : password,
+                    idCode : idCode,
+                    opPlatform :0
+                }
+                $.ajax({
+                    type : "POST",
+                    url : "restful/user/login",
+                    contentType : "application/json",
+                    dataType : "json",
+                    data : JSON.stringify(params),
+                    success : function(data) {
+                        if (data.status == 'success') {
+                            //将用户信息放入cookie中
+                            $.cookie("loginUser", data.content);
+							if (loginFlag == "1") {
+								location.href = "index.html";
+							} else if (loginFlag == "2") {
+								location.href = "backstage.html";
+							}
+                        } else {
+                            $('#msg1').show();
+							$('#msg1').html(data.message);
+							if(data.message=="验证码错误！"){
+								$("#idCode").focus();
+								randomCodeImage();
+							}else if(data.message=="密码不正确！"){
+								$("#psw").focus();
+							}else if(data.message=="账号不存在！"){
+								$("#nick").focus();
+							}
+                        }
+                    }
+                });
+            }
+			$("#codeImage").off().on('click',function(){
+				randomCodeImage();
+			});
+			//随机验证码
+			function randomCodeImage(){
+				function generateUUID() {
+					var d = new Date().getTime();
+					var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+					  var r = (d + Math.random()*16)%16 | 0;
+					  d = Math.floor(d/16);
+					  return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+					});
+					return uuid;
+					}
+				$("#codeImage").attr("src","restful/codeImage/getCode?id="+generateUUID());
+			}
+		});
+	</script>
+</body>
+</html>

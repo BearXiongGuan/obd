@@ -1,0 +1,494 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.bm.mapper.LightfacilityMapper">
+
+	<resultMap type="com.hq.bm.entity.Lightfacility" id="lightfacilityResultMap">
+		<result column="OCFID" property="ocfId" javaType="long" />
+		<result column="OCFCODE" property="ocfCode" javaType="java.lang.String" />
+		<result column="OCFNAME" property="ocfName" javaType="java.lang.String" />
+		<result column="ADDRESS" property="address" javaType="java.lang.String" />
+		<result column="OCFTYPE" property="ocfType" javaType="int" />
+		<result column="FACSTATUS" property="facstatus" javaType="int" />
+		<result column="RECDATE" property="recdate" javaType="java.util.Date" />
+		<result column="STID" property="stId" javaType="long" />
+		<result column="HEIGHT" property="height" javaType="double" />
+		<result column="ATTRI_OCFID" property="attriOcfid" javaType="long" />
+		<result column="NM_ACCESSTYPE" property="nmAccesstype"
+			javaType="int" />
+		<result column="NET_LEVEL" property="netLevel" javaType="int" />
+		<result column="COUNTYID" property="countyId" javaType="long" />
+		<result column="MKCENTERID" property="mkcenterId" javaType="long" />
+		<result column="LONGITUDE" property="longitude" javaType="double" />
+		<result column="LATITUDE" property="latitude" javaType="double" />
+		<result column="PORT_XL_COUNT" property="portXlCount" javaType="int" />
+		<result column="PORT_XL_COUNT_ZY" property="portXlCountZy"
+			javaType="int" />
+		<result column="PORT_XL_COUNT_KX" property="portXlCountKx"
+			javaType="int" />
+		<result column="MK_NAME" property="mkName" javaType="java.lang.String" />
+		<result column="COUNTY_NAME" property="countyName" javaType="java.lang.String" />
+		<result column="OCFTYPENAME" property="ocftypename" javaType="java.lang.String" />
+		<result column="FACSTATUSNAME" property="facstatusname"
+			javaType="java.lang.String" />
+		<result column="RECORDER" property="recorder" javaType="java.lang.String" />
+		<result column="ADDR" property="addr" javaType="java.lang.String" />
+		<result column="NM_ACCESSTYPENAME" property="nmAccesstypename"
+			javaType="java.lang.String" />
+		<result column="REMARK" property="remark" javaType="java.lang.String" />
+		<result column="THUMBNAIL" property="thumbnail" javaType="java.lang.String" />
+	</resultMap>
+
+	<sql id="column">
+		t.OCFID,t.OCFCODE,t.OCFNAME,t.ADDRESS,t.OCFTYPE,t.FACSTATUS,t.RECDATE,t.STID,
+		t.HEIGHT,t.ATTRI_OCFID,t.NM_ACCESSTYPE,t.NET_LEVEL,t.COUNTYID,t.MKCENTERID,t.LONGITUDE,
+		t.LATITUDE,t.PORT_XL_COUNT,t.PORT_XL_COUNT_ZY,t.PORT_XL_COUNT_KX,t.OCFTYPENAME,
+		t.FACSTATUSNAME,t.RECORDER,t.ADDR,t.NM_ACCESSTYPENAME,t.REMARK,f.THUMBNAIL
+	</sql>
+
+	<select id="findByOBDName" resultMap="lightfacilityResultMap">
+		select
+		<include refid="column" />
+		from lightfacility t where t.ADDRESS like CONCAT(#{address}, '%')
+	</select>
+
+	<select id="findByPosition" parameterType="java.util.Map"
+		resultMap="lightfacilityResultMap">
+		select
+		<include refid="column" />
+		from lightfacility t
+		where t.Latitude between #{minLatitude} and
+		#{maxLatitude} and t.LONGITUDE
+		between #{minLongitude} and
+		#{maxLongitude}
+		and ROWNUM &lt;=100
+	</select>
+
+	<select id="findPositionById" resultMap="lightfacilityResultMap">
+		select
+		t.LONGITUDE,t.LATITUDE
+		from lightfacility t where t.OCFID =#{mkName}
+	</select>
+
+	<select id="getCount" parameterType="java.util.Map" resultType="int">
+		select
+		count(1)
+		from lightfacility t
+		where t.Latitude between
+		#{minLatitude} and #{maxLatitude} and t.LONGITUDE
+		between
+		#{minLongitude} and #{maxLongitude} and t.OCFTYPE = 8
+		and t.MKCENTERID
+		in (select a.org_id from organization a start with a.org_id =
+		#{mkcenterId}
+		connect by prior a.org_id = a.org_pid)
+	</select>
+
+	<select id="getCountForFindObdByWhere" parameterType="java.util.Map"
+		resultType="int">
+		SELECT
+		COUNT(1)
+		FROM
+		lightfacility T
+		where
+		T .mkcenterid IN (
+		SELECT
+		A
+		.org_id
+		FROM
+		ORGANIZATION A START WITH A
+		.org_id = #{mkcenterId} CONNECT
+		BY PRIOR A .org_id = A .org_pid)
+
+		<if test="number1!=null and number1!=''">
+				<![CDATA[
+                and t.PORT_XL_COUNT_ZY >=#{number1}
+                ]]>
+		</if>
+		<if test="number2!=null and number2 !=''">
+				<![CDATA[
+                and t.PORT_XL_COUNT_ZY <= #{number2}
+                ]]>
+		</if>
+		<if test="number3!=null and number3!=''">
+			<![CDATA[
+                and t.PORT_XL_COUNT_Kx >=#{number3}
+                ]]>
+		</if>
+		<if test="number4!=null and number4 !=''">
+			<![CDATA[
+                and t.PORT_XL_COUNT_Kx <= #{number4}
+                ]]>
+		</if>
+
+
+	</select>
+
+	<select id="findByPage" parameterType="java.util.Map" resultMap="lightfacilityResultMap">
+        <![CDATA[
+        select ]]><include refid="column" /><![CDATA[,t.county_name,t.mk_name
+        from (
+        SELECT *
+        FROM (SELECT t.*, ROWNUM RN
+        FROM (select t.*,o1.org_name as mk_name,o2.org_name as county_name
+        from lightfacility t
+        inner join organization o1
+        on t.mkcenterid = o1.org_id
+        inner join organization o2
+        on t.countyid = o2.org_id
+        and t.Latitude between #{minLatitude} and #{maxLatitude} and t.LONGITUDE between #{minLongitude} and #{maxLongitude}
+        and t.OCFTYPE = 8 and t.MKCENTERID in (select a.org_id from organization a  start with a.org_id = #{mkcenterId}
+		connect by prior a.org_id = a.org_pid)) t
+        WHERE ROWNUM <= #{endRowNum}) t
+        WHERE RN > #{startRowNum}) t
+        left join (select t2.facid,t2.THUMBNAIL from 
+        (select row_number() 
+        over(partition by facid order by create_time desc) rn, t1.*
+            from facility_photo t1 where t1.factype=1) t2
+      	where t2.rn = 1) f
+        on t.OCFID = f.facid
+         ]]>
+	</select>
+
+	<select id="findObdPageByWhere" parameterType="java.util.Map"
+		resultMap="lightfacilityResultMap">
+		select t.ocfname, t.port_xl_count, t.port_xl_count_zy,
+		t.port_xl_count_kx
+		from (
+		SELECT *
+		FROM (SELECT t.*, ROWNUM RN
+		FROM
+		(select *
+		from lightfacility t
+		where
+		t.MKCENTERID in (select a.org_id
+		from
+		organization a start with a.org_id = #{mkcenterId}
+		connect by prior
+		a.org_id = a.org_pid)
+		<if test="number1!=null and number1!=''">
+			<![CDATA[
+                and t.PORT_XL_COUNT_ZY >=#{number1}
+                ]]>
+		</if>
+		<if test="number2!=null and number2 !=''">
+			<![CDATA[
+                and t.PORT_XL_COUNT_ZY <= #{number2}
+                ]]>
+		</if>
+		<if test="number3!=null and number3!=''">
+			<![CDATA[
+                and t.PORT_XL_COUNT_Kx >=#{number3}
+                ]]>
+		</if>
+		<if test="number4!=null and number4 !=''">
+			<![CDATA[
+                and t.PORT_XL_COUNT_Kx <= #{number4}
+                ]]>
+		</if>)
+		t <![CDATA[
+		WHERE ROWNUM <= #{endRowNum}) t
+        WHERE RN > #{startRowNum} ) t
+		]]>
+
+
+	</select>
+
+	<select id="getCountForFindPageByName" parameterType="java.util.Map"
+		resultType="int">
+		select
+		count(1)
+		from lightfacility t
+		where
+		t.mkcenterid in (
+		select
+		a.org_id from organization a start with a.org_id=#{mkcenterId}
+		connect by prior a.org_id =
+		a.org_pid
+		)
+		<if test="name!=null and name!=''">
+			and t.OCFNAME like CONCAT(CONCAT('%', #{name}), '%')
+		</if>
+		<if test="address!=null and address!=''">
+			and t.ADDRESS like CONCAT(CONCAT('%', #{address}), '%')
+		</if>
+		<if test="ocfCode!=null and ocfCode!=''">
+			and t.OCFCODE like CONCAT(CONCAT('%', #{ocfCode}), '%')
+		</if>
+		<if test="recdateStart!=null and recdateStart!=''">
+			and t.recdate &gt;=TO_DATE(#{recdateStart},'yyyy-MM-dd')
+		</if>
+		<if test="recdateEnd!=null and recdateEnd!=''">
+			and t.recdate &lt;TO_DATE(#{recdateEnd},'yyyy-MM-dd')+1
+		</if>
+		<if
+			test="minLatitude!=null and minLatitude!='' and maxLatitude!=null and maxLatitude!=''">
+			and t.Latitude between #{minLatitude} and #{maxLatitude}
+		</if>
+		<if
+			test="minLongitude!=null and minLongitude!='' and maxLongitude!=null and maxLongitude!=''">
+			and t.LONGITUDE between #{minLongitude} and #{maxLongitude}
+		</if>
+		and t.OCFTYPE = 8
+	</select>
+
+	<select id="findPageByName" parameterType="java.util.Map"
+		resultMap="lightfacilityResultMap">
+        <![CDATA[
+        select ]]><include refid="column" />,o1.org_name
+		as mk_name,o2.org_name as county_name<![CDATA[
+        from (
+        SELECT *
+        FROM (SELECT t.*, ROWNUM RN
+        FROM (select *
+        from lightfacility t
+        where 
+        t.mkcenterid in (
+		select a.org_id from organization a start with a.org_id=#{mkcenterId}
+		connect by prior a.org_id = a.org_pid
+		)
+        ]]>
+		<if test="name!=null and name!=''">
+			and t.OCFNAME like CONCAT(CONCAT('%', #{name}), '%')
+		</if>
+		<if test="address!=null and address!=''">
+			and t.ADDRESS like CONCAT(CONCAT('%', #{address}), '%')
+		</if>
+		<if test="ocfCode!=null and ocfCode!=''">
+			and t.OCFCODE like CONCAT(CONCAT('%', #{ocfCode}), '%')
+		</if>
+		<if test="recdateStart!=null and recdateStart!=''">
+			and t.recdate &gt;=TO_DATE(#{recdateStart},'yyyy-MM-dd')
+		</if>
+		<if test="recdateEnd!=null and recdateEnd!=''">
+			and t.recdate &lt;TO_DATE(#{recdateEnd},'yyyy-MM-dd')+1
+		</if>
+		<if
+			test="minLatitude!=null and minLatitude!='' and maxLatitude!=null and maxLatitude!=''">
+			and t.Latitude between #{minLatitude} and #{maxLatitude}
+		</if>
+		<if
+			test="minLongitude!=null and minLongitude!='' and maxLongitude!=null and maxLongitude!=''">
+			and t.LONGITUDE between #{minLongitude} and #{maxLongitude}
+		</if>
+        <![CDATA[and t.OCFTYPE = 8) t
+	        WHERE ROWNUM <= #{endRowNum}) t
+	        WHERE RN > #{startRowNum}) t
+	        left join (select t2.facid,t2.THUMBNAIL from 
+	        (select row_number() 
+	        over(partition by facid order by create_time desc) rn, t1.*
+	            from facility_photo t1 where t1.factype=1) t2
+	      	where t2.rn = 1) f
+	        on t.OCFID = f.facid
+	        inner join organization o1 
+	        on t.mkcenterid = o1.org_id
+			inner join organization o2 
+			on t.countyid = o2.org_id
+         ]]>
+	</select>
+
+	<update id="update" parameterType="com.hq.bm.entity.Lightfacility">
+		update lightfacility l
+		<set>
+			<!-- <if test="ocfCode != null and ocfCode != '' "> <![CDATA[ l.ocfCode 
+				= #{ocfCode}, ]]> </if> -->
+			<!-- <if test="ocfName != null and ocfName != '' "> <![CDATA[ l.ocfName=#{ocfName}, 
+				]]> </if> -->
+			<if test="address != null">
+                <![CDATA[
+                     l.address=#{address},
+                ]]>
+			</if>
+			<!-- <if test="ocfType != null and ocfType != '' "> <![CDATA[ l.ocfType=#{ocfType}, 
+				]]> </if> -->
+			<!-- <if test="facstatus != null and facstatus != '' "> <![CDATA[ l.facstatus=#{facstatus}, 
+				]]> </if> -->
+			<!-- <if test="recdate != null and recdate != '' "> <![CDATA[ l.recdate=#{recdate}, 
+				]]> </if> -->
+			<!-- <if test="stId != null and stId != '' "> <![CDATA[ l.stId=#{stId}, 
+				]]> </if> -->
+			<if test="height!=null">
+                <![CDATA[
+                     l.height=#{height},
+                ]]>
+			</if>
+			<!-- <if test="attriOcfid != null and attriOcfid != '' "> <![CDATA[ l.attri_ocfid=#{attriOcfid}, 
+				]]> </if> -->
+
+			<!-- <if test="nmAccesstype != null and nmAccesstype != '' "> <![CDATA[ 
+				l.nm_accesstype=#{nmAccesstype}, ]]> </if> -->
+
+			<!-- <if test="netLevel != null and netLevel != '' "> <![CDATA[ l.net_level=#{netLevel}, 
+				]]> </if> -->
+
+			<!-- <if test="countyId != null and countyId != '' "> <![CDATA[ l.countyId=#{countyId}, 
+				]]> </if> -->
+
+			<!-- <if test="mkcenterId != null and mkcenterId != '' "> <![CDATA[ l.mkcenterId=#{mkcenterId}, 
+				]]> </if> -->
+
+			<if test="longitude != null">
+                <![CDATA[
+                     l.longitude=#{longitude},
+                ]]>
+			</if>
+
+			<if test="latitude != null">
+                <![CDATA[
+                     l.latitude=#{latitude},
+                ]]>
+			</if>
+			<!-- <if test="portXlCount != null"> <![CDATA[ l.port_xl_count=#{portXlCount}, 
+				]]> </if> <if test="portXlCountZy != null"> <![CDATA[ l.port_xl_count_zy=#{portXlCountZy}, 
+				]]> </if> <if test="portXlCountKx != null"> <![CDATA[ l.port_xl_count_kx=#{portXlCountKx} 
+				]]> </if> -->
+			<if test="remark != null">
+                <![CDATA[
+                     l.remark=#{remark},
+                ]]>
+			</if>
+		</set>
+		where l.ocfId = #{ocfId}
+	</update>
+
+	<!--根据建筑物addrId查找OBD资源 手机用 -->
+	<select id="findObdByBuildingAddrID" parameterType="java.util.Map"
+		resultMap="lightfacilityResultMap">
+		select
+		<include refid="column" />
+		from (
+		select * from lightfacility t where t.ocfid in
+		(select o.dpid
+		from obd_servicearea o where o.stid in
+		(select a.id from addr a start
+		with a.id = #{addrid}
+		connect by prior a.id = a.parentid))) t left join
+		(select t2.facid,t2.THUMBNAIL from
+		(select row_number()
+		over(partition
+		by facid order by create_time desc) rn, t1.*
+		from facility_photo t1
+		where t1.factype=1) t2
+		where t2.rn = 1) f
+		on t.OCFID = f.facid
+	</select>
+
+	<!--根据建筑物addrId查找OBD资源 web用 -->
+	<select id="findObdByBuildingAddrIDForWeb" parameterType="java.util.Map"
+		resultMap="lightfacilityResultMap">
+		select * from lightfacility t where t.ocfid in
+		(select o.dpid
+		from obd_servicearea o where o.stid in
+		(select a.id from addr a start
+		with a.id = #{addrid}
+		connect by prior a.id = a.parentid))
+	</select>
+
+	<!--按组织机构查询OTB -->
+	<select id="getCountForfindOTBByOrg" parameterType="java.util.Map"
+		resultType="int">
+		select
+		count(1)
+		from lightfacility t where t.ocftype = 2
+
+		and
+		t.mkcenterid in (
+		select a.org_id from organization a start with
+		a.org_id = #{orgId}
+		connect by
+		prior a. org_id = a. org_pid)
+	</select>
+
+	<select id="findOTBByOrg" parameterType="java.util.Map"
+		resultMap="lightfacilityResultMap">
+        <![CDATA[SELECT * FROM
+        (
+          SELECT TEMP.*, ROWNUM RN
+          FROM (
+            SELECT *
+            from lightfacility t where t.ocftype = 2
+
+            and t.mkcenterid in (
+  			select a.org_id from organization a start with a.org_id = #{orgId}
+			connect by prior a. org_id = a. org_pid)
+          ) TEMP
+          WHERE ROWNUM <= #{endRowNum}
+        )
+        WHERE RN > #{startRowNum}
+       ]]>
+	</select>
+
+
+	<!--按OTB查询OBD -->
+	<select id="findOBDByOTB" resultMap="lightfacilityResultMap"
+		parameterType="java.util.Map">
+		select * from lightfacility t where t.ocftype = 8 and t.attri_ocfid =
+		#{attriOcfid}
+		<if test="name!=null and name!=''">
+			and t.OCFNAME like CONCAT(CONCAT('%', #{name}), '%')
+		</if>
+	</select>
+
+
+
+	<!--按组织机构和名称模糊查询OTB -->
+	<select id="getCountForFindOTBByIDAndName" parameterType="java.util.Map"
+		resultType="int">
+		select count(1) from lightfacility t where t.ocftype = 2
+		and t.ocfid in (
+		select t.attri_ocfid from lightfacility t where
+		t.ocftype = 8 and t.ocfname
+		like CONCAT(CONCAT('%', #{name}), '%') and
+		t.mkcenterid in (
+		select a.org_id from organization a start with
+		a.org_id = #{id}
+		connect by prior a. org_id = a. org_pid))
+
+	</select>
+
+	<select id="findOTBByIDAndName" parameterType="java.util.Map"
+		resultMap="lightfacilityResultMap">
+		<![CDATA[
+        SELECT * FROM
+        (
+          SELECT TEMP.*, ROWNUM RN
+          FROM (
+            select * from lightfacility t where t.ocftype = 2 and t.ocfid in (
+			select t.attri_ocfid from lightfacility t where t.ocftype = 8 and t.ocfname
+			like CONCAT(CONCAT('%', #{name}), '%') and t.mkcenterid  in (
+  			select a.org_id from organization a start with a.org_id = #{id}
+			connect by prior a. org_id = a. org_pid))
+          ) TEMP
+          WHERE ROWNUM <= #{endRowNum}
+        )
+        WHERE RN > #{startRowNum}
+        ]]>
+	</select>
+
+	<select id="findById" resultMap="lightfacilityResultMap"
+		parameterType="java.lang.String">
+		select
+		t.OCFID,t.OCFCODE,t.OCFNAME,t.ADDRESS,t.OCFTYPE,t.FACSTATUS,t.RECDATE,t.STID,
+		t.HEIGHT,t.ATTRI_OCFID,t.NM_ACCESSTYPE,t.NET_LEVEL,t.COUNTYID,t.MKCENTERID,t.LONGITUDE,
+		t.LATITUDE,t.PORT_XL_COUNT,t.PORT_XL_COUNT_ZY,t.PORT_XL_COUNT_KX,t.OCFTYPENAME,
+		t.FACSTATUSNAME,t.RECORDER,t.ADDR,t.NM_ACCESSTYPENAME,t.REMARK
+		from
+		lightfacility t where t.ocfid=#{ocfId}
+	</select>
+	
+	<select id="findObdByAddrids" resultMap="lightfacilityResultMap"
+		parameterType="java.lang.String">
+		select t.OCFID,t.OCFCODE,t.OCFNAME,t.ADDRESS,t.OCFTYPE,t.FACSTATUS,t.RECDATE,t.STID,
+		t.HEIGHT,t.ATTRI_OCFID,t.NM_ACCESSTYPE,t.NET_LEVEL,t.COUNTYID,t.MKCENTERID,t.LONGITUDE,
+		t.LATITUDE,t.PORT_XL_COUNT,t.PORT_XL_COUNT_ZY,t.PORT_XL_COUNT_KX,t.OCFTYPENAME,
+		t.FACSTATUSNAME,t.RECORDER,t.ADDR,t.NM_ACCESSTYPENAME,t.REMARK 
+		from lightfacility t
+		where t.ocfid in
+		(select dpid
+		from obd_servicearea
+		where stid in (select id
+		from addr a
+		start with a.id in (${_parameter})
+		connect by prior a.id = a.parentid))
+</select>
+</mapper>

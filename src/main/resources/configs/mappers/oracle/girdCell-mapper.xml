@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.bm.mapper.GirdCellMapper">
+
+    <resultMap type="com.hq.bm.entity.GirdCell" id="girdCellResultMap">
+        <result column="DICT_ID" property="DictId" javaType="int"/>
+        <result column="DICT_NAME" property="DictName" javaType="java.lang.String"/>
+    </resultMap>
+
+    <select id="findAll"  resultMap="girdCellResultMap">
+        select t.DICT_NAME,t.DICT_ID from GRIDCELL_TYPE t
+    </select>
+
+</mapper>

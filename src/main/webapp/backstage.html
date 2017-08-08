@@ -1,0 +1,2369 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="css/common.css"/>
+    <link rel="stylesheet" href="css/backstage.css"/>
+    <link rel="stylesheet" type="text/css" href="js/jquery-easyui-1.4.5/themes/default/easyui.css"/>
+    <link rel="stylesheet" type="text/css" href="js/jquery-easyui-1.4.5/themes/icon.css"/>
+</head>
+<body>
+<div class="header">
+    <div class="container"></div>
+    <div class="headerFix"></div>
+    <div class="personal">
+        <ul>
+            <li class="log-set"><a href="#"><i></i></a></li>
+            <li class="log-user">
+                <p class="log-name"></p>
+                <p class="log-time"></p>
+            </li>
+            <li class="log-out"><a href="logout"><i></i></a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="section clearfix">
+    <div class="left-nav ">
+        <div class="item">
+            <a href="javascript:;"><img src="img/ch0.png" alt=""/></a>
+        </div>
+        <div class="item">
+            <a href="javascript:;"><img src="img/ch1.png" alt=""/></a>
+        </div>
+        <div class="item">
+            <a href="javascript:;"><img src="img/ch2.png" alt=""/></a>
+        </div>
+        <div class="item">
+            <a href="javascript:;"><img src="img/ch3.png" alt=""/></a>
+        </div>
+        <div class="item">
+            <a href="javascript:;"><img src="img/ch4.png" alt=""/></a>
+        </div>
+        <div class="item">
+            <a href="javascript:;"><img src="img/ch5.png" alt=""/></a>
+        </div>
+        <div class="item">
+            <a href="javascript:;"><img src="img/ch6.png" alt=""/></a>
+        </div>
+    </div>
+    <div class="right-main ">
+        <!--主页-->
+        <div class="homeContent ">
+            <div class="home-top">
+                <div class="user-scale lf">
+                    <div class="home-tit">最近登录用户比例</div>
+                    <div class="img-box" id="echarts-user"></div>
+                </div>
+                <div class="user-name lf">
+                    <div class="home-tit">最近登录用户</div>
+                    <div class="user-list" id="userList">
+                        <!--<div class="user-listItem">-->
+                            <!--<div class="user-icon "><a href="#"><img src="img/log-time/01.png" alt=""/></a></div>-->
+                            <!--<div class="user-infor ">-->
+                                <!--<div class="">张经理</div>-->
+                                <!--<div class="">2017-02-23</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    </div>
+                </div>
+            </div>
+            <div class="home-bot">
+                <div class="home-tit">设备分布情况:<div></div>
+                    <input type="radio" id="yearLoginCount" name="yearCount" value="0"/>
+                    <span>按年份显示:</span>
+                    <select class="hide" id="yearLi">
+                        <option value="0">最近2年数据</option>
+                        <option value="1">最近3年数据</option>
+                        <option value="2">最近5年数据</option>
+                    </select>
+
+                    <input type="radio" id="monthLoginCount" name="monthCount" value="1" style="margin-left: 80px"/>
+                    <span>按月份显示</span>
+                    <select class="hide" id="monthLi">
+                        <option value="0">最近5个月数据</option>
+                        <option value="1">最近7个月数据</option>
+                        <option value="2">最近9个月数据</option>
+                        <option value="3">最近10个月数据</option>
+                        <option value="4">最近12个月数据</option>
+                    </select>
+                    <input type="radio" id="dayLoginCount" name="dayCount" value="2" checked="checked" style="margin-left: 80px">
+                    <span>按天显示</span>
+                    <select id="dayLi">
+                        <option value="0">最近10天数据</option>
+                        <option value="1">最近15天数据</option>
+                        <option value="2">最近20天数据</option>
+                        <option value="3">最近25天数据</option>
+                        <option value="4">最近30天数据</option>
+                    </select>
+                </div>
+                <div class="img-box" style="margin-top: 10px" id="echarts-scatter"></div>
+            </div>
+        </div>
+
+        <!--用户信息-->
+        <div id="cover"
+             style="width:100%;height:100%;top:0;left:0;z-index:1200;position:fixed;background-color:rgba(50,50,50,0.6);display:none"></div>
+        <div class="mainContent hide">
+            <div class="mainHead"><p>用户管理</p></div>
+            <div class="userInfor">
+                <table class="easyui-datagrid" id="user_dg" style="height: 450px;width: 1080px"
+                       toolbar="#user_toolbar" idField="id">
+                    <thead>
+                    <tr>
+                        <th data-options="field:'id',checkbox:true" align="center"></th>
+                        <th data-options="field:'loginName',width:150" align="center">用户名</th>
+                        <th data-options="field:'username',width:120" align="center">姓名</th>
+                        <th data-options="field:'loginEquId',width:270" align="center">IMEI</th>
+                        <th data-options="field:'lastLoginTime',width:160" align="center">最后登录时间</th>
+                        <th data-options="field:'orgName',width:500" align="center">组织</th>
+                        <th data-options="field:'name',width:120" align="center">角色</th>
+                        <th data-options="field:'userState',width:80" align="center">状态</th>
+                    </tr>
+                    </thead>
+                </table>
+                <div id="user_toolbar">
+                    <span>用户搜索：</span>
+                    <input id="user_search" class="easyui-textbox"
+                           style="width:154px;height:22px;;line-height:26px;border:1px solid #ccc"
+                           data-options="prompt: '用户名/姓名'">
+                    <a href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true"
+                       onclick="user_search()">搜索</a><br/>
+                    <a href="#" class="easyui-linkbutton" id="addUser" iconCls="icon-add" plain="true"
+                       onclick="user_add()">添加用户</a>
+                    <a href="#" class="easyui-linkbutton" id="editUser" iconCls="icon-edit" plain="true"
+                       onclick="user_edit()">编辑用户</a>
+                    <a href="#" class="easyui-linkbutton" id="restPwd" iconCls="icon-edit" plain="true"
+                       onclick="user_restPwd()">重置密码</a>
+                    <a href="#" class="easyui-linkbutton" id="changeStatus" iconCls="icon-edit" plain="true"
+                       onclick="user_changeStatus()">停用/启用</a>
+                    <a href="#" class="easyui-linkbutton" id="delUser" iconCls="icon-cancel" plain="true"
+                       onclick="user_del()">删除用户</a>
+                </div>
+            </div>
+        </div>
+
+        <!--角色管理-->
+        <div class="mainContent role-manager hide">
+            <div class="roles">
+                <table class="easyui-datagrid" id="role_dg" style="height: 800px;width: 670px"
+                       toolbar="#role_toolbar" idField="id" data-options="onClickRow:getDetail,singleSelect:true">
+                    <thead>
+                    <tr>
+                        <th data-options="field:'id'" align="center"></th>
+                        <th data-options="field:'name',width:200" align="center">角色名</th>
+                        <th data-options="field:'description',width:260" align="center">描述</th>
+                    </tr>
+                    </thead>
+                </table>
+                <div id="role_toolbar">
+                    <a href="#" class="easyui-linkbutton" id="addRole" iconCls="icon-add" plain="true"
+                       onclick="role_add()">添加角色</a>
+                    <a href="#" class="easyui-linkbutton" id="editRole" iconCls="icon-edit" plain="true"
+                       onclick="role_edit()">修改角色</a>
+                    <a href="#" class="easyui-linkbutton" id="delRole" iconCls="icon-cancel" plain="true"
+                       onclick="role_del()">删除角色</a>
+                </div>
+            </div>
+            <div class="Role-Permission">
+                <div style="height:100%; ">
+                    <div class="panel-header"><p class="panel-title">角色权限</p></div>
+                    <div style="border:1px solid #b2cfe0;border-top:none;height: 96%;overflow-y:scroll;">
+                        <ul id="role_permi" class="easyui-tree" data-options="animate:true,checkbox:true"></ul>
+                        <div>
+                            <button class="easyui-linkbutton" iconCls="icon-save" plain="true" id="savePermission">保存</button>
+                            <button class="easyui-linkbutton" iconCls="icon-cancel" plain="true" id="cancelPermission">取消</button>
+                        </div>
+                        <div id="savePermissionTips" style="margin: 10px" hidden >
+                            <textarea style="width: 300px;height: 33px;resize: none;border-color: #CC2222" readonly>提示：为了保证系统的安全性，系统管理员的权限不可修改，保存按钮已被禁止。</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="role-user">
+                <table class="easyui-datagrid" id="ru_dg" style="height: 800px;width: 618px;"
+                       idField="id">
+                    <thead>
+                    <tr>
+                        <!--<th data-options="field:'id',checkbox:true" align="center"></th>-->
+                        <th data-options="field:'loginName',width:150" align="center">用户名</th>
+                        <th data-options="field:'username',width:120" align="center">姓名</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+
+        <!--组织信息管理-->
+        <div class="mainContent hide">
+            <div class="mainHead"><p>组织管理</p></div>
+            <div class="orgInfo">
+                <table id="tt" class="easyui-treegrid" style="width:1420px;height:600px;display: none"
+                       data-options="idField:'orgId',treeField:'orgName'">
+                </table>
+            </div>
+        </div>
+
+        <!--日志信息-->
+        <div class="mainContent hide">
+            <div class="mainHead"><p>日志信息</p></div>
+            <div class="fq-condit">
+                <div class="query-condit">
+                    <form id="dataReviewForm" action="javascript:void(0)">
+                        <div>
+                            <ul>
+                                <li><label>操作平台：</label> <select id="opPlatform" name="opPlatform">
+                                    <option value="0">web</option>
+                                    <option value="1">andriod</option>
+                                    <option value="2">ios</option>
+                                </select></li>
+                                <li><label>模块名称：</label> <select id="modName" name="modName">
+                                    <option value="所有模块">所有模块</option>
+                                    <option value="用户登录">用户登录</option>
+                                    <option value="用户管理">用户管理</option>
+                                    <option value="角色管理">角色管理</option>
+                                    <option value="建筑物模块">建筑物模块</option>
+                                    <option value="光设施模块">光设施模块</option>
+                                    <option value="网格模块">网格模块</option>
+                                    <option value="服务区模块">服务区模块</option>
+                                    <option value="数据审核模块">数据审核模块</option>
+                                </select></li>
+                            </ul>
+                        </div>
+                        <div>
+                        	<ul>
+                            <li><label>操&nbsp;作&nbsp;人：</label><input type="text" name="userName" id="userName"  placeholder="操作人姓名"/></li>
+                            <li><label>操作时间：</label><input type="text" class="easyui-datebox" style="height: 28px;width:180px" name="createDateStart" id="createDateStart" />
+                            <label style="width: 30px;">至</label><input type="text" class="easyui-datebox" style="height: 28px;width:180px"
+                                name="createDateEnd" id="createDateEnd" /></li>
+                            <li class="query-btn">
+                                <button id="log_searchBtn">查询</button>
+                                <button id='log_resetBtn'>重置</button>
+                            <li>
+                            </ul>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="Facility-table">
+                <table class="easyui-datagrid" id="logManage" style="height: 600px;width: 1600px" data-options="nowrap:false">
+                </table>
+            </div>
+
+        </div>
+        <!--场景配置-->
+        <div class="mainContent hide">
+            <div class="SysParam-table">
+                <table class="easyui-datagrid" id="SceneConfigure" style="width:1420px;height:600px"
+                      toolbar="#scene_toolbar" data-options="nowrap:false">
+                </table>
+            </div>
+            <div id="scene_toolbar">
+                <a href="#" class="easyui-linkbutton" id="addParam" iconCls="icon-add" plain="true"
+                   onclick="param_add()">添加参数</a>
+                <a href="#" class="easyui-linkbutton" id="editParam" iconCls="icon-edit" plain="true"
+                   onclick="param_edit()">修改参数</a>
+            </div>
+            <div id="scene_dialog" class="hide" data-options="modal: true"
+                 style="width: 400px;height: 325px; padding: 20px 20px 20px 20px;" >
+                <form id="sceneform" style="padding: 20px 20px 20px 20px;">
+                    <label>参数名：</label>
+                    <input name="paramName" class="easyui-validatebox" style="height: 28px; width: 250px;" data-options="required:true,
+                               missingMessage:'请输入参数名'"/></br>
+                    <label>参数值：</label>
+                    <input name="paramValue" class="easyui-validatebox" style="margin-top: 20px; height: 28px; width: 250px;" data-options="required:true,
+                               missingMessage:'请输入参数值'"/></br></br>
+                    <label>备&nbsp;&nbsp;&nbsp;注：</label>
+                    <input name="remark" class="easyui-textbox" style="margin-top: 20px; height: 56px; width: 250px;" data-options="required:true,
+                               missingMessage:'请输入参数描述',multiline:true"/>
+                    <div  class="popBox-btn" style="margin-top:25px;text-align:center">
+                    	<Button onClick="saveParam();return false;">保存</Button>
+                    	<Button onClick="clearParam();return false;">重置</Button>
+                    	<button onClick="$('#scene_dialog').dialog('close');return false;">关闭</button>
+                    </div>
+                </form>
+            </div>
+            <div id="scene_editdialog" class="hide" data-options="modal: true"
+                 style="width: 400px;height: 325px; padding: 20px 20px 20px 20px; display: none;" >
+                <form id="sceneeditform" style="padding: 20px 20px 20px 20px;">
+                    <label>参数名：</label>
+                    <input name="paramName" id="paramName" style="height: 28px; width: 250px;" /></br>
+                    <label>参数值：</label>
+                    <input name="paramValue" id="paramValue" class="easyui-validatebox" style="margin-top: 20px; height: 28px; width: 250px;" data-options="required:true,
+                               missingMessage:'请输入参数值'"/></br></br>
+                    <label>备&nbsp;&nbsp;&nbsp;注：</label>
+                    <input name="remark" id="remark" class="easyui-textbox" style="margin-top: 20px; height: 56px; width: 250px;" data-options="required:true,
+                               missingMessage:'请输入参数描述',multiline:true"/>
+                    <div class="popBox-btn" style="margin-top:25px;text-align:center">
+                    	<Button onClick="editParam();return false;">保存</Button>
+                    	<button onClick="$('#scene_editdialog').dialog('close');return false;">关闭</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!--场景视图-->
+        <div class="mainContent hide">
+            <p>场景视图</p>
+        </div>
+        <!--app更新-->
+        <div class="mainContent hide">
+
+            <div class="mainHead"><p>app更新</p></div>
+            <div class="appInfo">
+                <table id="app_dg" class="easyui-datagrid" style="width:1420px;height:600px;display: none"
+                       data-options=" nowrap:false" toolbar="#app_toolbar">
+
+                </table>
+                <div id="app_toolbar">
+                    <a href="#" class="easyui-linkbutton" id="addApp" iconCls="icon-add" plain="true"
+                       onclick="app_add()">上传app</a>
+                    <a href="#" class="easyui-linkbutton" id="deleteApp" iconCls="icon-cancel" plain="true"
+                       onclick="app_delete()">删除app</a>
+                    <a href="#" class="easyui-linkbutton" id="downloadApp" iconCls="icon-save" plain="true"
+                       onclick="app_download()">下载app</a>
+                </div>
+                <div id="app" style="width:510px;height:430px; padding: 20px 50px;display: none">
+                    <form id="appInfo" class="easyui-form" method="post" action="restful/app/uploadApp/{appInfo}"
+                          enctype="multipart/form-data">
+                        <label>app版本：</label>
+                        <input name="version" type="text" id="version" class="easyui-validatebox" style="height: 28px; width: 337px;" data-options="required:true,
+                               missingMessage:'请输入版本号', validType:'exist'"
+                        /></br>
+                        <label>app描述：</label>
+                        <textarea name="updateDesc" type="text" class="easyui-validatebox" required="true"
+                                  missingMessage="请输入版本描述" style="height:200px;width: 400px;"
+                        ></textarea></br>
+                        <label>app选择：</label>
+                        <input name="appfile" class="easyui-filebox " data-options="required:true" accept=".apk"
+                               buttonText="选择文件" missingMessage="请选择文件"
+                               style="height: 28px; width:337px;"></br>
+                    </form>
+                    <div class="popBox-btn" style="text-align:center; margin-top: 30px;">
+                         <Button onClick="submitForm();return false;">上传</Button>
+                         <Button onClick="clearForm();return false;">清空</Button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!--弹框-->
+    <!--添加用户-->
+    <div class="addUser-box popBox hide easyui-draggable"
+         data-options="handle:'.popBox-head',onDrag:onDrag" style="z-index:1201">
+        <div class="popBox-head">
+            <p>添加用户</p>
+            <div class="boxSize">
+                <a href="#" class="close"><i></i></a>
+            </div>
+        </div>
+        <div class="addUser-body popBox-body">
+            <form action="" method="post" class="addUser-form" id="addUser-form">
+                <div class="add_loginname">
+                    <label>用户名：</label>
+                    <input type="text" placeholder="11位手机号码" name="nick" id="add_loginname" maxlength="11"
+                           onkeypress="intOnly()" style="ime-mode:Disabled"/>
+                </div>
+                <div class="login_pwd">
+                    <label>密码：</label>
+                    <input type="password" name="psw" id="login_pwd" onKeyUp="value=value.replace(/[\W]/g,'')"/>
+                </div>
+                <div class="login_repwd">
+                    <label>确认密码：</label>
+                    <input type="password" name="psw1" id="login_repwd" onKeyUp="value=value.replace(/[\W]/g,'')"/>
+                </div>
+                <div class="add_username">
+                    <label>姓名：</label>
+                    <input type="text" name="nick" id="add_username"/>
+                </div>
+                <!--<div class="">-->
+                    <!--<label>IMEI：</label>-->
+                    <!--<input type="text" placeholder="15位手机唯一标识码" id="add_IMEI" name="phone" maxlength="15"-->
+                           <!--onkeypress="intOnly()" style="ime-mode:Disabled" />-->
+                <!--</div>-->
+                <div>
+                    <label>组织：</label>
+                    <select id="add_org" name="" class="easyui-combotree" style="width:200px;display: none">
+
+                    </select>
+                </div>
+                <div>
+                    <label>角色：</label>
+                    <select id="add_role" name="">
+
+                    </select>
+                </div>
+                <div class="mesr" id="tip2" align="center"></div>
+            </form>
+            <div class="popBox-btn">
+                <button id="add_saveUser">保存</button>
+                <button class="cancelBtn">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!--编辑用户-->
+    <div class="updateUser-box popBox hide easyui-draggable"
+         data-options="handle:'.popBox-head',onDrag:onDrag" style="z-index:1201">
+        <div class="popBox-head">
+            <p>编辑用户</p>
+            <div class="boxSize">
+                <a href="#" class="close"><i></i></a>
+            </div>
+        </div>
+        <div class="updateUser-body popBox-body">
+            <form action="" method="post" class="updateUser-form" id="updateUser-form">
+                <div class="id" hidden>
+                    <label>id：</label>
+                    <input type="text" name="id" id="update_id" disabled/>
+                </div>
+                <div class="update_loginname">
+                    <label>用户名：</label>
+                    <input type="text" name="nick" id="update_loginname" disabled/>
+                </div>
+                <div class="update_username">
+                    <label>姓名：</label>
+                    <input type="text" name="username" id="update_username"/>
+                </div>
+                <!--<div class="">-->
+                    <!--<label>IMEI：</label>-->
+                    <!--<input type="text" placeholder="15位手机唯一标识码" id="update_IMEI" maxlength="15" name="phone"-->
+                           <!--onkeypress="intOnly()" style="ime-mode:Disabled"/>-->
+                <!--</div>-->
+                <div>
+                    <label>组织：</label>
+                    <select id="update_org" class="easyui-combotree" style="width:200px;display: none" name="">
+                    </select>
+                </div>
+                <div>
+                    <label>角色：</label>
+                    <select id="update_role" name="">
+                    </select>
+                </div>
+                <div class="mesr" id="tip3" align="center"></div>
+            </form>
+            <div class="popBox-btn">
+                <button id="update_saveUser">保存</button>
+                <button class="cancelBtn">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!--重置密码-->
+    <div class="resetPwd-box popBox hide easyui-draggable"
+         data-options="handle:'.popBox-head',onDrag:onDrag" style="z-index:1201">
+        <div class="popBox-head">
+            <p>重置密码</p>
+            <a href="#" class="close"><i></i></a>
+        </div>
+        <div class="resetPwd-body popBox-body">
+            <form action="" method="post" class="resetPwd-form">
+                <div class="">
+                    <label>登录密码：</label>
+                    <input type="password" name="psw" id="pwd1" onKeyUp="value=value.replace(/[\W]/g,'')"/>
+                </div>
+                <div class="">
+                    <label>确认密码：</label>
+                    <input type="password" name="psw1" id="pwd2"/>
+                </div>
+                <div class="mesr" id="tip1" align="center"></div>
+                <!-- <p><input type="checkbox"/><span>使用系统默认密码</span></p>-->
+            </form>
+            <div class="popBox-btn">
+                <button id="btn_savePwd">保存</button>
+                <button class="cancelBtn">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!--添加角色-->
+    <div class="createRole-box popBox hide" id="CreateMessage easyui-draggable"
+         data-options="handle:'.popBox-head',onDrag:onDrag" style="z-index:1201">
+        <div class="popBox-head">
+            <p>添加角色</p>
+            <a href="#" class="close"><i></i></a>
+        </div>
+        <div class="createRole-body popBox-body">
+            <form action="" method="post" class="addRole-form" id="addRole-form">
+                <div><label>添加角色：</label><input id="roleName" name="roleName" type="text" value=""/></div>
+                <div><label>角色描述：</label><textarea id="roleDesc" name="roleDesc" style="resize:none"></textarea></div>
+                <div class="mesr" id="tip4" align="center"></div>
+            </form>
+            <div class="popBox-btn">
+                <button onclick="insertRole() ">确定</button>
+                <button class="cancelBtn">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!--编辑角色-->
+    <div class="updateRole-box popBox hide easyui-draggable"
+         data-options="handle:'.popBox-head',onDrag:onDrag" style="z-index:1201">
+        <div class="popBox-head">
+            <p>修改角色</p>
+            <a href="#" class="close"><i></i></a>
+        </div>
+        <div class="updateRole-body popBox-body">
+            <form action="" method="post" class="updateRole-form" id="updateRole-form">
+                <div class="id" hidden>
+                    <label>id：</label>
+                    <input type="text" name="roleId" id="update_roleId" disabled/>
+                </div>
+                <div class="update_roleName">
+                    <label>角色名：</label>
+                    <input type="text" name="roleName" id="update_roleName"/>
+                </div>
+                <div class="update_roleDesc">
+                    <label>角色描述：</label>
+                    <input type="text" name="roleDesc" id="update_roleDesc"/>
+                </div>
+                <div class="mesr" id="tip5" align="center"></div>
+            </form>
+            <div class="popBox-btn">
+                <button id="update_saveRole">保存</button>
+                <button class="cancelBtn">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!--删除角色-->
+    <div class="deleteRole popBox hide" id="deleteMessage">
+        <div class="popBox-head">
+            <p>删除角色</p>
+            <a href="#" class="close"><i></i></a>
+        </div>
+        <div class="deleteRole-body popBox-body">
+            <div><p>删除角色，角色关联的用户将处于无效角色</p></div>
+            <div class="popBox-btn">
+                <button onclick="deleteRole()">确定</button>
+                <button class="cancelBtn">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="js/jquery-easyui-1.4.5/jquery.min.js"></script>
+<script type="text/javascript" src="js/echarts.common.min.js"></script>
+<script type="text/javascript" src="js/chartaccessdata.js"></script>
+<script type="text/javascript" src="js/md5.js"></script>
+<script type="text/javascript" src="js/jquery.cookie.js"></script>
+<script type="text/javascript" src="js/date-format.js"></script>
+<script type="text/javascript" src="js/jquery.serializeObj.js"></script>
+<script type="text/javascript" src="js/jquery-easyui-1.4.5/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="js/jquery-easyui-1.4.5/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript">
+
+    function getUserList() {
+        var html="";
+            $.get("restful/logInfo/getAll", function (data) {
+            var records = $.parseJSON(data.content);
+            $.each(records, function (i, r) {
+//                alert(records[i].userName + records[i].opTime);
+                html = "<div class='user-listItem'><div class='user-icon'><a href='#'><img src='img/log-time/01.png'/></a></div>" +
+                            "<div class='user-infor'><div>"+records[i].userName+"</div><div>"+records[i].opTime+"</div></div></div>";
+                $('#userList').append(html);
+            })
+        })
+    }
+   window.onload = getUserList();
+
+    $(function () {
+
+        //点击主页
+        $(".log-set a").click(function () {
+            $(".mainContent").hide();
+            $(".homeContent").show();
+            leftInit();
+        });
+
+        //右侧内容切换
+        $(".left-nav .item").click(function () {
+            var index = $(".left-nav .item").index(this);
+            var $Img = $(".left-nav img");
+            var imgTxt = "<img src='img/left" + index + ".png' alt='' />";
+            $(this).css("background", "#fff").siblings().css("background", "#333");
+            $(".homeContent").hide();
+
+            before_show(index)
+            $(".mainContent").eq(index).removeClass("hide").show().siblings().hide();
+            $Img.eq(index).replaceWith(imgTxt);
+            $(this).siblings().each(function () {
+                var $Imgs = $(this).find("img");
+                var Ind = $(".left-nav .item").index(this);
+                $Imgs.attr("src", "img/ch" + Ind + ".png");
+
+            });
+
+        });
+        
+        checkStartEndDatebox("createDateStart", "createDateEnd");
+    });
+
+    //关闭弹框
+    $(".close").click(function () {
+    	// 修正页面关闭时下拉框未收起导致下拉框会显示到左上角的bug
+    	$(this).parent().parent().parent().find('.easyui-combotree').each(function() {
+        	$(this).combotree('hidePanel');
+        });
+    	$(this).parent().parent().parent().find('.easyui-datebox').each(function() {
+        	$(this).datebox('hidePanel');
+        });
+        var oParent = $(this).parent();
+        $("#cover").hide();
+        var popHead = $(this).parent().parent();
+        popHead.parent().hide();
+        return;
+    });
+    $(".cancelBtn").click(function () {
+        var oParent = $(this).parent().parent();
+        $("#cover").hide();
+        oParent.parent().hide();
+    });
+
+    //左侧菜单初始化
+    function leftInit() {
+        $(".left-nav .item").each(function () {
+            var index = $(".left-nav .item").index(this);
+            $(this).css("background", "#333");
+            $(this).find("img").attr("src", "img/ch" + index + ".png");
+        });
+    }
+
+    //获取当前登录的用户，根据用户的角色查询权限
+    function checkPermission(){
+        var loginUser = JSON.parse($.cookie('loginUser'));
+        $.get("restful/permission/findByLoginName", {loginName: loginUser.loginName}, function (data) {
+            var list = $.parseJSON(data.content);
+            $('#addUser').linkbutton('disable');
+            $('#editUser').linkbutton('disable');
+            $('#restPwd').linkbutton('disable');
+            $('#changeStatus').linkbutton('disable');
+            $('#delUser').linkbutton('disable');
+            $('#addRole').linkbutton('disable');
+            $('#editRole').linkbutton('disable');
+            $('#delRole').linkbutton('disable');
+            $("#savePermission").linkbutton('disable');
+            for(i in list){
+                if(list[i].priviCode =='user:add'){
+                    $('#addUser').linkbutton('enable');
+                }
+                if(list[i].priviCode =='user:update'){
+                    $('#editUser').linkbutton('enable');
+                }
+                if(list[i].priviCode =='user:resetpsw'){
+                    $('#restPwd').linkbutton('enable');
+                }
+                if(list[i].priviCode =='user:status'){
+                    $('#changeStatus').linkbutton('enable');
+                }
+                if(list[i].priviCode =='user:delete'){
+                    $('#delUser').linkbutton('enable');
+                }
+                if(list[i].priviCode =='role:add'){
+                    $('#addRole').linkbutton('enable');
+                }
+                if(list[i].priviCode =='role:update'){
+                    $('#editRole').linkbutton('enable');
+                }
+                if(list[i].priviCode =='role:delete'){
+                    $('#delRole').linkbutton('enable');
+                }
+                if(list[i].priviCode =='role:grant'){
+                    $("#savePermission").linkbutton('enable');
+                }
+            }
+        })
+    }
+
+    //在显示前进行相关操作
+    function before_show(index) {
+        switch (index) {
+            case 0:
+                checkPermission();
+                //alert("用户信息");
+                $("#user_dg").datagrid({
+                    title: "用户信息",
+                    pagination: true,
+                    rownumbers: true,
+                    fitColumns: false,
+                    onLoadSuccess: function (data) {
+                        var pager = $("#user_dg").datagrid("getPager");
+                        $(pager).pagination({
+                            onSelectPage: function (pageNumber, pageSize) {
+                                $("#user_dg").datagrid("clearSelections");
+                                var input = $("#user_search").val();
+                                var params = {
+                                    loginName: input,
+                                    username: input
+                                };
+                                user_loadData(pageNumber, pageSize, params);
+                            },
+                            onChangePageSize: function (pageSize) {
+                                var options = pager.data("pagination").options;
+                                options.pageNumber = 1;  //返回第1页的页面和数据
+                            }
+                        });
+                    }
+                });
+                user_loadData(1, 10, {});
+
+                $("[class*='panel']").css("width", "100%");
+                $(".panel-body").css("height", "95%");
+                $(".datagrid-body").css("height", "100%");
+                $(".datagrid-view").css("height", "85%");
+                break;
+            case 1:
+                //alert("角色管理");
+                //角色
+                checkPermission();
+                $("#role_dg").datagrid({
+                    title: "角色",
+                    pagination: true,
+                    rownumbers: true,
+                    fitColumns: false,
+                    pageSize: 25,
+                    pageList: [10, 20, 25, 30, 40, 50],
+                    onLoadSuccess: function (data) {
+                        //$(this).datagrid('selectRow', 0);
+                        var pager = $("#role_dg").datagrid("getPager");
+                        $(pager).pagination({
+                            onSelectPage: function (pageNumber, pageSize, total) {
+                                role_loadData(pageNumber, pageSize, {});
+                            },
+                            onChangePageSize: function (pageSize) {
+                                var options = pager.data("pagination").options;
+                                options.pageNumber = 1;  //返回第1页的页面和数据
+                            }
+                        });
+                    }
+                });
+
+                $("#role_dg").datagrid('hideColumn', 'id');
+                role_loadData(1, 25, {});
+
+                //角色用户
+                $("#ru_dg").datagrid({
+                    title: "角色用户",
+                    pagination: true,
+                    rownumbers: true,
+                    fitColumns: false,
+                    pageSize: 25,
+                    pageList: [10, 20, 25, 30, 40, 50],
+                    onLoadSuccess: function (data) {
+                        var pager = $("#ru_dg").datagrid("getPager");
+                        $(pager).pagination({
+                            onSelectPage: function (pageNumber, pageSize) {
+                            	var jsonObj = {};
+                            	if($("#role_dg").datagrid("getSelected")!=null){
+                            		jsonObj.roleId = $("#role_dg").datagrid("getSelected").id;
+                            	}
+                                ru_loadData(pageNumber, pageSize,jsonObj);
+                            },
+                            onChangePageSize: function (pageSize) {
+                                var options = pager.data("pagination").options;
+                                options.pageNumber = 1;  //返回第1页的页面和数据
+                            }
+                        });
+                    }
+
+                });
+                ru_loadData(1, 25, {});
+
+                $("[class*='panel']").css("width", "100%");
+                $(".panel,.datagrid-body").css("height", "100%");
+                $(".panel-body").css({"width": "100%","height":"96%"});
+                $(".datagrid-view").css({"width": "100%","height":"96%"});
+                $(".datagrid-view2").css("width", "94%");
+
+
+                $('#role_permi').tree({
+                    onlyLeafCheck: false,
+                    lines: true,
+                    onBeforeCollapse: function (node) {
+                        return false;
+                    },
+                    onBeforeSelect: function (node) {
+                        return false;
+                    }
+                });
+
+                $('#role_permi').tree("loadData", tree);
+                break;
+            case 2:
+                // alert("组织管理");
+                $('#tt').treegrid({
+                    title: '组织结构',
+                    idField: 'id',
+                    treeField: 'text',
+                    rownumbers: true,
+                    animate: true,
+                    fitColumns: false,
+                    lines: true,
+                    columns: [[
+                        {title: '组织名称', field: 'text', width: 500, align: 'left'},
+                        {title: '组织描述', field: 'orgDesc', width: 500, align: 'center'},
+                        {title: '创建时间', field: 'createDate', width: 400, align: 'center'}
+                    ]]
+                });
+
+                loadTree();
+                $("[class*='panel']").css("width", "100%");
+                $(".panel-body").css("height", "95%");
+                $(".datagrid-view").css("height", "85%");
+                break;
+            case 3:
+                $("#logManage").datagrid({
+                    title: "日志管理",
+                    pagination: true,
+                    rownumbers: true,
+                    fitColumns: false,
+                    singleSelect:true,
+                    pageSize: 20,
+                    pageList: [10, 20, 25, 30, 40, 50],
+                    columns:[[
+                        {
+                            field: 'id',
+                            title: '',
+                            hidden: true,
+                            align:"center"
+                        },{
+                            field:'userName',
+                            title:'操作人',
+                            align:"center",
+                            width:100
+                        },{
+                            field:'opTime',
+                            title:'操作时间',
+                            align:"center",
+                            width:150
+                        },{
+                            field:'opPlatform',
+                            title:'操作平台',
+                            formatter: function(value,row,index) {
+                                if (row.opPlatform == 0){
+                                    return "web";
+                                }else if(row.opPlatform ==1){
+                                    return "andriod";
+                                }else if(row.opPlatform ==2){
+                                    return "ios";
+                                }
+                            },
+                            align:"center",
+                            width:80
+                        },{
+                            field:'modName',
+                            title:'功能模块',
+                            align:"center",
+                            width:150
+                        },{
+                            field:'opIp',
+                            title:'IP地址',
+                            align:"center",
+                            width:100
+                        },{
+                            field:'opDesc',
+                            title:'操作描述',
+                            align:"center",
+                            width:800
+                        },{
+                            field:'remark',
+                            title:'备注',
+                            align:"center",
+                            width:100
+                        },
+                    ]],
+                    onLoadSuccess: function (data) {
+                        var pager = $("#logManage").datagrid("getPager");
+                        $(pager).pagination({
+                            onSelectPage: function (pageNumber, pageSize) {
+                                var selectValue = $("#modName").val();
+                                var qryparam={};
+                                var loginUser = JSON.parse($.cookie('loginUser'));
+                                qryparam.userId=loginUser.id;
+                                qryparam.userName=$("#userName").val();
+                                qryparam.pageNumber=pageNumber;
+                                qryparam.pageSize=pageSize;
+                                qryparam = $.extend(qryparam,$("#dataReviewForm").serializeObj());
+                                if(selectValue=="所有模块"){
+                                    qryparam.modName="";
+                                }
+                                loadData(pageNumber, pageSize,JSON.stringify(qryparam));
+                            },
+                            onChangePageSize: function (pageSize) {
+                                var options = pager.data("pagination").options;
+                                options.pageNumber = 1;  //返回第1页的页面和数据
+                            }
+                        });
+                    }
+                });
+                log_loadData(1, 20, {opPlatform:0,modName:""});
+                
+                $("[class*='panel']").css("width", "100%");
+                $(".panel,.datagrid-body").css("height", "100%");
+                $(".panel-body").css({"width": "100%","height":"95%"});
+                $(".datagrid-view").css({"width": "100%","height":"96%"});
+                $(".datagrid-view2").css("width", "94%");
+
+                break;
+            case 4:
+                //alert("场景配置");
+                $("#SceneConfigure").datagrid({
+                    title: "场景配置",
+                    fitColumns: false,
+                    pagination: false,
+                    rownumbers: true,
+                    singleSelect: true,
+                    columns: [[{
+                        field: 'paramName',
+                        title: '参数名称',
+                        width: 500,
+                        align: 'center'
+                    }, {
+                        field: 'paramValue',
+                        title: '参数值',
+                        width: 300,
+                        align: 'center'
+                    }, {
+                        field: 'remark',
+                        title: '参数备注',
+                        width: 600,
+                        align: 'center'
+                    }]],
+
+                });
+                SceneConfigureloadDate();
+                
+                $("[class*='panel']").css("width", "100%");
+                $(".panel-body").css("height", "95%");
+                $(".datagrid-view").css("height", "85%");
+                
+                break;
+            case 5:
+                //alert("场景视图");
+                break;
+            case 6:
+                //alert("app更新");
+
+                $("#app_dg").datagrid({
+                    title: "app版本信息",
+                    fitColumns: false,
+                    pagination: false,
+                    rownumbers: true,
+                    singleSelect: true,
+                    columns: [[{
+                        field: 'id',
+                        title: '',
+                        hidden: true
+                    }, {
+                        field: 'version',
+                        title: '版本号',
+                        width: 80,
+                        align: 'center'
+                    }, {
+                        field: 'updateDesc',
+                        title: '更新详情',
+                        width: 500,
+                        align: 'left'
+                    }, {
+                        field: 'updateDate',
+                        title: '更新日期',
+                        width: 180,
+                        align: 'center'
+                    }, {
+	                    field: 'url',
+	                    title: '下载地址',
+	                    width: 500,
+	                    align: 'left'
+	                }, {
+	                    field: 'size',
+	                    title: 'app大小',
+	                    width: 120,
+	                    align: 'center',
+	                    formatter: function(value,row,index) {
+	                        return (value/1024/1024).toFixed(2)+" M";
+	                    }
+                    }
+                    ]]
+                });
+                AppInfoloadDate();
+                
+                $("[class*='panel']").css("width", "100%");
+                $(".panel-body").css("height", "95%");
+                $(".datagrid-view").css("height", "85%");
+                
+                break;
+            default:
+        }
+    }
+
+    var tree;
+    $.get("restful/permission/getAll", function (data) {
+        var list = $.parseJSON(data.content);
+        //list 转成树形json
+        function listToTree(list, pid) {
+            var ret = [];//一个存放结果的临时数组
+            for (var i in list) {
+                //alert(list[i].priviTypeId);
+                if (list[i].pid == pid) {//如果当前项的父id等于要查找的父id，进行递归
+                    list[i].children = listToTree(list, list[i].id);
+                    ret.push(list[i]);//把当前项保存到临时数组中
+                }
+            }
+            return ret;//递归结束后返回结果
+        }
+
+        tree = listToTree(list, list[0].priviType);//调用函数，传入要转换的list数组，和树中顶级元素的pid
+    });
+
+
+    function rp_loadData(roleId) {
+        var param = {"id": roleId};
+        $.ajax({
+            url: "restful/role/getByWhere",
+            type: "post",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify(param),
+            success: function (data) {
+                if (data.status == 'success') {
+                    var records = $.parseJSON(data.content);
+                    $.each(records, function (i, r) {
+                        var node = $('#role_permi').tree('find', r.priviId);
+	                    if (node) {
+                            $('#role_permi').tree('check', node.target);
+                        } 
+                    });
+                }
+            },
+            error: function (err) {
+            }
+        })
+    }
+
+    //保存权限项
+    $("#savePermission").off().on("click", function () {
+        var priviIds = [];
+        var nodes = $('#role_permi').tree('getChecked');
+        for (var i = 0; i < nodes.length; i++) {
+            priviIds.push(nodes[i].id);
+        }
+        priviIds = priviIds.join(",");
+        var param = {"id": roleId, "priviIds": priviIds,"name":$("#role_dg").datagrid('getSelected').name};
+        $.ajax({
+            url: "restful/role/updatePermi",
+            type: "post",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify(param),
+            success: function (data) {
+                if (data.status == 'success') {
+                    checkPermission();
+                    $.messager.alert("提示", "保存成功！", "info");
+                }
+                else {
+                    $.messager.alert("提示", "保存失败！", "error");
+                }
+            }
+        });
+    });
+
+    function loadTree() {
+        var loginUser = JSON.parse($.cookie('loginUser'));
+
+        $.get("restful/organization/findOrgByUser", {userId: loginUser.id}, function (data) {
+            var list = $.parseJSON(data.content);
+            //list 转成树形json
+
+            function listToTree(list, orgPid) {
+                var ret = [];//一个存放结果的临时数组
+                for (var i in list) {
+                    if (list[i].orgPid == orgPid) {//如果当前项的父id等于要查找的父id，进行递归
+                        list[i].children = listToTree(list, list[i].id);
+                        ret.push(list[i]);//把当前项保存到临时数组中
+                    }
+                }
+                return ret;//递归结束后返回结果
+            }
+
+            var tree = listToTree(list, list[0].orgPid);//调用函数，传入要转换的list数组，和树中顶级元素的pid
+
+            $('#tt').treegrid("loadData", tree);
+
+        })
+    }
+
+    //搜索用户
+    function user_search() {
+        var input = $("#user_search").val();
+
+        var params = {
+            loginName: input,
+            username: input
+        };
+        var pager = $("#user_dg").datagrid("getPager");
+
+        var options = pager.data("pagination").options;
+
+        options.pageNumber = 1;  //返回第1页的页面和数据
+
+        user_loadData(options.pageNumber, options.pageSize, params);
+    }
+
+    function user_loadData(pageNumber, pageSize, qryjson) {
+
+        var page = {"pageNumber": pageNumber, "pageSize": pageSize, "objCondition": qryjson};
+        $.ajax({
+            url: "restful/user/getPage",
+            type: "post",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify(page),
+            success: function (data) {
+                $("#user_dg").datagrid("loadData", {rows: data.rows, total: data.total});
+                var rowNumbers = $('.datagrid-cell-rownumber');
+                $(rowNumbers).each(
+                    function(index) {
+                        var row = parseInt($(rowNumbers[index]).html() - 1)
+                            % parseInt(pageSize) + 1;
+                        $(rowNumbers[index]).html(row);
+                    });
+
+
+            },
+            error: function (err) {
+            }
+        })
+    }
+
+    function role_loadData(pageNumber, pageSize, qryjson) {
+
+        var page = {"pageNumber": pageNumber, "pageSize": pageSize, "objCondition": qryjson};
+        $.ajax({
+            url: "restful/role/getPage",
+            type: "post",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify(page),
+            success: function (data) {
+                $("#role_dg").datagrid("loadData", {rows: data.rows, total: data.total});
+                 var rowNumbers = $('.datagrid-cell-rownumber');
+    			$(rowNumbers).each(
+    					function(index) {
+    						var row = parseInt($(rowNumbers[index]).html() - 1)
+    								% parseInt(pageSize) + 1;
+    						$(rowNumbers[index]).html(row);
+    					}); 
+            },
+            error: function (err) {
+            }
+        })
+    }
+
+    function ru_loadData(pageNumber, pageSize, qryjson) {
+
+        var page = {"pageNumber": pageNumber, "pageSize": pageSize, "objCondition": qryjson};
+        $.ajax({
+            url: "restful/user/getPage",
+            type: "post",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify(page),
+            success: function (data) {
+                $("#ru_dg").datagrid("loadData", {rows: data.rows, total: data.total});
+            },
+            error: function (err) {
+            }
+        })
+    }
+
+    function log_loadData(pageNumber, pageSize, qryjson) {
+
+        var page = {"pageNumber": pageNumber, "pageSize": pageSize, "objCondition": qryjson};
+        $.ajax({
+            url: "restful/logInfo/getPage",
+            type: "post",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify(page),
+            success: function (data) {
+                $("#logManage").datagrid("loadData", {rows: data.rows, total: data.total});
+            },
+            error: function (err) {
+            }
+        })
+    }
+
+    //删除用户
+    function user_del() {
+        //var obj=$("#user_dg").datagrid("getSelected");
+        var objs = $("#user_dg").datagrid("getSelections");
+        if (objs.length == 0) {
+            $.messager.alert("提示", "请选择要删除的用户！", "warning");
+            return false;
+        }
+        var index = $("#user_dg").datagrid("getRowIndex", objs);
+        if (objs.length != 0) {
+            $.messager.confirm("提示", "确定删除所有选择的用户吗?", function (success) {
+                if (success) {
+                	var ids="";
+                	var loginNames="";
+                    for (var i = 0; i < objs.length; i++) {
+                    	ids+=objs[i].id+",";
+                    	loginNames+=objs[i].loginName+",";
+                    }
+                    ids=ids.substring(0,ids.lastIndexOf(","));
+                    loginNames=loginNames.substring(0,loginNames.lastIndexOf(","));
+                    $.get("restful/user/deleteUserByIds", {ids: ids,loginNames:loginNames},function (data) {
+                        var pager = $("#user_dg").datagrid("getPager");
+                        var options = pager.data("pagination").options;
+                        options.total = options.total - objs.length;
+                        var yushu = (options.total) % (options.pageSize);
+                        //options.pageNumber = Math.floor(options.total / options.pageSize + 1);
+                        if (yushu == 0) {
+                            var totalpagenumber = Math.floor(options.total / options.pageSize);
+                        } else {
+                            var totalpagenumber = Math.floor(options.total / options.pageSize + 1);
+                        }
+                        //totalpagenumber = Math.floor(options.total / options.pageSize );
+                        options.pageNumber = options.pageNumber <= totalpagenumber ? options.pageNumber : totalpagenumber;
+                        $.messager.alert("提示", "删除成功！", "info");
+                        user_loadData(options.pageNumber, options.pageSize, {});
+                        $("#user_dg").datagrid("clearChecked");
+
+                        if(data.status == 'unauthorized'){
+                            $.messager.alert("提示", "您无权进行该操作！", "error");
+                            $("#cover").hide();
+                            $("#user_dg").datagrid("clearChecked");
+                        }
+                    });
+                }
+
+            })
+        }
+    }
+
+
+    //添加用户
+    function user_add() {
+        $("#cover").show();
+        $(".addUser-box").removeClass("hide").show();
+        $('#addUser-form')[0].reset();
+        $("#tip2").empty();
+
+        //url: 'restful/organization/getAll',
+        $('#add_org').combotree({
+            multiple: true,
+            cascadeCheck: false,
+            lines: true
+        });
+
+
+        $.get("restful/organization/getAll", function (data) {
+            var list = $.parseJSON(data.content);
+            //list 转成树形json
+            function listToTree(list, orgPid) {
+                var ret = [];//一个存放结果的临时数组
+                for (var i in list) {
+                    if (list[i].orgPid == orgPid) {//如果当前项的父id等于要查找的父id，进行递归
+                        list[i].children = listToTree(list, list[i].id);
+                        ret.push(list[i]);//把当前项保存到临时数组中
+                    }
+                }
+                return ret;//递归结束后返回结果
+            }
+
+            var tree = listToTree(list, 0);//调用函数，传入要转换的list数组，和树中顶级元素的pid
+            $('#add_org').combotree("loadData", tree);
+            $('#add_org').combotree("setValue", 100000);
+
+            /*//js脚本，递归生成
+             //获取容器对象
+             var selectbox = document.getElementById("add_org");
+
+             //生成树下拉菜单
+             var j = "";//前缀符号，用于显示父子关系，这里可以使用其它符号
+             function creatSelectTree(d) {
+             var option = "";
+             for (var i = 0; i < d.length; i++) {
+             if (d[i].children.length) {//如果有子集
+             option += "<option value='" + d[i].orgId + "'>" + j + d[i].orgName + "</option>";
+             j += "----";//前缀符号加一个符号
+             option += creatSelectTree(d[i].children);//递归调用子集
+             j = j.slice(0, j.length - 4);//每次递归结束返回上级时，前缀符号需要减一个符号
+             } else {//没有子集直接显示
+             option += "<option value='" + d[i].orgId + "'>" + j + d[i].orgName + "</option>";
+             }
+             }
+             return option;//返回最终html结果
+             }
+
+             //调用函数，并将结构出入到下拉框容器中
+             selectbox.innerHTML = creatSelectTree(tree);*/
+        });
+
+        $.get("restful/role/getAll", function (data) {
+            //alert(data);
+            var rolejson = $.parseJSON(data.content);
+            //alert(rolejson);
+            $("#add_role").html("");
+            for (i = 0; i < rolejson.length; i++) {
+                var roleitem = rolejson[i];
+                $("#add_role").append("<option value='" + roleitem.id + "'>" + roleitem.name + "</option>");
+            }
+            $("#add_role").get(0).selectedIndex = 0;
+        });
+
+        $("#add_saveUser").off().on("click", function () {
+            var loginName = $(".add_loginname input").val().replace(/\s/g, '');
+            var loginPwd = $(".login_pwd input").val().replace(/\s/g, '');
+            var loginRepwd = $(".login_repwd input").val().replace(/\s/g, '');
+            var username = $(".add_username input").val().replace(/\s/g, '');
+//            var IMEI = $("#add_IMEI").val().replace(/\s/g, '');
+            var orgId = $("#add_org").combotree("getValues").join(",");
+            var roleId = $("#add_role").val();
+            if (!loginName.match(/^(((13[0-9]{1})|(18[0-9]{1})|(15[0-9]{1}))+\d{8})$/)) {
+                $("#tip2").html('用户名格式不正确！').show();
+                $(".add_loginname input").focus();
+                return false;
+            }
+            if (loginPwd == '') {
+                $("#tip2").html('请输入密码！').show();
+                $("#login_pwd").focus();
+                return false;
+            }
+            if (loginRepwd == '') {
+                $("#tip2").html('请输入确认密码！').show();
+                $("#login_repwd").focus();
+                return false;
+            }
+            if (loginPwd != loginRepwd) {
+                $("#tip2").html('两次输入的密码不一致！').show();
+                $("#login_pwd").focus();
+                return false;
+            }
+            if (username == '') {
+                $("#tip2").html('姓名不能为空！').show();
+                $(".add_username input").focus();
+                return false;
+            }
+//            if (IMEI.length != 15) {
+//                //alert("手机号码格式不正确！");
+//                $("#tip2").html("IMEI码格式不正确！");
+//                $("#add_IMEI").focus();
+//                return false;
+//            }
+
+            if (loginPwd == loginRepwd) {
+                $("#tip2").html('').show();
+                $(".addUser-box").hide();
+                loginPwd = hex_md5(loginPwd).toUpperCase();
+                var params = {
+                    loginName: loginName,
+                    password: loginPwd,
+                    username: username,
+//                    loginEquId: IMEI,
+                    orgId: orgId,
+                    roleId: roleId
+                }
+            }
+            $.ajax({
+                type: "post",
+                url: "restful/user/insert",
+                contentType: "application/json",
+                dataType: "json",
+                data: JSON.stringify(params),
+                success: function (data) {
+                    if (data.status == 'success') {
+                        $.messager.alert("提示", "添加成功！", "info");
+                        $("#cover").hide();
+                        $("#user_dg").datagrid("clearChecked");
+                        var pager = $("#user_dg").datagrid("getPager");
+                        var options = pager.data("pagination").options;
+                        options.pageNumber = Math.floor(options.total / options.pageSize + 1);
+                        user_loadData(options.pageNumber, options.pageSize, {});
+                    } else if (data.message == 'exist') {
+                        $.messager.alert("提示", "该用户已经存在！", "error");
+                        $("#cover").hide();
+                        $("#user_dg").datagrid("clearChecked");
+                    } else if (data.status == 'unauthorized') {
+                        $.messager.alert("提示", "您无权进行该操作！", "error");
+                        $("#cover").hide();
+                        $("#user_dg").datagrid("clearChecked");
+                    } else {
+                        $.messager.alert("提示", "添加失败！", "error");
+                        $("#cover").hide();
+                        $("#user_dg").datagrid("clearChecked");
+                    }
+                }
+            });
+        });
+    }
+
+    //编辑用户
+    function user_edit() {
+        var objs = $("#user_dg").datagrid("getSelections");
+        var obj = $("#user_dg").datagrid("getSelected");
+        if (objs.length == 0) {
+            $.messager.alert("提示", "请选择要编辑的用户！", "warning");
+            return false;
+        } else if (objs.length > 1) {
+            $.messager.alert("提示", "只能选择一个用户！", "warning");
+            return false;
+        }
+        $("#cover").show();
+        $(".updateUser-box").removeClass("hide").show();
+        $('#updateUser-form')[0].reset();
+        $("#update_loginname").attr("value", obj.loginName);
+        $("#update_username").attr("value", obj.username);
+//        $("#update_IMEI").attr("value", obj.loginEquId);
+        $("#update_id").attr("value", obj.id);
+        $("#tip3").empty();
+
+        $('#update_org').combotree({
+            multiple: true,
+            cascadeCheck: false
+        });
+
+        $.get("restful/organization/getAll", function (data) {
+            //alert( data );
+            var list = $.parseJSON(data.content);
+
+            function listToTree(list, orgPid) {
+                var ret = [];//一个存放结果的临时数组
+                for (var i in list) {
+                    if (list[i].orgPid == orgPid) {//如果当前项的父id等于要查找的父id，进行递归
+                        list[i].children = listToTree(list, list[i].id);
+                        ret.push(list[i]);//把当前项保存到临时数组中
+                    }
+                }
+                return ret;//递归结束后返回结果
+            }
+
+            var tree = listToTree(list, 0);//调用函数，传入要转换的list数组，和树中顶级元素的pid
+            $('#update_org').combotree("loadData", tree);
+            $('#update_org').combotree("setValue", obj.orgId.split(','));
+            /*
+             //js脚本，递归生成
+             //获取容器对象
+             var selectbox = document.getElementById("update_org");
+
+             //生成树下拉菜单
+             var j = "";//前缀符号，用于显示父子关系，这里可以使用其它符号
+             function creatSelectTree(d) {
+             var option = "";
+             for (var i = 0; i < d.length; i++) {
+             if (d[i].children.length) {//如果有子集
+             option += "<option value='" + d[i].orgId + "'>" + j + d[i].orgName + "</option>";
+             j += "----";//前缀符号加一个符号
+             option += creatSelectTree(d[i].children);//递归调用子集
+             j = j.slice(0, j.length - 4);//每次递归结束返回上级时，前缀符号需要减一个符号
+             } else {//没有子集直接显示
+             option += "<option value='" + d[i].orgId + "'>" + j + d[i].orgName + "</option>";
+             }
+             }
+             return option;//返回最终html结果
+             }
+
+             //调用函数，并将结构出入到下拉框容器中
+             selectbox.innerHTML = creatSelectTree(tree);
+             $("#update_org option[value=" + obj.orgId + "]").attr("selected", true);*/
+        });
+
+        $.get("restful/role/getAll", function (data) {
+            //alert(data);
+            var rolejson = $.parseJSON(data.content);
+            //alert(rolejson);
+            $("#update_role").html("");
+            for (i = 0; i < rolejson.length; i++) {
+                var roleitem = rolejson[i];
+                $("#update_role").append("<option value='" + roleitem.id + "'>" + roleitem.name + "</option>");
+            }
+            //$("#update_role").get(0).selectedIndex = 0;
+            $("#update_role option[value=" + obj.roleId + "]").attr("selected", true);
+        });
+
+        $("#update_saveUser").off().on("click", function () {
+            var loginName = $("#update_loginname").val().replace(/\s/g, '');
+            var username = $("#update_username").val().replace(/\s/g, '');
+//            var IMEI = $("#update_IMEI").val().replace(/\s/g, '');
+            var orgId = $("#update_org").combotree("getValues").join(",");
+            var roleId = $("#update_role").val();
+            var id = $("#update_id").val();
+
+            if (username == '') {
+                $("#tip3").html('姓名不能为空！').show();
+                $(".update_username input").focus();
+                return false;
+            }
+//            if (IMEI.length != 15) {
+//                //alert("手机号码格式不正确！");
+//                $("#tip3").html("IMEI格式不正确！");
+//                $("#update_IMEI").focus();
+//                return false;
+//            } else {
+            else{
+                $(".updateUser-box").hide();
+                var params = {
+                    id: id,
+                    loginName: loginName,
+                    username: username,
+//                    loginEquId: IMEI,
+                    orgId: orgId,
+                    roleId: roleId
+                }
+            }
+            $.ajax({
+                type: "post",
+                url: "restful/user/update",
+                contentType: "application/json",
+                dataType: "json",
+                data: JSON.stringify(params),
+                success: function (data) {
+                    if (data.status=='success') {
+                        $.messager.alert("提示", "修改成功！", "info");
+                        $("#cover").hide();
+                        $("#user_dg").datagrid("clearChecked");
+                        var pager = $("#user_dg").datagrid("getPager");
+                        var options = pager.data("pagination").options;
+                        user_loadData(options.pageNumber, options.pageSize, {});
+                    } else if (data.status == 'unauthorized') {
+                        $.messager.alert("提示", "您无权进行该操作！", "error");
+                        $("#cover").hide();
+                        $("#user_dg").datagrid("clearChecked");
+                        var pager = $("#user_dg").datagrid("getPager");
+                        var options = pager.data("pagination").options;
+                        user_loadData(options.pageNumber, options.pageSize, {});
+                    }
+                    else {
+                        $.messager.alert("提示", "修改失败！", "error");
+                        $("#cover").hide();
+                        $("#user_dg").datagrid("clearChecked");
+                        var pager = $("#user_dg").datagrid("getPager");
+                        var options = pager.data("pagination").options;
+                        user_loadData(options.pageNumber, options.pageSize, {});
+                    }
+                }
+            });
+        });
+    }
+
+    //重置密码
+    function user_restPwd() {
+        $('.resetPwd-form')[0].reset();
+        //var id = el.id;
+        var objs = $("#user_dg").datagrid("getSelections");
+        var obj = $("#user_dg").datagrid("getSelected");
+        if (objs.length == 0) {
+            $.messager.alert("提示", "请选择要重置密码的用户！", "warning");
+            return false;
+        } else if (objs.length > 1) {
+            $.messager.alert("提示", "只能选择一个用户！", "warning");
+            return false;
+        }
+        $("#cover").show();
+        var id = obj.id;
+        $(".resetPwd-box").removeClass("hide").show();
+        $(".resetPwd-form input").attr("value", "");
+        $("#tip1").empty();
+        $("#btn_savePwd").off().on("click", function () {
+
+            var pwd1 = $("#pwd1").val().replace(/\s/g, '');
+            var pwd2 = $("#pwd2").val().replace(/\s/g, '');
+
+            if (pwd1 == '') {
+                $("#tip1").html('请输入密码').show();
+                $("#pwd1").focus();
+                return false;
+            }
+            if (pwd2 == '') {
+                $("#tip1").html('请输入确认密码').show();
+                $("#pwd2").focus();
+                return false;
+            }
+            if (pwd1 != pwd2) {
+                $("#tip1").html('新密码与确认密码不一致').show();
+                $("#pwd1").focus();
+                return false;
+            }
+            if (pwd1 == pwd2) {
+                $("#tip1").html('').show();
+                $(".resetPwd-box").hide();
+                pwd1 = hex_md5(pwd1).toUpperCase();
+                var params = {id: id, password: pwd1}
+            }
+            $.ajax({
+                type: "post",
+                url: "restful/user/updatePassword",
+                contentType: "application/json",
+                dataType: "json",
+                data: JSON.stringify(params),
+                success: function (data) {
+                    if (data.status == 'success') {
+                        $.messager.alert("提示", "重置成功！", "info");
+                        $("#cover").hide();
+                        $("#user_dg").datagrid("clearChecked");
+                        var pager = $("#user_dg").datagrid("getPager");
+                        var options = pager.data("pagination").options;
+                        user_loadData(options.pageNumber, options.pageSize, {});
+                    } else if (data.status == 'unauthorized') {
+                        $.messager.alert("提示", "您无权进行该操作！", "error");
+                        $("#cover").hide();
+                        $("#user_dg").datagrid("clearChecked");
+                        var pager = $("#user_dg").datagrid("getPager");
+                        var options = pager.data("pagination").options;
+                        user_loadData(options.pageNumber, options.pageSize, {});
+                    }
+                    else {
+                        $.messager.alert("提示", "重置失败！", "error");
+                        $("#cover").hide();
+                        $("#user_dg").datagrid("clearChecked");
+                        var pager = $("#user_dg").datagrid("getPager");
+                        var options = pager.data("pagination").options;
+                        user_loadData(options.pageNumber, options.pageSize, {});
+                    }
+                }
+
+            });
+        })
+    }
+
+    //状态停启
+    function user_changeStatus() {
+        var objs = $("#user_dg").datagrid("getSelections");
+        var obj = $("#user_dg").datagrid("getSelected");
+        if (objs.length == 0) {
+            $.messager.alert("提示", "请选择要修改账号状态的用户！", "warning");
+            return false;
+        } else if (objs.length > 1) {
+            $.messager.alert("提示", "只能选择一个用户！", "warning");
+            return false;
+        }
+        obj.userStateId = obj.userStateId == 1 ? 2 : 1;
+        $.messager.confirm("提示", "确定要修改该用户的状态吗？", function (success) {
+            if (success) {
+                $.ajax({
+                    type: "post",
+                    url: "restful/user/updateStatus",
+                    contentType: "application/json",
+                    dataType: "json",
+                    data: JSON.stringify(obj),
+                    success: function (data) {
+                        if (data.status == 'success') {
+                            $.messager.alert("提示", "修改成功！", "info");
+                            $("#user_dg").datagrid("clearChecked");
+                            var pager = $("#user_dg").datagrid("getPager");
+                            var options = pager.data("pagination").options;
+                            user_loadData(options.pageNumber, options.pageSize, {});
+                        } else if (data.status == 'unauthorized') {
+                            $.messager.alert("提示", "您无权进行该操作！", "error");
+                            $("#user_dg").datagrid("clearChecked");
+                            var pager = $("#user_dg").datagrid("getPager");
+                            var options = pager.data("pagination").options;
+                            user_loadData(options.pageNumber, options.pageSize, {});
+                        }
+                        else {
+                            $.messager.alert("提示", "修改失败！", "error");
+                            $("#user_dg").datagrid("clearChecked");
+                            var pager = $("#user_dg").datagrid("getPager");
+                            var options = pager.data("pagination").options;
+                            user_loadData(options.pageNumber, options.pageSize, {});
+                        }
+                    }
+
+                });
+            }
+        })
+    }
+
+    //角色管理
+    //删除角色
+    function role_del() {
+        //var obj=$("#user_dg").datagrid("getSelected");
+    	//判断该角色是否被占用
+    	if($("#ru_dg").datagrid("getRows").length>0){
+    		 $.messager.alert("提示", "角色已绑定用户，无法删除！", "warning");
+             return false;
+    	}
+        var objs = $("#role_dg").datagrid("getSelections");
+        if (objs.length == 0) {
+            $.messager.alert("提示", "请选择要删除的角色！", "warning");
+            return false;
+        }
+        var index = $("#role_dg").datagrid("getRowIndex", objs);
+        if (objs.length != 0) {
+            $.messager.confirm("提示", "确定删除所选择的角色吗?", function (success) {
+                if (success) {
+                    for (var i = 0; i < objs.length; i++) {
+                        $.get("restful/role/deleteRoleById", {id: objs[i].id,name:objs[i].name},function (data) {
+                            var pager = $("#role_dg").datagrid("getPager");
+                            var options = pager.data("pagination").options;
+                            options.total = options.total - objs.length;
+                            var yushu = (options.total) % (options.pageSize);
+                            //options.pageNumber = Math.floor(options.total / options.pageSize + 1);
+                            if (yushu == 0) {
+                                var totalpagenumber = Math.floor(options.total / options.pageSize);
+                            } else {
+                                var totalpagenumber = Math.floor(options.total / options.pageSize + 1);
+                            }
+                            //totalpagenumber = Math.floor(options.total / options.pageSize );
+                            options.pageNumber = options.pageNumber <= totalpagenumber ? options.pageNumber : totalpagenumber;
+                            if(data.status=="success"){
+                            $.messager.alert("提示","角色删除成功！","info");
+                            role_loadData(options.pageNumber, options.pageSize, {});
+                            $("#role_dg").datagrid("clearChecked");
+                            }
+                            else if(data.status == 'unauthorized'){
+                                $.messager.alert("提示", "您无权进行该操作！", "error");
+                                $("#role_dg").datagrid("clearChecked");
+                            }
+                            else{$.messager.alert("提示", "删除失败！", "error");}
+                        });
+                    }
+                }
+            })
+        }
+    }
+
+    //添加角色
+    function role_add() {
+        $("#cover").show();
+        $(".createRole-box").removeClass("hide").show();
+        $('#addRole-form')[0].reset();
+        $("#tip2").empty();
+    }
+
+    function insertRole() {
+        var role = {};
+        role.name = $("#roleName").val().replace(/\s/g, '');
+        role.description = $("#roleDesc").val().replace(/\s/g, '');
+        if (role.name == '') {
+            $("#tip4").html('请输入角色名称！').show();
+            $("#roleName").focus();
+            return false;
+        }
+        $(".createRole-box").hide();
+        $.ajax({
+            type: "POST",
+            url: "restful/role/insert",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify(role),
+            success: function (data) {
+                if (data.status == 'success') {
+                    $.messager.alert("提示", "添加成功！", "info");
+                    $("#cover").hide();
+                    $("#role_dg").datagrid("clearChecked");
+                    var pager = $("#role_dg").datagrid("getPager");
+                    var options = pager.data("pagination").options;
+                    options.pageNumber = Math.floor(options.total / options.pageSize + 1);
+                    role_loadData(options.pageNumber, options.pageSize, {});
+                } else if (data.message == 'exist') {
+                    $.messager.alert("提示", "该角色已经存在！", "error");
+                    $("#cover").hide();
+                    $("#role_dg").datagrid("clearChecked");
+                }else if(data.status == 'unauthorized'){
+                    $.messager.alert("提示", "您无权进行该操作！", "error");
+                    $("#cover").hide();
+                    $("#role_dg").datagrid("clearChecked");
+                }
+            }
+        });
+    }
+
+
+
+    //编辑角色
+    function role_edit() {
+        var objs = $("#role_dg").datagrid("getSelections");
+        var obj = $("#role_dg").datagrid("getSelected");
+        if (objs.length == 0) {
+            $.messager.alert("提示", "请选择要编辑的角色！", "warning");
+            return false;
+        } else if (objs.length > 1) {
+            $.messager.alert("提示", "只能选择一个角色！", "warning");
+            return false;
+        }
+        $("#cover").show();
+        $(".updateRole-box").removeClass("hide").show();
+        $('#updateRole-form')[0].reset();
+        $(".updateRole-form input").attr("value", "");
+        $("#update_roleName").attr("value", obj.name);
+        $("#update_roleDesc").attr("value", obj.description);
+        $("#update_roleId").attr("value", obj.id);
+        $("#tip5").empty();
+
+        $("#update_saveRole").off().on("click", function () {
+            var name = $("#update_roleName").val().replace(/\s/g, '');
+            var description = $("#update_roleDesc").val().replace(/\s/g, '');
+            var id = $("#update_roleId").val();
+            if (name == '') {
+                $("#tip5").html('请输入角色名称！').show();
+                $("#roleName").focus();
+                return false;
+            } else {
+                $(".updateRole-box").hide();
+                var params = {
+                    id: id,
+                    name: name,
+                    description: description,
+                    code:obj.name
+                }
+            }
+            $.ajax({
+                type: "post",
+                url: "restful/role/update",
+                contentType: "application/json",
+                dataType: "json",
+                data: JSON.stringify(params),
+                success: function (data) {
+                    if (data.status == 'success') {
+                        $.messager.alert("提示", "修改成功！", "info");
+                    }else if(data.status == 'unauthorized') {
+                        $.messager.alert("提示", "您无权进行该操作！", "error");
+                    }else {
+                        $.messager.alert("提示", "修改失败！", "error");
+                    }
+                    $("#cover").hide();
+                    $("#role_dg").datagrid("clearChecked");
+                    var pager = $("#role_dg").datagrid("getPager");
+                    var options = pager.data("pagination").options;
+                    role_loadData(options.pageNumber, options.pageSize, {});
+                }
+            });
+        });
+    }
+
+    //显示登录名和最后登录时间
+    var loginJSON = JSON.parse($.cookie("loginUser"));
+    $(".log-name").text(loginJSON['username']);
+    $(".log-time").text(getSmpFormatDateByLong(parseInt(loginJSON['lastLoginTime']), true));
+
+    function intOnly() {
+        var codeNum = event.keyCode;
+        if (codeNum == 8 || codeNum == 37 || codeNum == 39 || (codeNum >= 48 && codeNum <= 57)) {
+            event.returnValue = codeNum;
+        } else {
+            event.returnValue = false;
+        }
+    }
+
+    //弹窗拖拽
+    function onDrag(e) {
+        var d = e.data;
+        var screenHeight = $(".homeContent").outerHeight();
+        var screenWidth = $(".homeContent").outerWidth();
+        if (d.left < 0) {
+            d.left = 0;
+        }
+        if (d.top < 0) {
+            d.top = 0;
+        }
+
+        if (d.left + $(d.target).outerWidth() > screenWidth) {
+            d.left = screenWidth - $(d.target).outerWidth();
+        }
+        if (d.top + $(d.target).outerHeight() > screenHeight) {
+            d.top = screenHeight - $(d.target).outerHeight();
+        }
+        // 修正拖动页面时未收起的下拉框跟随页面的bug
+        $(this).find('.easyui-combotree').each(function() {
+        	$(this).combotree('hidePanel');
+        });
+        $(this).find('.easyui-datebox').each(function() {
+        	$(this).datebox('hidePanel');
+        });
+    }
+
+
+    //角色表点击事件
+    var roleId;
+    function getDetail(index, data) {
+        $('#role_permi').tree("loadData", tree);
+        var nodes = $('#role_permi').tree('getChecked');
+        for (var i = 0; i < nodes.length; i++) {
+            $('#role_permi').tree("uncheck", nodes[i].target);
+        }
+        var selectdata = data;
+        roleId = selectdata.id;
+        var pageSize = $("#ru_dg").datagrid("getPager").pagination("options").pageSize;
+        ru_loadData(1, pageSize, {roleId: roleId});
+        if (roleId == '100000') {
+            $("#savePermission").linkbutton('disable');
+            $("#savePermissionTips").show();
+        } else {
+            checkPermission();
+            $("#savePermissionTips").hide();
+        }
+        rp_loadData(roleId);
+    }
+
+    //取消权限修改
+    $("#cancelPermission").off().on("click", function () {
+        $('#role_permi').tree("loadData", tree);
+        var nodes = $('#role_permi').tree('getChecked');
+        for (var i = 0; i < nodes.length; i++) {
+            $('#role_permi').tree("uncheck", nodes[i].target);
+        }
+
+        rp_loadData(roleId);
+    });
+
+    //查询参数全局变量
+    var qryJson = {};
+    var loginUser = JSON.parse($.cookie('loginUser'));
+    qryJson.userId = loginUser.id;
+    //查询日志 点击查询按钮
+    $("#log_searchBtn").click(
+        function() {
+            var qryparam={};
+            var loginUser = JSON.parse($.cookie('loginUser'));
+            qryparam.userId=loginUser.id;
+            qryparam.userName=$("#userName").val();
+            var selectValue = $("#modName").val();
+            $("#logManage").datagrid("clearSelections");
+            var pager = $("#logManage").datagrid('getPager');
+            $(pager).pagination("options").pageNumber = 1;
+            qryparam = $.extend(qryparam,$("#dataReviewForm").serializeObj());
+            var pageNumber = $("#logManage").datagrid('getPager')
+                .pagination("options").pageNumber;
+            var pageSize = $("#logManage").datagrid('getPager').pagination(
+                "options").pageSize;
+            if(selectValue=="所有模块"){
+                qryparam.modName="";
+            }
+            loadData(pageNumber, pageSize, JSON.stringify(qryparam));
+        });
+
+
+    // 加载远程数据
+    function loadData(pageNumber, pageSize, queryParams) {
+        var jsonObj = {};
+        jsonObj.pageSize = pageSize;
+        jsonObj.pageNumber = pageNumber;
+        jsonObj.objCondition = queryParams;
+        $.ajax({
+            type : "POST",
+            url : "restful/logInfo/getPageByName",
+            contentType : "application/json",
+            dataType : "json",
+            data : JSON.stringify(jsonObj),
+            success : function(data) {
+                var contentStr = data.content;
+                var dataResult = JSON.parse(contentStr);
+                $("#logManage").datagrid("loadData", {
+                    rows : dataResult.rows,
+                    total : dataResult.total
+                });
+            },
+            error : function(err) {
+            }
+        });
+    }
+
+    // 重置查询表单
+    function resetForm() {
+        // 置空查询参数
+        qryJson = {};
+        qryJson.userId = loginUser.id;
+        $("#opPlatform").get(0).selectedIndex = 0;
+        $("#modName").get(0).selectedIndex = 0;
+        $("#userName").val("");
+        $("#createDateStart").datebox("setValue", "");
+        $("#createDateEnd").datebox("setValue", "");
+    }
+
+    // 点击重置按钮
+    $("#log_resetBtn").click(function() {
+        resetForm();
+        $("#logManage").datagrid('getPager')
+            .pagination("options").pageNumber =1;
+        $("#logManage").datagrid('getPager')
+            .pagination("options").pageSize = 20;
+        log_loadData(1, 20, {opPlatform:0,modName:""});
+    });
+
+    /**
+     * linkbutton方法扩展
+     * @param {Object} jq
+     */
+    $.extend($.fn.linkbutton.methods, {
+        /**
+         * 激活选项（覆盖重写）
+         * @param {Object} jq
+         */
+        enable: function(jq){
+            return jq.each(function(){
+                var state = $.data(this, 'linkbutton');
+                if ($(this).hasClass('l-btn-disabled')) {
+                    var itemData = state._eventsStore;
+                    //恢复超链接
+                    if (itemData.href) {
+                        $(this).attr("href", itemData.href);
+                    }
+                    //回复点击事件
+                    if (itemData.onclicks) {
+                        for (var j = 0; j < itemData.onclicks.length; j++) {
+                            $(this).bind('click', itemData.onclicks[j]);
+                        }
+                    }
+                    //设置target为null，清空存储的事件处理程序
+                    itemData.target = null;
+                    itemData.onclicks = [];
+                    $(this).removeClass('l-btn-disabled');
+                }
+            });
+        },
+        /**
+         * 禁用选项（覆盖重写）
+         * @param {Object} jq
+         */
+        disable: function(jq){
+            return jq.each(function(){
+                var state = $.data(this, 'linkbutton');
+                if (!state._eventsStore)
+                    state._eventsStore = {};
+                if (!$(this).hasClass('l-btn-disabled')) {
+                    var eventsStore = {};
+                    eventsStore.target = this;
+                    eventsStore.onclicks = [];
+                    //处理超链接
+                    var strHref = $(this).attr("href");
+                    if (strHref) {
+                        eventsStore.href = strHref;
+                        $(this).attr("href", "javascript:void(0)");
+                    }
+                    //处理直接耦合绑定到onclick属性上的事件
+                    var onclickStr = $(this).attr("onclick");
+                    if (onclickStr && onclickStr != "") {
+                        eventsStore.onclicks[eventsStore.onclicks.length] = new Function(onclickStr);
+                        $(this).attr("onclick", "");
+                    }
+                    //处理使用jquery绑定的事件
+                    var eventDatas = $(this).data("events") || $._data(this, 'events');
+                    if (eventDatas["click"]) {
+                        var eventData = eventDatas["click"];
+                        for (var i = 0; i < eventData.length; i++) {
+                            if (eventData[i].namespace != "menu") {
+                                eventsStore.onclicks[eventsStore.onclicks.length] = eventData[i]["handler"];
+                                $(this).unbind('click', eventData[i]["handler"]);
+                                i--;
+                            }
+                        }
+                    }
+                    state._eventsStore = eventsStore;
+                    $(this).addClass('l-btn-disabled');
+                }
+            });
+        }
+    });
+
+    /*    $("savePermission").bind("click",function(){
+     $(this).unbind("click");
+     });*/
+
+    function SceneConfigureloadDate(){
+        $.ajax({
+            type: "get",
+            url: "restful/sysparam/getAll",
+            contentType: "application/json",
+            async:true,
+            dataType: "json",
+            success: function (data) {
+                var record= JSON.parse(data.content);
+                $("#SceneConfigure").datagrid('loadData', record);
+            }
+        });
+    }
+
+    function param_add() {
+        $('#scene_dialog').dialog({
+            title : '参数添加',
+            closed : false,
+            cache : false,
+            modal : true
+        }).show();
+        clearParam();
+    }
+
+    function param_edit() {
+        var objs = $('#SceneConfigure').datagrid('getSelections');
+        var obj = $('#SceneConfigure').datagrid('getSelected');
+        if(objs.length==0){
+            $.messager.alert("提示", "请选择要修改一行！", "info");
+            return false;
+        }
+        else{
+            $('#scene_editdialog').dialog({
+                title : '参数修改',
+                closed : false,
+                cache : false,
+                modal : true
+            }).show();
+            $("#paramName").attr('value',obj.paramName);
+            $("#paramName").attr('readonly',true);
+            $("#paramValue").attr('value',obj.paramValue);
+            $("#remark").textbox('setValue',obj.remark);
+            $("#paramValue").validatebox("validate");
+            $("#remark").textbox("validate");
+        }
+    }
+    
+    function saveParam() {
+        if($("#sceneform").form('enableValidation').form('validate')){
+            var param = $("#sceneform").serializeObj();
+            $.ajax({
+                type:'post',
+                url:'restful/sysparam/insert',
+                contentType:"application/json",
+                data:JSON.stringify(param),
+                success:function (data) {
+                    if(data.status=="success"){
+                        $('#scene_dialog').dialog('close');
+                        $.messager.alert("提示", "添加成功！", "info");
+                        SceneConfigureloadDate();
+                    }
+                    else {
+                        $.messager.alert("提示", "添加失败！", "info");
+                    }
+                }
+            });
+        }
+    }
+
+    function editParam() {
+        if($("#sceneeditform").form('enableValidation').form('validate')){
+            var param = $("#sceneeditform").serializeObj();
+            
+            $.ajax({
+                type:'post',
+                url:'restful/sysparam/edit',
+                contentType:"application/json",
+                data:JSON.stringify(param),
+                success:function (data) {
+                    if(data.status=="success"){
+                        $('#scene_editdialog').dialog("close");
+                        $.messager.alert("提示", "修改成功！", "info");
+                        SceneConfigureloadDate();
+                    }
+                    else {
+                        $.messager.alert("提示", "修改失败！", "info");
+                    }
+                }
+            })
+        }
+    }
+    function clearParam() {
+        $("#sceneform").form('clear');
+    }
+
+    function AppInfoloadDate() {
+        $.ajax({
+            type: "get",
+            url: "restful/app/getAllApp",
+            contentType: "application/json",
+            dataType: "json",
+            success: function (data) {
+                $("#app_dg").datagrid('loadData', data);
+            }
+        });
+
+    }
+    function app_add() {
+        $("#app").removeClass("hide").show();
+        $("#app").dialog({
+            title: 'app更新',
+            closed: false,
+            cache: false,
+            modal: true,
+            onClose: function () {
+                clearForm();
+            }
+        });
+
+    }
+
+    //APP上传
+    function submitForm() {
+        var param = {};
+        param.version = $("#version").val();
+        if($("#version").val()==""){
+        	  $.messager.alert("提示", "app版本号不能为空！", "info");
+              return false;
+        }
+        $.ajax({
+            type: "post",
+            url: "restful/app/check",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify(param),
+            success: function (data) {
+                if (data.message == 'exist') {
+                    $.messager.alert("提示", "app版本号已经存在！", "info");
+                    return false;
+                }
+                else {
+
+                    $('#appInfo').form('submit', {
+
+                        onSubmit: function () {
+                            var isValid = $(this).form('enableValidation').form('validate');
+                            if (!isValid) {
+                                $.messager.progress('close')
+                            }
+                            else {
+                                $.messager.progress({
+                                    title: "上传文件",
+                                    msg: "上传中，请稍候。。。",
+                                    text:""
+                                })
+                            }
+                            return isValid;
+                        },
+                        success: function (data) {
+                            var record = $.parseJSON(data);
+                            if (record.status == 'success') {
+                                $.messager.progress('close');
+                                $.messager.alert("提示", "app信息上传成功！", "info");
+                                AppInfoloadDate();
+                            }
+                            else {
+                                $.messager.progress('close');
+                                $.messager.alert("提示", "app信息上传失败！", "info");
+                            }
+                        }
+
+                    });
+
+
+                }
+            }
+        });
+
+
+    }
+
+    //app删除
+    function app_delete() {
+        var objs = $("#app_dg").datagrid('getSelections');
+        var obj = $("#app_dg").datagrid('getSelected');
+
+        //var name = obj.url.substring(obj.url.lastIndexOf('/')+1);
+
+        if (objs.length == 0) {
+            $.messager.alert("提示", "请选择要删除的app！", "warning");
+            return false;
+        }
+        if (obj && obj.url) {
+            $.messager.confirm("提示", "确定删除这个app吗?", function (success) {
+                if (success) {
+                    $.ajax({
+                        type: "get",
+                        url: "restful/app/deleteAppByUrl",
+                        contentType: "application/json",
+                        dataType: "json",
+                        data: {url: obj.url},
+                        success: function (data) {
+                            if (data.status == 'success') {
+                                $.messager.alert("提示", "该版本app已经删除！", "info");
+                                AppInfoloadDate();
+                            } else {
+                            	$.messager.alert("提示", "该版本app删除失败！", "error");
+                            }
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+    //app下载
+    function app_download() {
+        var objs = $("#app_dg").datagrid('getSelections');
+        if (objs.length == 0) {
+            $.messager.alert("提示", "请选择要下载的app！", "warning");
+            return false;
+        }
+
+        var obj = $("#app_dg").datagrid('getSelected');
+        
+        if (obj.url.length > 0) {
+            location.href = obj.url;
+        }
+    }
+
+    //清空APP上传页面表单
+    function clearForm() {
+        $('#appInfo').form('clear');
+    }
+    //判断超时，超时跳转到登录
+    $.ajaxSetup({
+    	timeout: 8000,
+        complete:function(XMLHttpRequest,textStatus){
+            if(textStatus=="parsererror"){
+                $.messager.alert("提示", "登录超时，请重新登录！", 'info',function(){
+                    window.location.href = 'login.html';
+                });
+            } else if(textStatus=="error"){
+                $.messager.alert("提示", "请求超时，请稍后再试！", 'info');
+            }
+        }
+    });
+    
+    // 控制开始、结束日期的选择
+    function checkStartEndDatebox(startId, endId) {
+    	var startDatebox = $("#"+startId);
+    	var endDatebox = $("#"+endId);
+    
+    	startDatebox.datebox("calendar").calendar({
+		    validator: function(date) {
+		    	var endDateStr = endDatebox.datebox('getValue');
+		    	
+		    	if (endDateStr) {
+		    		var arr = [];
+		    		
+		    		if (endDateStr.indexOf("-") > 0) {
+		    			arr = endDateStr.split("-");
+		    		}
+		    		
+		    		if (arr.length == 3) {
+		    			var d = new Date(parseInt(arr[0]), parseInt(arr[1])-1, parseInt(arr[2]));
+		    			
+		    			return date <= d;
+		    		}
+
+		    		return true;
+		    	} else {
+		    		return true;
+		    	}
+		    }
+		});
+		
+		endDatebox.datebox('calendar').calendar({
+		    validator: function(date) {
+		    	var startDateStr = startDatebox.datebox('getValue');
+		    	
+		    	if (startDateStr) {
+		    		var arr = [];
+		    		
+		    		if (startDateStr.indexOf("-") > 0) {
+		    			arr = startDateStr.split("-");
+		    		}
+		    		
+		    		if (arr.length == 3) {
+		    			var d = new Date(parseInt(arr[0]), parseInt(arr[1])-1, parseInt(arr[2]));
+		    			
+		    			return date >= d;
+		    		}
+
+		    		return true;
+		    	} else {
+		    		return true;
+		    	}
+		    }
+		});
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,501 @@
+.section{
+	width: 100%;
+	height: 96%;
+	position: fixed;
+	z-index: 11;
+	top: 55px;
+	left: 0;
+	padding-bottom: 30px;
+	min-height: 722px;
+	min-width: 1170px;
+}
+/***左侧菜单栏***/
+.left-nav{
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 99;
+	width: 86px;
+	height:100%;
+	background-color: #333;
+}
+.left-nav .item{
+	width: 100%;
+	height: 104px;
+	padding: 20px 0 12px;
+}
+.left-nav .item:hover{
+	background-color: #42515f;
+}
+.left-nav .item a{
+	display: inline-block;
+	width: 100%;
+	height: 72px;
+	text-align: center;
+}
+/***右侧主体内容***/
+.right-main{
+	width: 100%;
+	height:100%;
+	padding-left: 86px;
+}
+.mainContent,.homeContent{
+	width: 100%;
+	height: 100%;
+	padding: 20px;
+}
+.mainContent>div{
+	padding: 4px;
+}
+.homeContent .home-top{
+	height: 50%;
+	margin-bottom: 10px;
+}
+.home-top .user-scale{
+	width: 60%;
+	margin-right: 20px;
+	height:100%;
+}
+/*#echarts-user div{
+	width: 68%;
+}*/
+.home-top .user-name{
+	width: 38%;
+	height: 100%;
+}
+.user-list{
+	width: 100%;
+	height: 89%;
+	overflow: auto;
+}
+.homeContent .home-bot{
+	height: 50%;
+}
+.home-tit{
+	height:10%;	
+}
+.img-box{
+	border: 1px solid #e3e3e3;
+}
+#echarts-user,#echarts-scatter{
+	height: 89%;
+	overflow: hidden;
+}
+#echarts-user div,#echarts-scatter div{ 
+	background-color: #f8f8f8;
+}
+
+.user-listItem{
+	background-color: #F8F8F8;
+	border: 1px solid #e3e3e3;
+	padding: 0 10px;
+    height: 57px;
+    width: 100%;
+    margin-bottom: 4px;
+}
+.user-icon,.user-infor{ float: left;}
+.user-icon a{
+	display: block;
+	padding: 10px;
+	height: 55px;
+}
+.user-infor{
+	padding:7px 0 6px;
+}
+.user-infor div{
+	height: 24px;
+}
+/***用户信息***/
+
+.mainHead p{
+	color: #1092e0;
+	font-weight: 600;
+    font-size: 16px;
+}
+.userInfor,.logInfor,.mainHead{
+	margin:0 20px;
+}
+.userInfor-top{
+	width: 100%;
+	height: 34px;
+	margin-bottom: 30px;	
+}
+.searchBox{
+	width: 60%;
+	height: 100%;
+	display: inline-block;
+}
+.searchBox>div{
+	width: 50%;
+	height: 100%;	
+}
+.searchBox .advSearch{
+	display: inline-block;
+	line-height: 34px;
+	width: auto;
+	margin-left: 30px;
+}
+.addUser {
+	width: 39%;
+	display: inline-block;
+}
+.addUser button{
+	height: 34px;
+	line-height: 34px;
+	padding: 0 10px;
+	border-radius: 4px;
+}
+
+/******用户信息表格******/
+
+.userTable .itemSection {width:10% ;}
+.userTable .itemHandle {width:10% ;}
+.userTable .itemHandle button{
+	height: 24px;
+    line-height: 24px;
+    padding: 0 8px;
+    border-radius: 4px;
+    margin-right: 10px;	
+}
+.Role-Permission .easyui-linkbutton{
+	border: 1px solid #b2cfe0;
+	margin-left: 10px;
+	padding:0;
+}
+/******角色******/
+.role-user_search{
+	width: 60%;
+	margin: 10px;
+}
+.role-manager>div{
+	height: 100%;
+	float: left;
+	border: 1px dashed #D6E7F6;
+}
+.roles{
+	width: 34%;
+	position: relative;
+}
+.Role-Permission{
+	width: 31%;
+	margin:0 20px;
+}
+.role-user{
+	width: 31%;
+	position: relative;
+}
+.roles-title{
+	width: 100%;
+	height: 40px;
+	line-height: 40px;
+	background-color: #4eaaef;
+	text-align: center;
+	font-size: 20px;
+	color: #fff;
+	margin-bottom: 6px;
+}
+.roles-list{
+	width: 100%;
+	height: auto;
+	
+}
+.roles-list li{
+	width: 100%;
+	height: 38px;
+	line-height: 38px;
+	padding-left: 10px;
+	background-color: #fdfdfd;
+	box-sizing: border-box;
+}
+.roles-list li.active{
+	background-color: #D6E7F6;
+}
+.roles-list li i{
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	
+}
+.roles-list li p{
+	display: inline-block;
+}
+.roles-handle{
+	position: absolute;
+	z-index: 100;
+	bottom: 4px;
+	left: 4px;
+	width: 100%;
+	height: 34px;
+}
+.roles-handle li{
+	float: left;
+	width: 22%;
+	height: 32px;
+	line-height: 32px;
+	margin-right: 10px;
+	background-color: #219df5;
+	text-align: center;
+	border-radius: 4px;
+}
+.roles-handle li a{
+	display: inline-block;
+    color: #fff;
+    width: 100%;
+    height: 100%;
+}
+/***角色权限***/
+.list-item{
+	/*border-bottom: 1px solid #D6E7F6;*/
+	margin-bottom: 10px;
+}
+.list-item p{
+	border-left: 3px solid #1bb4f9;
+	padding-left: 5px;
+	margin-bottom: 6px;
+	font-size: 16px;
+}
+.list-item  li{
+	height: 30px;
+	line-height: 30px;
+}
+.list-item li input{
+	vertical-align: middle;
+	display: inline-block;
+	margin-right: 3px;
+}
+.list-item li span{
+	display: inline-block;
+	float: left;
+	width: 25%;
+	height: 30px;
+}
+.roles-operation{
+	display: inline-block;
+	float: left;
+	width: 75%;
+}
+
+/*角色用户表格*/
+.role-user .table{
+	padding: 4px;
+}
+.tbody ul{
+	max-height: 300px;
+}
+.role-user .thead span,.role-user .tbody li span{
+	width: 25%;
+}
+
+/*****日志信息*****/
+.logInfor-top{
+	width: 100%;
+    height: 34px;
+    margin-bottom: 30px;
+}
+.logInfor-top div{
+	display: inline-block;
+	height: 34px;
+    line-height: 34px;
+    margin-right: 20px
+}
+.logInfor-top div input{
+	height: 28px;
+	padding-left: 10px;
+}
+/*.logInfor-top .logTime input{
+	width: 150px;
+}*/
+.logInfor-top div span{
+	display: inline-block;
+    vertical-align: middle;
+    margin: 0 6px;
+}
+.logInfor-top div button{
+	height: 26px;
+    line-height: 26px;
+    padding: 0 14px;
+}
+/******17-3-30********/
+
+.userInfor,.logInfor{ height: 97%;}
+.userTable,.logTable{
+	height: 92%;
+    overflow: hidden;
+}
+.userTable .table,.logTable .table{
+	height:100%;
+}
+.table .tbody{
+	height:95%;
+}
+.tbody ul{
+	max-height: 100%;
+}
+.role-user .table{
+	height:78%;
+}
+/******组织信息*****/
+.orgInfo{
+	height: 97%;
+}
+
+.appInfo{
+	height: 97%;
+}
+
+.SysParam-table{
+	height: 100%;
+}
+
+/***添加用户弹框***/
+form{
+	padding-bottom: 1px;
+}
+form div{
+	min-height:28px;
+	margin-bottom:16px;
+}
+form div label{
+	float:left;
+	width:100px;
+	line-height: 28px;
+	padding-right:8px;
+	text-align:right;
+	font-size:14px;
+}
+form div input{
+	float:left;
+	width:200px;
+	height:28px;
+	font-size:14px;
+	padding:5px;
+	border:1px #a8d2e7 solid;
+}
+form div span{
+	float:left;
+	padding-left:10px;
+	font-size:12px;
+	color:#666;
+}
+form div select{
+	width: 120px;
+	height: 28px;
+}
+.addUser-body .popBox-btn,.resetPwd-body .popBox-btn{
+	margin-left: 100px;
+}
+.addUser-body div button,.resetPwd-body div button{
+	margin-right: 30px;
+}
+.updateUser-body .popBox-btn,.resetPwd-body .popBox-btn{
+	margin-left: 100px;
+}
+.updateUser-body div button,.resetPwd-body div button{
+	margin-right: 30px;
+}
+.addOrg-body .popBox-btn,.resetPwd-body .popBox-btn{
+	margin-left: 100px;
+}
+.addOrg-body div button,.resetPwd-body div button{
+	margin-right: 30px;
+}
+.updateOrg-body .popBox-btn,.resetPwd-body .popBox-btn{
+	margin-left: 100px;
+}
+.updateOrg-body div button,.resetPwd-body div button{
+	margin-right: 30px;
+}
+
+/**重置密码**/
+form p{
+	padding-left: 100px;
+	margin-bottom: 20px;
+}
+form p input{
+	margin-right: 4px;
+	position: relative;
+    top: 2px;
+}
+/*新建角色弹框*/
+
+.createRole{
+	height: 320px;
+}
+.createRole-body{
+	height: auto;
+}
+.createRole-body div{
+	padding-left: 20px;
+}
+.createRole-body div label{
+	vertical-align: top;
+}
+.createRole-body div input{
+	width: 200px;
+	height: 28px;
+}
+.createRole-body div textarea{
+	height: 120px;
+	width: 200px;
+	padding:10px;
+}
+.createRole-body div.popBox-btn,.updateRole-body .popBox-btn{
+	text-align:center;
+	margin-bottom:0;
+}
+.createRole-body div.popBox-btn{
+	padding-left: 50px;
+}
+.updateRole-body .popBox-btn{
+	padding-left: 30px;
+}
+.createRole-body div button{	
+    margin-left: 24px;   
+}
+/**/
+.updateRole-body .popBox-btn button{
+	margin:0 10px;
+}
+/*删除角色弹框*/
+.deleteRole{
+	height: 220px;
+}
+.deleteRole-body{
+	height: 182px;
+}
+.deleteRole-body div{
+	padding-left: 40px;
+	margin: 28px 0 42px;
+}
+.deleteRole-body div p{
+	font-size: 16px;
+}
+.deleteRole-body div button{
+	margin-left: 45px;
+}
+
+/**日志信息**/
+.userInfor .panel,.orgInfo .panel,.Facility-table .panel,.appInfo .panel,.SysParam-table .panel{
+	height: 100%;
+}
+.Facility-table{ height:83%;}
+form .mesr{
+	display: block;
+    color: #ff0000;
+    min-height: 22px;
+    margin-bottom: 5px;
+    margin-top: -8px;
+}
+.query-condit div{
+	margin-top:10px;
+	margin-bottom:0;
+}
+.query-condit div li select,
+.query-condit div li input[type='text']{
+	width:180px;
+}
+.query-condit div li button{
+    padding: 3px 12px;
+    border-radius: 4px;
+    margin-right:10px;
+}

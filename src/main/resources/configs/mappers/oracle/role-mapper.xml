@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.bm.mapper.RoleMapper">
+
+    <resultMap type="com.hq.bm.entity.Role" id="RoleResultMap">
+        <result column="ROLE_ID" property="id" javaType="java.lang.String"/>
+        <result column="NAME" property="name" javaType="java.lang.String"/>
+        <result column="ROLE_DESC" property="description" javaType="java.lang.String"/>
+        <result column="CREATE_TIME" property="creatTime" javaType="java.util.Date"/>
+        <result column="CREATER_ID" property="creatId" javaType="int"/>
+        <result column="PRIVI_ID" property="priviId" javaType="java.lang.String"/>
+        <result column="PRIVI_IDS" property="priviIds" javaType="java.lang.String"/>
+    </resultMap>
+
+    <sql id="column">
+        r.ROLE_ID,r.NAME,r.ROLE_DESC,r.CREATE_TIME,r.CREATER_ID
+    </sql>
+
+    <insert id="save"  parameterType="java.util.Map">
+        insert into role r  (r.ROLE_ID,r.NAME,r.ROLE_DESC,r.CREATE_TIME,r.CREATER_ID)
+        VALUES (SEQ_ROLE.nextval,#{name},#{description},#{creatTime},#{creatId})
+    </insert>
+
+    <select id="findAll" resultMap="RoleResultMap">
+        select
+        r.NAME,r.ROLE_ID
+        from role r
+    </select>
+
+    <select id="getCount" parameterType="java.util.Map" resultType="int">
+        select
+        count(1)
+        from role r
+        <where>
+            <if test="name != null and name != ''">
+                <![CDATA[
+                 r.NAME = #{name}
+                ]]>
+            </if>
+        </where>
+    </select>
+
+    <select id="getPermi" resultMap="RoleResultMap">
+        select
+        <include refid="column"/>,RP.PRIVI_ID
+        from role r
+        left join ROLE_PRIVILEGES rp on rp.ROLE_ID = r.ROLE_ID
+        <where>
+            <if test="id!= null and id != ''">
+                <![CDATA[
+                 r.ROLE_ID = #{id}
+                ]]>
+            </if>
+        </where>
+    </select>
+
+    <select id="findByMap" parameterType="java.util.Map" resultMap="RoleResultMap">
+        select
+        <include refid="column"/>,RP.PRIVI_ID
+        from role r
+        left join ROLE_PRIVILEGES rp on rp.ROLE_ID = r.ROLE_ID
+        <where>
+            <if test="id!= null and id != ''">
+                <![CDATA[
+                 r.ROLE_ID = #{id}
+                ]]>
+            </if>
+        </where>
+        order by RP.PRIVI_ID
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.String">
+        delete from role r where r.role_id = #{id}
+    </delete>
+
+    <select id="findByPage" parameterType="java.util.Map" resultMap="RoleResultMap">
+        <![CDATA[
+        SELECT * FROM
+        (
+          SELECT TEMP.*, ROWNUM RN
+          FROM (
+            SELECT
+            ]]><include refid="column"/><![CDATA[
+            FROM role r
+            ]]>
+        <where>
+            <if test="name != null and name != ''">
+                <![CDATA[
+                 r.NAME = {name}
+                ]]>
+            </if>
+        </where>
+        <![CDATA[
+      ORDER BY r.ROLE_ID
+          ) TEMP
+          WHERE ROWNUM <= #{endRowNum}
+        )
+        WHERE RN > #{startRowNum}
+        ]]>
+    </select>
+
+    <update id="update" parameterType="com.hq.bm.entity.Role">
+        update role r
+        <set>
+            <if test="name != null and name != '' ">
+                <![CDATA[
+                    r.NAME = #{name},
+                ]]>
+            </if>
+            <if test="description != null and description != '' ">
+                <![CDATA[
+                    r.ROLE_DESC = #{description},
+                ]]>
+            </if>
+        </set>
+        where r.ROLE_ID=#{id}
+    </update>
+
+    <update id="updatePermi" parameterType="com.hq.bm.entity.Role">
+        update role r
+        set
+              r.PRIVI_IDS = #{priviIds}
+        where r.ROLE_ID=#{id}
+    </update>
+
+    <!--查询条件-->
+    <sql id="sql_where">
+        <where>
+            <if test="id != null and id != ''">
+                <![CDATA[
+                and t.ROLE_ID = #{id}
+                ]]>
+            </if>
+            <if test="name != null and name != ''">
+                <![CDATA[
+                and t.NAME = #{name}
+            ]]>
+            </if>
+        </where>
+    </sql>
+
+</mapper>

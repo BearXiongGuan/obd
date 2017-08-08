@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.bm.mapper.RptResCoverageMapper">
+	<resultMap type="com.hq.bm.entity.RptResCoverageData" id="rptResCoverageMap">
+		<result column="obj_name" property="objName" javaType="String" />
+		<result column="obj_type" property="objType" javaType="int" />
+		<result column="final_data" property="finalData" javaType="String" />
+		<result column="county" property="county" javaType="String" />
+		<result column="village" property="village" javaType="String" />
+		<result column="org_id" property="orgId" javaType="long" />
+	</resultMap>
+
+	<sql id="column">
+		t.obj_name,(t.final_data*100)||'%'
+		final_data,j.county,j.village
+	</sql>
+	<select id="findByPage" parameterType="java.util.Map" resultMap="rptResCoverageMap">
+        <![CDATA[
+        SELECT * FROM
+        (
+          SELECT TEMP.*, ROWNUM RN
+          FROM (
+            select]]>
+		<include refid="column"></include>
+             <![CDATA[ from rpt_res_coverage_data t,]]>
+		<if test="objType==4">
+            	<![CDATA[wg j]]>
+		</if>
+		<if test="objType==5">
+            	<![CDATA[jzw j]]>
+		</if>
+            <![CDATA[where t.obj_type=#{objType} and t.obj_id = j.facid
+			and j.village in (select o.org_name from organization o start with o.org_id = #{orgId} connect by prior o.org_id = o.org_pid)]]>
+		<if test="objName!=null and objName!=''">
+			and t.obj_name like concat(concat('%',#{objName}),'%')
+		</if>
+          <![CDATA[) TEMP
+          WHERE ROWNUM <= #{endRowNum}
+        )
+        WHERE RN > #{startRowNum}
+        ]]>
+	</select>
+	<select id="getCount" parameterType="java.util.Map" resultType="int">
+		select count(j.facid) from
+		<if test="objType==4">
+	        <![CDATA[wg j]]>
+		</if>
+		<if test="objType==5">
+	        <![CDATA[jzw j]]>
+		</if>
+			<![CDATA[where j.del_flag = 0 and j.village in (select o.org_name from organization o start with o.org_id = ${orgId} connect by prior o.org_id = o.org_pid)]]>
+		<if test="objName!=null and objName!=''">
+			and j.facname like concat(concat('%',#{objName}),'%')
+		</if>
+	</select>
+
+</mapper>

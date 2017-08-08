@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.bm.mapper.FacilityPhotoMapper">
+
+	<resultMap type="com.hq.bm.entity.FacilityPhoto" id="facilityPhotoResultMap">
+		<result column="PHOTOID" property="photoId" javaType="int"
+			jdbcType="INTEGER" />
+		<result column="FACID" property="facid" javaType="long"
+			jdbcType="INTEGER" />
+		<result column="FACTYPE" property="factype" javaType="int"
+			jdbcType="INTEGER" />
+		<result column="THUMBNAIL" property="thumbnail" javaType="string"
+			jdbcType="VARCHAR" />
+		<result column="PHOTO" property="photo" javaType="string"
+			jdbcType="VARCHAR" />
+		<result column="CREATE_TIME" property="createTime" javaType="java.util.Date" />
+		<result column="CREATER_ID" property="createrId" javaType="int"
+			jdbcType="INTEGER" />
+		<result column="LONGITUDE" property="longitude" javaType="double" />
+		<result column="LATITUDE" property="latitude" javaType="double" />
+		<result column="USER_NAME" property="creater" javaType="string"
+			jdbcType="VARCHAR" />
+		<result column="AZIMUTH" property="azimuth" javaType="string"
+			jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="column">
+		T.PHOTOID, T.FACID, T.FACTYPE, T.CREATE_TIME, T.CREATER_ID,
+		T.THUMBNAIL,
+		T.PHOTO,T.REMARK,T.LONGITUDE,T.LATITUDE,T.AZIMUTH
+	</sql>
+
+	<!-- <insert id="save" parameterType="java.util.Map">
+		insert into FACILITY_PHOTO t (
+		<include refid="column" />
+		)
+		VALUES
+		(#{facid,jdbcType=INTEGER},#{factype,jdbcType=INTEGER},#{createTime,jdbcType=TIMESTAMP},#{createrId,jdbcType=INTEGER},#{thumbnail,jdbcType=VARCHAR},#{photo,jdbcType=VARCHAR},#{remark,jdbcType=VARCHAR},#{longitude,jdbcType=DOUBLE},#{latitude,jdbcType=DOUBLE},#{azimuth,jdbcType=VARCHAR})
+	</insert> -->
+
+	<insert id="add" parameterType="java.util.Map">
+		insert into FACILITY_PHOTO t (
+		<include refid="column" />
+		)
+		VALUES
+		(SEQ_FACILITY_PHOTO.nextval,#{facid,jdbcType=INTEGER},#{factype,jdbcType=INTEGER},nvl(#{createTime,jdbcType=TIMESTAMP}, sysdate),#{createrId,jdbcType=INTEGER},#{thumbnail,jdbcType=VARCHAR},#{photo,jdbcType=VARCHAR},#{remark,jdbcType=VARCHAR},#{longitude,jdbcType=DOUBLE},#{latitude,jdbcType=DOUBLE},#{azimuth,jdbcType=VARCHAR})
+	</insert>
+
+	<select id="findByMap" parameterType="java.util.Map" resultMap="facilityPhotoResultMap">
+		select
+		<include refid="column"></include>
+		,a.user_name
+		from facility_photo t
+		left join account a on
+		t.creater_id=a.id
+		where
+		t.factype=#{facType} and t.facid=#{facId}
+	</select>
+
+</mapper>

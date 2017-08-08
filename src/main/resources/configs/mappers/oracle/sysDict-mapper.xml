@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.bm.mapper.SysDictMapper">
+	<resultMap type="com.hq.bm.entity.SysDict" id="sysDictResultMap">
+		<result column="dict_id" property="dictId" javaType="java.lang.Long" />
+		<result column="dict_type" property="dictType" javaType="java.lang.String" />
+		<result column="dict_key" property="dictKey" javaType="java.lang.String" />
+		<result column="dict_desc" property="dictDesc" javaType="java.lang.String" />
+		<result column="dict_status" property="dictStatus" javaType="int" />
+	</resultMap>
+	<sql id="column">
+		t.dict_id,t.dict_type,t.dict_key,t.dict_desc,t.dict_status
+	</sql>
+
+	<select id="findByMap" parameterType="java.util.Map" resultMap="sysDictResultMap">
+		select
+		t.dict_key,t.dict_desc
+		from 
+		sys_dict t where t.dict_type=#{dictType} and t.dict_status=1
+	</select>
+</mapper>

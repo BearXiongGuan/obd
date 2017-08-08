@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.bm.mapper.DataReviewMapper">
+
+	<resultMap type="com.hq.bm.entity.DataReview" id="dataReviewResultMap">
+		<result column="ID" property="id" javaType="java.lang.String" />
+		<result column="REVIEWER" property="reviewer" javaType="java.lang.String" />
+		<result column="REVIEWDATE" property="reviewDate" javaType="java.util.Date" />
+		<result column="COUNTYID" property="countyId" javaType="long" />
+		<result column="MKCENTERID" property="mkcenterId" javaType="long" />
+		<result column="DATATYPE" property="dataType" javaType="int" />
+		<result column="CREATEDATE" property="createDate" javaType="java.util.Date" />
+		<result column="DATAKEYID" property="datakeyId" javaType="long" />
+		<result column="OLDVALUE" property="oldValue" javaType="java.lang.String" />
+		<result column="NEWVALUE" property="newValue" javaType="java.lang.String" />
+		<result column="REVIEWSTATUS" property="reviewStatus" javaType="int" />
+		<result column="MK_NAME" property="mkName" javaType="java.lang.String" />
+		<result column="COUNTY_NAME" property="countyName" javaType="java.lang.String" />
+		<result column="CREATER" property="creater" javaType="java.lang.String" />
+		<result column="DATAKEYNAME" property="dataKeyName" javaType="java.lang.String" />
+		<result column="STATUS" property="status" javaType="int" />
+		<result column="REMARK" property="remark" javaType="java.lang.String" />
+		<result column="SHAPE_LEN" property="shapeLen" javaType="double" />
+	</resultMap>
+
+	<sql id="column">
+		t.ID,t.REVIEWER,t.REVIEWDATE,t.COUNTYID,t.MKCENTERID,t.DATATYPE,t.CREATEDATE,t.DATAKEYID,to_char(t.OLDVALUE) OLDVALUE,to_char(t.NEWVALUE) NEWVALUE,t.REVIEWSTATUS,t.CREATER,t.DATAKEYNAME,t.STATUS,t.REMARK
+	</sql>
+
+	<select id="getCount" parameterType="java.util.Map" resultType="int">
+		select
+		count(1)
+		from data_review t
+		where
+		<choose>
+			<when test="creater==null||creater==''">
+	            <![CDATA[
+		        t.mkcenterid in (
+				select a.org_id from organization a start with a.org_id in (select org_id from account_org where user_id=#{userId})
+				connect by prior a.org_id = a.org_pid
+				)]]>
+			</when>
+			<otherwise>
+				t.creater=#{creater}
+				<if test="opStatus!=null and opStatus!=''">
+					and t.status in ${opStatus}
+				</if>
+			</otherwise>
+		</choose>
+		<include refid="sql_where"></include>
+	</select>
+	<select id="findByPage" parameterType="java.util.Map" resultMap="dataReviewResultMap">
+		select
+		<include refid="column" />,SHAPE_LEN,o1.org_name
+		as mk_name,o2.org_name as county_name<![CDATA[
+        from (
+        SELECT * FROM
+        (
+          SELECT TEMP.*, ROWNUM RN
+          FROM (
+            SELECT t.ID,b.user_name REVIEWER,t.REVIEWDATE,t.COUNTYID,
+            t.MKCENTERID,t.DATATYPE,t.CREATEDATE,t.DATAKEYID,to_char(t.OLDVALUE) OLDVALUE,
+            to_char(t.NEWVALUE) NEWVALUE,t.REVIEWSTATUS,a.user_name CREATER,t.DATAKEYNAME,
+            t.STATUS,t.REMARK,t.SHAPE.LEN AS SHAPE_LEN
+            from data_review t
+            left join account a
+            on t.creater=a.login_name
+            left join account b
+            on t.reviewer=b.login_name
+            where 
+            ]]>
+            <choose>
+	            <when test="creater==null||creater==''">
+		             <![CDATA[
+				        t.mkcenterid in (
+						select a.org_id from organization a start with a.org_id in (select org_id from account_org where user_id=#{userId})
+						connect by prior a.org_id = a.org_pid
+					)]]>
+	            </when>
+	            <otherwise>
+	            	t.creater=#{creater} 
+	            		<if test="opStatus!=null and opStatus!=''">
+	            			and t.status in ${opStatus}
+	            		</if>
+	            </otherwise>
+            </choose>
+		<include refid="sql_where"></include>
+		<include refid="orderBy"></include>
+			<![CDATA[
+          ) TEMP
+          WHERE ROWNUM <= #{endRowNum}
+        )
+        WHERE RN > #{startRowNum}
+        ]]>)
+		t
+		inner join organization o1
+		on t.mkcenterid = o1.org_id
+		inner join
+		organization o2
+		on t.countyid = o2.org_id
+		<include refid="orderBy"></include>
+	</select>
+
+	<insert id="save" parameterType="java.util.Map">
+		insert into data_review t(
+		t.ID,t.REVIEWER,t.REVIEWDATE,t.COUNTYID,t.MKCENTERID,t.DATATYPE,t.CREATEDATE,t.DATAKEYID,t.OLDVALUE,t.NEWVALUE,t.REVIEWSTATUS,t.CREATER,t.DATAKEYNAME,t.STATUS
+		)
+		VALUES
+		(SEQ_DATA_REVIEW.nextval,#{reviewer,jdbcType=VARCHAR},#{reviewDate,jdbcType=TIMESTAMP},#{countyId,jdbcType=INTEGER},#{mkcenterId,jdbcType=INTEGER},#{dataType,jdbcType=INTEGER},sysdate,#{datakeyId,jdbcType=INTEGER},#{oldValue,jdbcType=CLOB},#{newValue,jdbcType=CLOB},#{reviewStatus,jdbcType=INTEGER},#{creater,jdbcType=VARCHAR},#{dataKeyName,jdbcType=VARCHAR},#{status,jdbcType=INTEGER})
+	</insert>
+
+
+	<update id="update" parameterType="com.hq.bm.entity.DataReview">
+		update data_review r
+		<set>
+			<if test="reviewStatus != null and reviewStatus != '' ">
+                <![CDATA[
+                    r.REVIEWSTATUS = #{reviewStatus},
+                ]]>
+			</if>
+			<if test="reviewDate != null and reviewDate != '' ">
+                <![CDATA[
+                    r.REVIEWDATE = #{reviewDate},
+                ]]>
+			</if>
+			<if test="reviewer != null and reviewer != '' ">
+                <![CDATA[
+                    r.REVIEWER = #{reviewer},
+                ]]>
+			</if>
+		</set>
+		 <![CDATA[
+         where r.id=#{id}
+         ]]>
+	</update>
+
+	<!--查询条件 -->
+	<sql id="sql_where">
+
+		<if test="dataType != null">
+			and t.DATATYPE=#{dataType}
+		</if>
+		<if test="reviewStatus != null">
+			and t.REVIEWSTATUS = #{reviewStatus}
+		</if>
+		<if test="createDateStart and createDateStart!=''">
+			and t.createDate
+			&gt;=TO_DATE(#{createDateStart},'yyyy-MM-dd')
+		</if>
+		<if test="createDateEnd!=null and createDateEnd!=''">
+			and t.createDate
+			&lt;TO_DATE(#{createDateEnd},'yyyy-MM-dd')+1
+		</if>
+		<if test="reviewDateStart!=null and reviewDateStart!=''">
+			and t.reviewDate
+			&gt;=TO_DATE(#{reviewDateStart},'yyyy-MM-dd')
+		</if>
+		<if test="reviewDateEnd!=null and reviewDateEnd!=''">
+			and t.reviewDate
+			&lt;TO_DATE(#{reviewDateEnd},'yyyy-MM-dd')+1
+		</if>
+	</sql>
+
+	<sql id="orderBy">
+		order by t.id desc
+	</sql>
+</mapper>

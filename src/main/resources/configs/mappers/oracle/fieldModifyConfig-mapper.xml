@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.bm.mapper.FieldModifyConfigMapper">
+	<cache 
+		eviction="LRU" 
+		flushInterval="86400000" 
+		size="1024"
+		readOnly="true" 
+	/>
+	<resultMap type="com.hq.bm.entity.FieldModifyConfig" id="fieldModifyConfigResultMap">
+		<result column="ID" property="id" javaType="java.lang.String" />
+		<result column="TABLE_NAME" property="tableName" javaType="java.lang.String" />
+		<result column="FIELD_CN_NAME" property="fieldCnName" javaType="java.lang.String" />
+		<result column="FILED_EN_NAME" property="fieldEnName" javaType="java.lang.String" />
+		<result column="DATATYPE" property="dataType" javaType="int" />
+		<result column="SEQ" property="seq" javaType="int" />
+	</resultMap>
+	<sql id="column">
+		f.ID,f.TABLE_NAME,f.FIELD_CN_NAME,f.FILED_EN_NAME,f.DATATYPE,f.SEQ
+	</sql>
+	<select id="findByMap" resultMap="fieldModifyConfigResultMap">
+		select
+		<include refid="column"></include>
+		from field_modify_config f where f.DATATYPE=#{dataType}
+		order by f.SEQ ASC
+	</select>
+
+</mapper>

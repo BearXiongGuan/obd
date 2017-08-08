@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.bm.mapper.WgMapper">
+	<resultMap type="com.hq.bm.entity.Wg" id="wgResultMap">
+		<result property="facId" column="FACID" javaType="long" />
+		<result property="facName" column="FACNAME" javaType="java.lang.String" />
+		<result property="facType" column="FACTYPE" javaType="int" />
+		<result property="city" column="CITY" javaType="java.lang.String" />
+		<result property="type" column="TYPE" javaType="int" />
+		<result property="regionId" column="REGION_ID" javaType="int" />
+		<result property="buildingF" column="BUILDING_F" javaType="int" />
+		<result property="county" column="COUNTY" javaType="java.lang.String" />
+		<result property="village" column="VILLAGE" javaType="java.lang.String" />
+		<result property="parentId" column="PARENT_ID" javaType="long" />
+		<result property="addrId" column="ADDRID" javaType="java.lang.String" />
+		<result property="code" column="CODE" javaType="java.lang.String" />
+		<result property="gridType" column="GRID_TYPE" javaType="java.lang.String" />
+	</resultMap>
+	<sql id="column">
+		t.FACID,t.FACNAME,t.FACTYPE,t.city,t.TYPE,t.REGION_ID,t.BUILDING_F,t.COUNTY,t.VILLAGE,t.PARENT_ID,t.ADDRID,t.CODE,t.GRID_TYPE
+	</sql>
+	<select id="findByMap" parameterType="java.util.Map" resultMap="wgResultMap">
+		select t.FACID,t.FACNAME
+		from wg t where t.del_flag=0 and t.village = #{village}
+	</select>
+
+	<select id="getCountForfindWgByGridType" parameterType="java.util.Map" resultType="int">
+		select count(1)
+		from wg t where t.del_flag=0 and t.grid_type = #{gridType} and t.village in
+		(select a.org_name from organization a where a.org_pid not in (100000, 0)
+		start with a.org_id = #{orgId}
+		connect by prior a.org_id = a.org_pid)
+	</select>
+
+
+	<select id="findWgByGridType" parameterType="java.util.Map" resultMap="wgResultMap">
+		select facid, facname ,grid_type
+		from wg t where t.del_flag=0 and t.grid_type = #{gridType}
+		and t.village in
+        (select a.org_name from organization a where a.org_pid not in (100000, 0)
+        start with a.org_id = #{orgId}
+ 		connect by prior a.org_id = a.org_pid)
+	</select>
+
+	<!--<select id="getCountForfindWgByName" parameterType="java.util.Map" resultType="int">-->
+		<!--SELECT 	count(1)-->
+		<!--FROM wg WHERE facid IN (-->
+		<!--SELECT	T .parent_id FROM	jzw T-->
+		<!--WHERE-->
+		<!--<if test="facName!=null and facName!=''">-->
+			<!--t.FACNAME like CONCAT(CONCAT('%', #{facName}), '%')-->
+		<!--</if>-->
+		<!--AND T .village IN (	SELECT	A .org_name		FROM-->
+		<!--ORGANIZATION A START WITH A .org_id = #{orgId} CONNECT BY PRIOR A .org_id = A .org_pid))-->
+	<!--</select>-->
+
+
+	<select id="findWgByName" parameterType="java.util.Map" resultMap="wgResultMap">
+		SELECT 	facid, facname ,grid_type FROM	wg WHERE del_flag=0 and facid IN (
+		SELECT	T .parent_id FROM	jzw T
+		WHERE
+		<if test="facName!=null and facName!=''">
+			t.FACNAME like CONCAT(CONCAT('%', #{facName}), '%')
+		</if>
+		AND T .village IN (	SELECT	A .org_name	FROM ORGANIZATION A START WITH A .org_id = #{orgId}
+		CONNECT BY PRIOR A .org_id = A .org_pid))
+	</select>
+	<select id="findWgByOrgName" parameterType="java.util.Map" resultMap="wgResultMap">
+		select t.facname, t.facId from wg t where t.del_flag=0 and
+		<if test="city!=null and city!=''">
+			t.city=#{city}
+		</if>
+		 <if test="county!=null and county!=''">
+			t.county=#{county}
+		</if>
+		<if test="village!=null and village!=''">
+			t.village=#{village}
+		</if>
+	</select>
+
+	<select id="findById"  resultMap="wgResultMap">
+		select t.FACNAME from WG t where t.FACID = #{id}
+	</select>
+</mapper>

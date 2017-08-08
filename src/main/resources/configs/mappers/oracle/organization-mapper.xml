@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.bm.mapper.OrganizationMapper">
+
+	<cache 
+		eviction="LRU" 
+		flushInterval="86400000" 
+		size="1024"
+		readOnly="true" 
+	/>
+	
+    <resultMap type="com.hq.bm.entity.Organization" id="organizationResultMap">
+        <result column="org_id" property="id" javaType="java.lang.String"/>
+        <result column="org_id1" property="id1" javaType="java.lang.String"/>
+        <result column="org_pid" property="orgPid" javaType="java.lang.String"/>
+        <result column="org_name" property="text" javaType="java.lang.String"/>
+        <result column="org_desc" property="orgDesc" javaType="java.lang.String"/>
+        <result column="org_level" property="orgLevel" javaType="int"/>
+        <result column="creater_id" property="createrId" javaType="int"/>
+        <result column="create_time" property="createDate" javaType="java.util.Date"/>
+        <result column="seq" property="seq" javaType="int"/>
+
+    </resultMap>
+
+    <sql id="column">
+        o.org_id,o.org_pid,o.org_name,o.org_desc,o.creater_id,o.create_time,o.seq
+    </sql>
+
+    <select id="findAll" resultMap="organizationResultMap" useCache="true">
+        SELECT <include refid="column"/>
+        from organization o
+        START WITH o.org_id = 100000
+        CONNECT BY NOCYCLE PRIOR o.org_id = o.org_pid
+
+
+    </select>
+
+    <select id="findOrgByUser" resultMap="organizationResultMap" useCache="true">
+        SELECT distinct <include refid="column"/>
+        from organization o
+        START WITH o.org_id in (SELECT org_id from account_org WHERE user_id = #{userId})
+        CONNECT BY NOCYCLE PRIOR o.org_id = o.org_pid
+        ORDER BY SEQ
+    </select>
+
+    <select id="findByMap" parameterType="java.util.Map" resultMap="organizationResultMap">
+        select
+        o.org_id,o.org_name
+        from organization o
+        <where>
+
+            <if test="id != null and id != ''">
+                <![CDATA[
+                 o.org_pid = #{id} order by seq
+            ]]>
+            </if>
+
+        </where>
+
+    </select>
+
+
+    <select id="findIdByName" parameterType="java.lang.String" resultMap="organizationResultMap">
+        select
+        o.org_id
+        from organization o
+        where org_name = #{text}
+
+    </select>
+
+    <sql id="sql_where">
+        <where>
+            <if test="id != null and id != '' ">
+                <![CDATA[
+                    o.org_id = #{id},
+                ]]>
+            </if>
+            <if test="text != null and text != '' ">
+                <![CDATA[
+                    o.org_name = #{text}
+                ]]>
+            </if>
+
+        </where>
+    </sql>
+
+    <insert id="save" parameterType="java.util.Map">
+        insert into organization o (o.org_id,o.org_pid,o.org_name,o.org_desc,o.create_time,o.creater_id)
+        VALUES (#{id,jdbcType=VARCHAR},#{orgPid,jdbcType=VARCHAR},#{text,jdbcType=VARCHAR},#{orgDesc,jdbcType=VARCHAR},#{createDate,jdbcType=VARCHAR},#{createrId,jdbcType=NUMERIC})
+    </insert>
+
+    <update id="update" parameterType="com.hq.bm.entity.Organization">
+        update organization o
+        <set>
+            <if test="orgPid != null and orgPid != '' ">
+                <![CDATA[
+                    o.org_pid = #{orgPid},
+                ]]>
+            </if>
+            <if test="text != null and text != '' ">
+                <![CDATA[
+                    o.org_name = #{text},
+                ]]>
+            </if>
+            <if test="orgDesc != null and orgDesc != '' ">
+                <![CDATA[
+                     o.org_desc=#{orgDesc}
+
+                ]]>
+            </if>
+        </set>
+        where o.org_id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="java.lang.String">
+        delete from  organization o where o.org_id = #{id}
+    </delete>
+
+    <select id="findByPage" parameterType="java.util.Map" resultMap="organizationResultMap">
+        <![CDATA[
+        SELECT * FROM
+        (
+          SELECT TEMP.*, ROWNUM RN
+          FROM (
+            SELECT
+            ]]><include refid="column"/><![CDATA[
+            from organization o
+            START WITH o.org_id = 100000
+            CONNECT BY NOCYCLE PRIOR o.org_id = o.org_pid
+
+          ) TEMP
+          WHERE ROWNUM <= #{endRowNum}
+        )
+        WHERE RN > #{startRowNum}
+        ]]>
+    </select>
+
+
+    <select id="getCount" parameterType="java.util.Map" resultType="int">
+        select
+        count(1)
+        from organization o
+        where o.org_name like '%${text}%'
+    </select>
+
+    <select id="findCountyIDByFaceID"  resultMap="organizationResultMap">
+        select o1.org_id , o2.org_id as  org_id1 from jzw t, organization o1, organization o2
+        where t.facid = #{facid} and t.county = o1.org_name and t.village = o2.org_name
+    </select>
+
+    <select id="findYfByUser" parameterType="java.util.Map" resultMap="organizationResultMap">
+        SELECT <include refid="column"/>
+        from organization o where o.org_level = #{orgLevel}
+        START WITH o.org_id in (SELECT org_id from account_org WHERE user_id = #{id})
+        CONNECT BY NOCYCLE PRIOR o.org_id = o.org_pid
+        ORDER BY SEQ
+    </select>
+
+</mapper>

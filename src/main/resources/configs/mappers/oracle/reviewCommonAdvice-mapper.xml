@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.bm.mapper.ReviewCommonAdviceMapper">
+
+	<resultMap type="com.hq.bm.entity.ReviewCommonAdvice" id="reviewCommonAdviceResultMap">
+		<!--<result column="ID" property="id" javaType="long" />-->
+		<result column="ADVICE" property="advice" javaType="String" />
+		<result column="ADVICE_TYPE" property="adviceType" javaType="int" />
+	</resultMap>
+
+	<insert id="save" parameterType="java.util.Map">
+		insert into REVIEW_COMMON_ADVICE r (r.ID, r.ADVICE, r.ADVICE_TYPE)
+		VALUES (SEQ_REVIEW_COMMON_ADVICE.Nextval,#{advice,jdbcType=VARCHAR},#{adviceType,jdbcType=INTEGER})
+	</insert>
+
+	<select id="findAll" resultMap="reviewCommonAdviceResultMap">
+		SELECT r.ID, r.ADVICE, r.ADVICE_TYPE FROM REVIEW_COMMON_ADVICE r where rowid in (select max(rowid) from review_common_advice group by advice, advice_type)
+	</select>
+</mapper>

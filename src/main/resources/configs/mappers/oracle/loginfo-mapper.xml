@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.bm.mapper.LogInfoMapper">
+
+    <resultMap type="com.hq.bm.entity.LogInfo" id="loginfoResultMap">
+        <!--<result column="ID" property="id" javaType="int"/>-->
+        <result column="USER_ID" property="userId" javaType="int"/>
+        <result column="OP_TIME" property="opTime" javaType="java.util.Date"/>
+        <result column="OP_PLATFORM" property="opPlatform" javaType="int"/>
+        <result column="MOD_NAME" property="modName" javaType="java.lang.String"/>
+        <result column="OP_IP" property="opIp" javaType="java.lang.String"/>
+        <result column="OP_DESC" property="opDesc" javaType="java.lang.String"/>
+        <result column="REMARK" property="remark" javaType="java.lang.String"/>
+        <result column="USER_NAME" property="userName" javaType="java.lang.String"/>
+    </resultMap>
+
+    <sql id="column">
+       t.USER_ID,t.OP_TIME,t.OP_PLATFORM,t.MOD_NAME,t.OP_IP,t.OP_DESC,t.REMARK,a.user_name
+    </sql>
+
+
+    <select id="findByPage" parameterType="java.util.Map" resultMap="loginfoResultMap">
+        <![CDATA[
+        SELECT * FROM
+        (
+          SELECT TEMP.*, ROWNUM RN
+          FROM (
+            SELECT
+            ]]><include refid="column"/><![CDATA[
+            FROM OPERATION_LOG t
+            INNER JOIN account a on t.USER_ID = a.id
+            ]]>
+        <where>
+            <if test="opTime != null and opTime != ''">
+                <![CDATA[
+                 t.OP_TIME = #{opTime}
+                ]]>
+            </if>
+        </where>
+        <![CDATA[
+      ORDER BY t.OP_TIME DESC
+          ) TEMP
+          WHERE ROWNUM <= #{endRowNum}
+        )
+        WHERE RN > #{startRowNum}
+        ]]>
+    </select>
+
+    <select id="getCount" parameterType="java.util.Map" resultType="int">
+        select
+        count(1)
+        from OPERATION_LOG t
+        <where>
+            <if test="opTime != null and opTime != ''">
+                <![CDATA[
+                 t.opTime = #{opTime}
+                ]]>
+            </if>
+
+        </where>
+    </select>
+
+    <insert id="add"  parameterType="java.util.Map">
+        insert into OPERATION_LOG t (t.ID, t.USER_ID,t.OP_TIME,t.OP_PLATFORM,t.MOD_NAME,t.OP_IP,t.OP_DESC,t.REMARK)
+        VALUES (SEQ_OPLOG.nextval,#{userId},#{opTime},#{opPlatform},#{modName},#{opIp},#{opDesc},#{remark})
+    </insert>
+
+    <select id="getCountForFindPageByName" parameterType="java.util.Map" resultType="int">
+        select
+        count(1)
+        from OPERATION_LOG t
+        LEFT JOIN "ACCOUNT" A ON A ."ID" = T .USER_ID
+        <where>
+             t.OP_PLATFORM = #{opPlatform}
+            <if test="modName!=null and modName!=''">
+                and t.MOD_NAME = #{modName}
+            </if>
+            <if test="userName!=null and userName!=''">
+                and a.user_name like CONCAT(CONCAT('%', #{userName}), '%')
+            </if>
+            <if test="createDateStart!=null and createDateStart!=''">
+                and t.OP_TIME &gt;=TO_DATE(#{createDateStart},'yyyy-MM-dd')
+            </if>
+            <if test="createDateEnd != null and createDateEnd != ''">
+                and t.OP_TIME &lt;TO_DATE(#{createDateEnd},'yyyy-MM-dd')+1
+            </if>
+        </where>
+    </select>
+
+    <select id="findPageByName" parameterType="java.util.Map" resultMap="loginfoResultMap">
+        SELECT *
+        FROM
+        (
+        SELECT
+        TEMP.*, ROWNUM RN
+        FROM
+        (
+        SELECT
+        T .USER_ID,
+        T .OP_TIME,
+        T .OP_PLATFORM,
+        T .MOD_NAME,
+        T .OP_IP,
+        T .OP_DESC,
+        T .REMARK,
+        A .user_name
+        FROM
+        OPERATION_LOG T
+        LEFT JOIN "ACCOUNT" A ON A ."ID" = T .USER_ID
+        <where>
+            t.OP_PLATFORM = #{opPlatform}
+            <if test="modName!=null and modName!=''">
+                and t.MOD_NAME = #{modName}
+            </if>
+            <if test="userName!=null and userName!=''">
+               and A .USER_NAME LIKE CONCAT(CONCAT('%', #{userName}), '%')
+            </if>
+          <if test="createDateStart!=null and createDateStart!=''">
+              and t.OP_TIME &gt;=TO_DATE(#{createDateStart},'yyyy-MM-dd')
+           </if>
+           <if test="createDateEnd!=null and createDateEnd!=''">
+              and t.OP_TIME &lt;TO_DATE(#{createDateEnd},'yyyy-MM-dd')+1
+           </if>
+        </where>
+        <![CDATA[  ORDER BY t.OP_TIME DESC) TEMP
+        WHERE
+        ROWNUM <= #{endRowNum}
+        )
+        WHERE
+        RN > #{startRowNum}
+         ]]>
+    </select>
+
+    <select id="findAll" resultMap="loginfoResultMap">
+        select b.user_name, a.op_time from (select user_id, max(t.op_time) op_time from
+        operation_log t where t.mod_name = '用户登录' group by user_id order by op_time desc) a
+        inner join ACCOUNT b on a.user_id = b.id <![CDATA[
+        where rownum <= 5
+        ]]>
+    </select>
+</mapper>

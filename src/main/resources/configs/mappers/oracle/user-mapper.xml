@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.bm.mapper.UserMapper">
+
+    <resultMap type="com.hq.bm.entity.User" id="userResultMap">
+        <result column="id" property="id" javaType="java.lang.String"/>
+        <result column="LOGIN_NAME" property="loginName" javaType="java.lang.String"/>
+        <result column="LOGIN_PWD" property="password" javaType="java.lang.String"/>
+        <result column="LOGIN_EQU_ID" property="loginEquId" javaType="java.lang.String"/>
+        <result column="TEL" property="tel" javaType="java.lang.String"/>
+        <result column="USER_NAME" property="username" javaType="java.lang.String"/>
+        <result column="ORG_NAME" property="orgName" javaType="java.lang.String"/>
+        <result column="ORG_ID" property="orgId" javaType="java.lang.String"/>
+        <result column="NAME" property="name" javaType="java.lang.String"/>
+        <result column="ROLE_ID" property="roleId" javaType="java.lang.String"/>
+        <result column="CREATE_TIME" property="creatTime" javaType="java.util.Date"/>
+        <result column="UPDATE_TIME" property="updateTime" javaType="java.util.Date"/>
+        <result column="LAST_LOGIN_TIME" property="lastLoginTime" javaType="java.util.Date"/>
+        <result column="USER_STATE_ID" property="userStateId" javaType="int"/>
+        <result column="USER_STATE" property="userState" javaType="java.lang.String"/>
+        <result column="CREATER_ID" property="createrId" javaType="int"/>
+        <result column="OP_PLATFORM" property="opPlatform" javaType="int"/>
+        <collection property="roleList" ofType="com.hq.bm.entity.Role" column="t.role_id">
+            <id column="ROLE_ID" property="id"/>
+            <result column="NAME" property="name"/>
+            <!--<result column="role_code" property="code"/>-->
+        </collection>
+    </resultMap>
+
+    <sql id="column">
+        t.id,t.LOGIN_NAME,t.LOGIN_PWD,t.LOGIN_EQU_ID,t.USER_NAME,t.ROLE_ID,t.CREATE_TIME,
+        t.UPDATE_TIME,t.USER_STATE_ID,t.CREATER_ID,t.LAST_LOGIN_TIME,r.NAME ,ORG_NAME,a.USER_STATE
+    </sql>
+
+    <select id="findById" resultMap="userResultMap">
+        select
+        <include refid="column"/>
+        from account t where t.id = #{id}
+    </select>
+
+    <select id="findAllByLoginName" resultMap="userResultMap">
+        select
+        <include refid="column"/>,r.ROLE_ID,r.name
+        from account t
+        inner join role r on t.ROLE_ID=r.ROLE_ID
+    </select>
+
+    <select id="findAllRole" resultMap="userResultMap">
+        select
+        <include refid="column"/>,r.ROLE_ID,r.name
+        from account t
+        inner join role r on t.ROLE_ID=r.ROLE_ID
+    </select>
+
+    <select id="findAll" resultMap="userResultMap">
+        select
+        <include refid="column"/>,a.USER_STATE_DESC,s.org_id
+        from account t
+        inner join account_state a on t.user_state_id=a.user_state_id
+        inner join role r on t.role_id=r.role_id
+        LEFT JOIN (
+        SELECT
+        wm_concat (o.org_name) org_name,
+        wm_concat (o.org_id) org_id,
+        user_id
+        FROM
+        ACCOUNT_ORG A,
+        ORGANIZATION o
+        where A .org_id = o.org_id
+        GROUP BY
+        A .user_id
+        ) s ON T . ID = s.user_id
+        ORDER BY t.id
+    </select>
+
+    <select id="findByMap" parameterType="java.util.Map" resultMap="userResultMap">
+        select
+        <include refid="column"/>,a.USER_STATE_DESC,s.org_id, 0 OP_PLATFORM
+        from account t
+        inner join account_state a on t.user_state_id=a.user_state_id
+        inner join role r on t.role_id=r.role_id
+        LEFT JOIN (
+        SELECT
+        wm_concat (o.org_name) org_name,
+        wm_concat (o.org_id) org_id,
+        user_id
+        FROM
+        ACCOUNT_ORG A,
+        ORGANIZATION o
+        where A .org_id = o.org_id
+        GROUP BY
+        A .user_id
+        ) s ON T . ID = s.user_id
+        <where>
+            t.LOGIN_NAME = #{loginName}
+            <if test="username != null and username != ''">
+                <![CDATA[
+                and t.USER_NAME = #{username}
+            ]]>
+            </if>
+            <if test="password != null and password != ''">
+                <![CDATA[
+                and t.LOGIN_PWD = #{password}
+            ]]>
+            </if>
+            <if test="id != null and id != ''">
+                <![CDATA[
+                and t.id = #{id}
+            ]]>
+            </if>
+            <if test="roleId != null and roleId != ''">
+                <![CDATA[
+                and t.ROLE_ID = #{roleId}
+            ]]>
+            </if>
+        </where>
+        ORDER BY t.user_name
+    </select>
+
+    <select id="findByName" parameterType="string" resultMap="userResultMap">
+        select
+        <include refid="column"/>,a.USER_STATE_DESC,s.org_id
+        from account t
+        inner join account_state a on t.user_state_id=a.user_state_id
+        inner join role r on t.role_id=r.role_id
+        LEFT JOIN (
+        SELECT
+        wm_concat (o.org_name) org_name,
+        wm_concat (o.org_id) org_id,
+        user_id
+        FROM
+        ACCOUNT_ORG A,
+        ORGANIZATION o
+        where A .org_id = o.org_id
+        GROUP BY
+        A .user_id
+        ) s ON T . ID = s.user_id
+        where t.USER_NAME like #{ name }
+
+    </select>
+
+    <select id="findByCreaterId" parameterType="int" resultMap="userResultMap">
+        select
+        <include refid="column"/>,a.USER_STATE_DESC,s.org_id
+        from account t
+        inner join account_state a on t.user_state_id=a.user_state_id
+        inner join role r on t.role_id=r.role_id
+        LEFT JOIN (
+        SELECT
+        wm_concat (o.org_name) org_name,
+        wm_concat (o.org_id) org_id,
+        user_id
+        FROM
+        ACCOUNT_ORG A,
+        ORGANIZATION o
+        where A .org_id = o.org_id
+        GROUP BY
+        A .user_id
+        ) s ON T . ID = s.user_id
+        where t.ROLE_ID = #{ createrid }
+
+    </select>
+
+    <select id="getCount" parameterType="java.util.Map" resultType="int">
+        select
+        count(1)
+        from account t
+        <where>
+            <if test="loginName != null and loginName != ''">
+                <![CDATA[
+                and t.LOGIN_NAME LIKE CONCAT(CONCAT('%', #{loginName}), '%')
+                ]]>
+            </if>
+            <if test="username != null and username != ''">
+                <![CDATA[
+                or t.USER_NAME LIKE CONCAT(CONCAT('%', #{username}), '%')
+            ]]>
+            </if>
+            <if test="roleId != null and roleId != ''">
+                <![CDATA[
+                and t.ROLE_ID = #{roleId}
+            ]]>
+            </if>
+        </where>
+    </select>
+
+
+    <insert id="save" parameterType="java.util.Map">
+        insert into account t
+        (t.ID,t.LOGIN_NAME,T.LOGIN_PWD,T.USER_NAME,T.ORG_ID,T.ROLE_ID,t.USER_STATE_ID,T.CREATE_TIME,T.CREATER_ID)
+        VALUES (SEQ_ACCOUNT.nextval,#{loginName},#{password},#{username},#{orgId},#{roleId},1,#{creatTime},#{createrId})
+    </insert>
+
+    <select id="findByPage" parameterType="java.util.Map" resultMap="userResultMap">
+        <![CDATA[
+        SELECT * FROM
+        (
+          SELECT TEMP.*, ROWNUM RN
+          FROM (
+            SELECT
+            ]]><include refid="column"/>,a.USER_STATE_DESC,s.org_id<![CDATA[
+            FROM account t
+            inner join account_state a on t.user_state_id=a.user_state_id
+            inner join role r on t.role_id=r.role_id
+            LEFT JOIN (
+            SELECT
+            wm_concat (o.org_name) org_name,
+            wm_concat (o.org_id) org_id,
+            user_id
+          FROM
+            ACCOUNT_ORG A,
+            ORGANIZATION o
+            where A .org_id = o.org_id
+            GROUP BY
+            A .user_id
+            ) s ON T . ID = s.user_id
+            ]]>
+        <where>
+            <if test="loginName != null and loginName != ''">
+                <![CDATA[
+                t.LOGIN_NAME LIKE CONCAT(CONCAT('%', #{loginName}), '%')
+                ]]>
+            </if>
+            <if test="username != null and username != ''">
+                <![CDATA[
+                or t.USER_NAME LIKE CONCAT(CONCAT('%', #{username}), '%')
+            ]]>
+            </if>
+            <if test="roleId != null and roleId != ''">
+                <![CDATA[
+                and t.ROLE_ID = #{roleId}
+            ]]>
+            </if>
+        </where>
+        <![CDATA[
+            ORDER BY t.id
+          ) TEMP
+          WHERE ROWNUM <= #{endRowNum}
+        )
+        WHERE RN > #{startRowNum}
+        ]]>
+    </select>
+
+    <update id="update" parameterType="com.hq.bm.entity.User">
+        update account t
+        <set>
+            <if test="loginName != null and loginName != '' ">
+                <![CDATA[
+                    t.LOGIN_NAME = #{loginName},
+                ]]>
+            </if>
+            <if test="username != null and username != '' ">
+                <![CDATA[
+                    t.USER_NAME = #{username},
+                ]]>
+            </if>
+            <if test="password != null and password != '' ">
+                <![CDATA[
+                    t.LOGIN_PWD = #{password},
+                ]]>
+            </if>
+            <if test="loginEquId != null and loginEquId != '' ">
+                <![CDATA[
+                    t.LOGIN_EQU_ID = #{loginEquId},
+                ]]>
+            </if>
+            <if test="lastLoginTime != null and lastLoginTime != '' ">
+                <![CDATA[
+                    t.LAST_LOGIN_TIME = #{lastLoginTime},
+                ]]>
+            </if>
+            <if test="orgId != null and orgId != '' ">
+                <![CDATA[
+                    t.ORG_ID = #{orgId},
+                ]]>
+            </if>
+            <if test="roleId != null and roleId != '' ">
+                <![CDATA[
+                    t.ROLE_ID = #{roleId},
+                ]]>
+            </if>
+            <if test="userStateId != null and userStateId != '' ">
+                <![CDATA[
+                    t.USER_STATE_ID = #{userStateId}
+                ]]>
+            </if>
+
+        </set>
+        where t.id=#{id}
+    </update>
+
+    <delete id="deleteUserByIds" parameterType="java.util.Map">
+        delete from account t where t.id in (${ids})
+    </delete>
+
+    <!--<select id="findLoginPrivi" resultMap="userResultMap">
+        select
+        <include refid="column"/>,pi.privi_id,pi.privi_name
+        from account t
+        inner join role_privileges rp on rp.ROLE_ID = t.ROLE_ID
+        inner join privileges_item pi on pi.PRIVI_ID = rp.privi_id
+        where t.LOGIN_NAME = #{loginName}
+    </select>-->
+
+
+    <!--查询条件-->
+    <sql id="sql_where">
+        <where>
+            <if test="loginName != null and loginName != ''">
+                <![CDATA[
+                and t.LOGIN_NAME = #{loginName}
+                ]]>
+            </if>
+            <if test="username != null and username != ''">
+                <![CDATA[
+                and t.USER_NAME = #{username}
+            ]]>
+            </if>
+            <if test="password != null and password != ''">
+                <![CDATA[
+                and t.LOGIN_PWD = #{password}
+            ]]>
+            </if>
+
+            <if test="id != null and id != ''">
+                <![CDATA[
+                and t.id = #{id}
+            ]]>
+            </if>
+
+        </where>
+    </sql>
+
+</mapper>

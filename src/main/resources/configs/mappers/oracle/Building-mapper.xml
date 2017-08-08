@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.bm.mapper.BuildingMapper">
+
+    <resultMap type="com.hq.bm.entity.Building" id="buildingResultMap">
+        <result column="OBJECTID" property="objectId" javaType="int"/>
+        <result column="FACID" property="facId" javaType="double"/>
+        <result column="FACNAME" property="facName" javaType="java.lang.String"/>
+        <result column="FACNAMEWG" property="facnameWg" javaType="java.lang.String"/>
+        <result column="FACTYPE" property="facType" javaType="int"/>
+        <result column="CITY" property="city" javaType="java.lang.String"/>
+        <result column="TYPE" property="type" javaType="int"/>
+        <result column="REGION_ID" property="regionId" javaType="double"/>
+        <result column="BUILDING_F" property="buildingf" javaType="int"/>
+        <result column="COUNTY" property="county" javaType="java.lang.String"/>
+        <result column="VILLAGE" property="village" javaType="java.lang.String"/>
+        <result column="PARENT_ID" property="parentId" javaType="double"/>
+        <result column="ADDRID" property="addrId" javaType="java.lang.String"/>
+        <result column="name" property="facnameWg" javaType="java.lang.String"/>
+        <result column="STRUCTURE_TYPE" property="structureType" javaType="java.lang.String"/>
+        <result column="JZW_TYPE" property="jzwType" javaType="java.lang.String"/>
+        <result column="FLOOR_NUM" property="floorNum" javaType="long"/>
+        <result column="ROOM_NUM" property="roomNum" javaType="long"/>
+       	<result column="THUMBNAIL" property="thumbnail" javaType="java.lang.String" />
+        <result column="DEL_FLAG" property="del_flag" javaType="int"/>
+        <result column="REMARK" property="remark" javaType="java.lang.String" />
+    </resultMap>
+
+    <sql id="column">
+        t.OBJECTID,t.FACID,t.FACNAME,t.FACTYPE,t.CITY,t.TYPE,t.REGION_ID,t.BUILDING_F,
+        t.COUNTY,t.VILLAGE,t.PARENT_ID,t.ADDRID,t.STRUCTURE_TYPE,t.JZW_TYPE,
+        t.FLOOR_NUM,t.ROOM_NUM,t.REMARK
+    </sql>
+    
+    <select id="findBuildingById"  resultMap="buildingResultMap" parameterType="java.util.Map">
+        select  <include refid="column"/> from jzw t where addrid in (
+        select to_char(a.id)
+        from addr a
+        start with a.id in (select s.stid from obd_servicearea s where s.dpid = #{id})
+        connect by prior a.parentid = a.id
+        )
+ 		and t.del_flag = 0
+    </select>
+
+    <select id="getCount" parameterType="java.util.Map" resultType="int">
+        select
+        count(1)
+        from jzw t
+        where addrid in (
+        select to_char(a.id)
+        from addr a
+        start with a.id in (select s.stid from obd_servicearea s where s.dpid = #{dpId})
+        connect by prior a.parentid = a.id)
+        and t.del_flag = 0
+    </select>
+
+    <select id="findByPage" parameterType="java.util.Map" resultMap="buildingResultMap">
+        <![CDATA[
+        SELECT * FROM
+        (
+          SELECT TEMP.*, ROWNUM RN
+          FROM (
+            SELECT
+            ]]><include refid="column"/><![CDATA[
+            FROM jzw t
+            where addrid in (
+            select to_char(a.id)
+            from addr a
+            start with a.id in (select s.stid from obd_servicearea s where s.dpid = #{dpId})
+            connect by prior a.parentid = a.id)
+ 			and t.del_flag = 0
+          ) TEMP
+          WHERE ROWNUM <= #{endRowNum}
+        )
+        WHERE RN > #{startRowNum}
+        ]]>
+    </select>
+
+
+    <select id="getCountForJZW" parameterType="java.util.Map" resultType="int">
+        select
+        count(1)
+        from jzw t
+        where t.Latitude between #{minLatitude} and #{maxLatitude} and t.LONGITUDE between #{minLongitude} and #{maxLongitude}
+        and t.village in (select a.org_name from organization a  start with a.org_id = #{mkcenterId} connect by prior a.org_id = a.org_pid)
+		and t.del_flag = 0
+    </select>
+
+    <select id="findByPageForJZW" parameterType="java.util.Map" resultMap="buildingResultMap">
+        <![CDATA[
+        SELECT * FROM
+        (
+          SELECT TEMP.*, ROWNUM RN
+          FROM (
+            SELECT
+            ]]><include refid="column"/><![CDATA[
+            FROM jzw t
+            where
+            t.Latitude between #{minLatitude} and #{maxLatitude} and t.LONGITUDE between #{minLongitude} and #{maxLongitude}
+            and t.village in (select a.org_name from organization a  start with a.org_id = #{mkcenterId} connect by prior a.org_id = a.org_pid)
+			and t.del_flag = 0
+          ) TEMP
+          WHERE ROWNUM <= #{endRowNum}
+        )
+        WHERE RN > #{startRowNum}
+        ]]>
+    </select>
+
+   <!-- <select id="getCountForJZWByName" parameterType="java.util.Map" resultType="int">
+        select
+        count(1)
+        from jzw t
+        where t.Latitude between #{minLatitude} and #{maxLatitude} and t.LONGITUDE between #{minLongitude} and #{maxLongitude}
+        and t.FACNAME like CONCAT(CONCAT('%', #{name}), '%')
+        and t.village in (select a.org_name from organization a  start with a.org_id = #{mkcenterId} connect by prior a.org_id = a.org_pid)
+
+    </select>
+
+    <select id="findByPageForJZWByName" parameterType="java.util.Map" resultMap="buildingResultMap">
+        <![CDATA[
+        SELECT * FROM
+        (
+          SELECT TEMP.*, ROWNUM RN
+          FROM (
+            SELECT
+            ]]><include refid="column"/><![CDATA[
+            FROM jzw t
+            where
+            t.Latitude between #{minLatitude} and #{maxLatitude} and t.LONGITUDE between #{minLongitude} and #{maxLongitude}
+            and t.FACNAME like CONCAT(CONCAT('%', #{name}), '%')
+            and t.village in (select a.org_name from organization a  start with a.org_id = #{mkcenterId} connect by prior a.org_id = a.org_pid)
+
+          ) TEMP
+          WHERE ROWNUM <= #{endRowNum}
+        )
+        WHERE RN > #{startRowNum}
+        ]]>
+    </select>-->
+
+    <!--4月17号后查询建筑物的新需求改了-->
+    <select id="getCountForJZWByName" parameterType="java.util.Map" resultType="int">
+        select
+        count(1)
+        from jzw t
+        where t.FACNAME like CONCAT(CONCAT('%', #{name}), '%')
+        and t.del_flag = 0
+        and t.village in (select a.org_name from organization a  start with a.org_id
+        in (select org_id from account_org where user_id = #{userId})
+        connect by prior a.org_id = a.org_pid)
+    </select>
+
+	<select id="findByPageForJZWByName" parameterType="java.util.Map"
+				resultMap="buildingResultMap">
+		<![CDATA[select]]>
+		<include refid="column"></include>
+		<![CDATA[,f.THUMBNAIL
+		from (
+		SELECT * FROM
+		(SELECT TEMP.*, ROWNUM RN FROM (
+		SELECT]]>
+		<include refid="column"></include>
+		<![CDATA[FROM jzw t
+		where t.FACNAME like CONCAT(CONCAT('%', #{name}), '%')
+		and t.del_flag = 0
+		and
+		t.village in
+		(select a.org_name from organization a
+		start with a.org_id in
+		(select org_id from account_org
+		where user_id = #{userId})
+		connect by
+		prior a.org_id = a.org_pid)) TEMP
+		WHERE ROWNUM <= #{endRowNum})
+		WHERE RN > #{startRowNum}) t
+		left join (select t2.facid,t2.THUMBNAIL from 
+        (select row_number() 
+        over(partition by facid order by create_time desc) rn, t1.*
+        from facility_photo t1 where t1.factype=2) t2
+      	where t2.rn = 1) f
+		on t.facid = f.facid]]>
+	</select>
+
+
+    <select id="findPositionById" resultMap="buildingResultMap">
+        select t.LONGITUDE,t.LATITUDE
+        from jzw t where t.OBJECTID  = #{id}
+    </select>
+
+    <select id="getBuildingPropertyById"  resultMap="buildingResultMap">
+        select j.*, w.facname AS FACNAMEWG, a.addr from jzw j
+        inner join wg w on j.parent_id = w.facid
+        inner join addr a on j.addrid = a.id where j.OBJECTID = #{id}
+    </select>
+
+
+
+    <select id="getCountForfindBuilidngByWg" parameterType="java.util.Map" resultType="int">
+        SELECT count(1)
+         from jzw t where t.parent_id in
+        (select a.facid from wg a where a.del_flag=0 and a.village in (
+        select a.org_name from organization a  start with a.org_id = #{orgId}
+        connect by prior a.org_id = a.org_pid))
+        and t.parent_id= #{parentId}
+        and t.del_flag = 0
+        <if test="facName!=null and facName!=''">
+            and t.FACNAME like CONCAT(CONCAT('%', #{facName}), '%')
+        </if>
+    </select>
+
+
+    <!--通过网格和组织机构查建筑物-->
+    <select id="findBuildingByWgId" parameterType="java.util.Map" resultMap="buildingResultMap">
+        SELECT * FROM (
+        SELECT temp.*, ROWNUM rn FROM ( SELECT * FROM	jzw T
+        WHERE T .parent_id IN (
+        SELECT	A .facid	FROM wg A	WHERE a.del_flag=0 and
+        A .village IN (
+        SELECT A .org_name	FROM
+        ORGANIZATION A START WITH A .org_id = #{orgId}  CONNECT BY PRIOR A .org_id = A .org_pid
+        )  )
+        and t.parent_id= #{parentId}
+        and t.del_flag = 0
+        <if test="facName!=null and facName!=''">
+            and t.FACNAME like CONCAT(CONCAT('%', #{facName}), '%')
+        </if>
+        ) TEMP<![CDATA[
+        WHERE ROWNUM <= #{endRowNum}
+        )WHERE RN > #{startRowNum}
+        ]]>
+    </select>
+
+
+    <!--通过建筑物ID查地址和所属网格-->
+    <select id="findAddrsByFacid"  resultMap="buildingResultMap">
+        select w.facname as name, j.city,j.facname,j.COUNTY,j.VILLAGE,to_number(j.parent_id),
+        a.addr, j.addrid, j.facid, j.REMARK, j.STRUCTURE_TYPE,j.JZW_TYPE, j.FLOOR_NUM,
+        j.ROOM_NUM,j.OBJECTID,j.REGION_ID,j.TYPE
+        from wg w, addr a, jzw j
+        where j.facid = #{facid} and w.facid (+)= j.parent_id and a.id (+)= trim(j.addrid)
+    </select>
+
+	<select id="findById" resultMap="buildingResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="column"></include>
+		from jzw t where t.facid=#{facid}
+	</select>
+
+    <select id="showAllBuildingByOTB" resultMap="buildingResultMap"
+            parameterType="java.lang.String">
+        select  <include refid="column"/> from jzw t where addrid in (
+        select to_char(a.id)
+        from addr a
+        start with a.id in
+        (select s.stid from obd_servicearea s where s.dpid in
+        (select y.ocfid from lightfacility y where  y.attri_ocfid = #{ocfid}))
+        connect by prior a.parentid = a.id
+        )
+ 		and t.del_flag = 0
+    </select>
+
+    <select id="findByMap" resultMap="buildingResultMap"
+            parameterType="java.lang.String">
+        select  <include refid="column"/> from jzw t where t.VILLAGE = #{village}
+        and t.del_flag = 0 and review_flag = 1
+    </select>
+
+
+    <select id="getCountForFindBuildingByVillage" parameterType="java.util.Map" resultType="int">
+        select
+        count(1)
+        from jzw t
+
+        <where>
+            <if test="city != null and city!=''">
+                <![CDATA[
+                    t.CITY=#{city}
+                ]]>
+            </if>
+            <if  test="county != null  and county!=''">
+                <![CDATA[
+                    t.COUNTY = #{county}
+                ]]>
+            </if>
+            <if  test="village!= null and village!=''">
+                <![CDATA[
+                    t.VILLAGE = #{village}
+                ]]>
+            </if>
+
+        </where>
+        and t.del_flag = 0 and review_flag = 1
+    </select>
+
+
+    <select id="findBuildingByVillage" parameterType="java.util.Map" resultMap="buildingResultMap">
+        <![CDATA[
+        SELECT * FROM
+        (
+          SELECT TEMP.*, ROWNUM RN
+          FROM (
+            SELECT
+            ]]><include refid="column"/><![CDATA[
+            FROM jzw t
+            ]]>
+            <where>
+            <if test="city != null and city!=''">
+                <![CDATA[
+                    t.CITY=#{city}
+                ]]>
+    </if>
+    <if  test="county != null  and county!=''">
+        <![CDATA[
+                    t.COUNTY = #{county}
+                ]]>
+    </if>
+    <if  test="village!= null and village!=''">
+        <![CDATA[
+                    t.VILLAGE = #{village}
+                ]]>
+    </if>
+
+</where>
+        <![CDATA[
+ and t.del_flag = 0 and review_flag = 1
+          ) TEMP
+          WHERE ROWNUM <= #{endRowNum}
+        )
+        WHERE RN > #{startRowNum}
+        ]]>
+    </select>
+
+</mapper>

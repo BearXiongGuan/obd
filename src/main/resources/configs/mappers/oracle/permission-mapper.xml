@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.bm.mapper.PermissionMapper">
+
+    <resultMap type="com.hq.bm.entity.Permission" id="permissionResultMap">
+        <result column="ID" property="id" javaType="java.lang.String"/>
+        <result column="PID" property="pid" javaType="java.lang.String"/>
+        <result column="PRIVI_NAME" property="text" javaType="java.lang.String"/>
+        <result column="PRIVI_CODE" property="priviCode" javaType="java.lang.String"/>
+        <result column="PRIVI_TYPE" property="priviType" javaType="int"/>
+    </resultMap>
+
+    <sql id="column">
+        pi.ID,pi.PID,pi.PRIVI_NAME,pi.PRIVI_CODE,pi.PRIVI_TYPE
+    </sql>
+
+    <!--<select id="findByLoginName" resultMap="permissionResultMap">
+        select
+        <include refid="column"/>
+        from account u
+        inner join role_privileges rp on rp.ROLE_ID = u.ROLE_ID
+        inner join privileges_item pi on pi.PRIVI_ID = rp.privi_id
+        where u.LOGIN_NAME = #{loginName}
+    </select>-->
+
+
+    <select id="findByLoginName" resultMap="permissionResultMap" parameterType="java.lang.String">
+        select
+        <include refid="column"/>
+        from account u
+        inner join role_privileges rp on rp.ROLE_ID = u.ROLE_ID
+        inner join PRIVILEGESTREE pi on pi.ID = rp.PRIVI_ID
+        where u.LOGIN_NAME = #{loginName}
+    </select>
+	
+	<select id="findAll" resultMap="permissionResultMap">
+         SELECT <include refid="column"/>
+        from PRIVILEGESTREE pi
+        START WITH pi.PID = 0
+        CONNECT BY NOCYCLE PRIOR pi.id = pi.pid
+	</select>
+	
+</mapper>
